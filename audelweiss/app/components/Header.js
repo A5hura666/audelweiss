@@ -1,11 +1,13 @@
-"use client"; // Si tu es en App Router
+"use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCart, User } from "lucide-react";
+import { ShoppingCart, User, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 export default function Header() {
+    const [isOpen, setIsOpen] = useState(false);
     const pathname = usePathname();
     const cartCount = 3;
 
@@ -19,20 +21,21 @@ export default function Header() {
 
     return (
         <header className="bg-white shadow-md">
-            <div className="container mx-auto flex justify-between items-center p-8">
+            <div className="container mx-auto flex justify-between items-center p-3 lg:p-8">
+                {/* Logo */}
                 <Link href="/">
-                    <Image src="logo-wide.svg" alt="Logo" width={200} height={50} />
+                    <img src="/logo-wide.svg" alt="Logo" className={"w-[150px] lg:w-[200px]"}/>
                 </Link>
 
-                {/* Menu */}
-                <nav className="flex items-center space-x-6">
+                {/* Desktop Menu */}
+                <nav className="hidden lg:flex items-center space-x-5">
                     {menuItems.map((item) => (
                         <Link
                             key={item.href}
                             href={item.href}
                             className={`text-sm font-bold ${
-                                pathname === item.href ? "text-orange-500" : "text-gray-700"
-                            } hover:text-orange-500 transition`}
+                                pathname === item.href ? "text-[#E8A499]" : "text-gray-700"
+                            } hover:text-[#E8A499] transition`}
                         >
                             {item.title}
                         </Link>
@@ -41,21 +44,64 @@ export default function Header() {
                     {/* Icônes Profil & Panier */}
                     <div className="flex items-center space-x-4">
                         <Link href="/my-account">
-                            <User size={22} className="text-gray-700 hover:text-orange-500" />
+                            <User size={22} className="text-gray-700 hover:text-[#E8A499]" />
                         </Link>
-
                         <Link href="/cart" className="relative">
-                            <ShoppingCart size={22} className="text-gray-700 hover:text-orange-500" />
-
-                            {/* Bulle rouge si le panier n'est pas vide */}
+                            <ShoppingCart size={22} className="text-gray-700 hover:text-[#E8A499]" />
                             {cartCount > 0 && (
-                                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold rounded-full px-2">
-                              {cartCount}
-                            </span>
+                                <span className="absolute -top-2 -right-2 bg-[#E8A499] text-white text-xs font-bold rounded-full px-1">
+                  {cartCount}
+                </span>
                             )}
                         </Link>
                     </div>
                 </nav>
+
+                {/* Mobile Menu (Burger) */}
+                <div className="lg:hidden flex items-center space-x-4">
+                    {/* Icône ShoppingCart à gauche */}
+                    <Link href="/cart" className="relative">
+                        <ShoppingCart size={22} className="text-gray-700 hover:text-[#E8A499]" />
+                        {cartCount > 0 && (
+                            <span className="absolute -top-2 -right-2 bg-[#E8A499] text-white text-xs font-bold rounded-full px-1">
+                {cartCount}
+              </span>
+                        )}
+                    </Link>
+
+                    {/* Bouton Menu Burger */}
+                    <button onClick={() => setIsOpen(!isOpen)}>
+                        {isOpen ? (
+                            <X size={28} className="text-gray-700 hover:text-[#E8A499]" />
+                        ) : (
+                            <Menu size={28} className="text-gray-700 hover:text-[#E8A499]" />
+                        )}
+                    </button>
+                </div>
+
+                {/* Menu Mobile */}
+                {isOpen && (
+                    <div className="lg:hidden absolute top-16 left-0 w-full bg-white shadow-md p-6 flex flex-col space-y-4">
+                        {menuItems.map((item) => (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className={`text-sm font-bold ${
+                                    pathname === item.href ? "text-[#E8A499]" : "text-gray-700"
+                                } hover:text-[#E8A499] transition`}
+                                onClick={() => setIsOpen(false)}
+                            >
+                                {item.title}
+                            </Link>
+                        ))}
+
+                        {/* Icônes Profil */}
+                        <Link href="/my-account" className="flex items-center space-x-2">
+                            <User size={22} className="text-gray-700 hover:text-[#E8A499]" />
+                            <span className="text-gray-700 hover:text-[#E8A499]">Se connecter</span>
+                        </Link>
+                    </div>
+                )}
             </div>
         </header>
     );
