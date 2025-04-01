@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ShoppingCart, User, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
