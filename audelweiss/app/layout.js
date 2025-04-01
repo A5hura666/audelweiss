@@ -1,9 +1,25 @@
 // app/layout.js
+"use client";
+
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import {useEffect, useState} from "react";
 
 export default function RootLayout({ children }) {
+    const [headerHeight, setHeaderHeight] = useState(0);
+
+    useEffect(() => {
+        const updateHeaderHeight = () => {
+            const header = document.querySelector("header");
+            if (header) setHeaderHeight(header.offsetHeight);
+        };
+
+        updateHeaderHeight();
+        window.addEventListener("resize", updateHeaderHeight);
+        return () => window.removeEventListener("resize", updateHeaderHeight);
+    }, []);
+
     return (
         <html lang="fr">
         <head>
@@ -17,7 +33,7 @@ export default function RootLayout({ children }) {
         </head>
         <body className="flex flex-col">
         <Header />
-        <main className="flex-grow">{children}</main>
+        <main style={{ paddingTop: `${headerHeight}px` }} className="flex-grow">{children}</main>
         <Footer />
         </body>
         </html>
