@@ -14,12 +14,36 @@ export interface ComponentsIconLink extends Struct.ComponentSchema {
 export interface ComponentsLink extends Struct.ComponentSchema {
   collectionName: 'components_components_links';
   info: {
+    description: '';
     displayName: 'Link';
     icon: 'attachment';
   };
   attributes: {
     label: Schema.Attribute.String;
+    megaMenu: Schema.Attribute.Component<'components.mega-menu', false>;
     url: Schema.Attribute.String;
+  };
+}
+
+export interface ComponentsMegaMenu extends Struct.ComponentSchema {
+  collectionName: 'components_components_mega_menus';
+  info: {
+    displayName: 'megaMenu';
+  };
+  attributes: {
+    links: Schema.Attribute.Component<'components.icon-link', true>;
+  };
+}
+
+export interface LayoutCategoryHighlight extends Struct.ComponentSchema {
+  collectionName: 'components_layout_category_highlights';
+  info: {
+    displayName: 'CategoryHighlight';
+  };
+  attributes: {
+    Categories: Schema.Attribute.Component<'components.link', true> &
+      Schema.Attribute.Required;
+    Images: Schema.Attribute.Media<'images', true> & Schema.Attribute.Required;
   };
 }
 
@@ -131,6 +155,7 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'components.icon-link': ComponentsIconLink;
       'components.link': ComponentsLink;
+      'components.mega-menu': ComponentsMegaMenu;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;
       'layout.hero': LayoutHero;

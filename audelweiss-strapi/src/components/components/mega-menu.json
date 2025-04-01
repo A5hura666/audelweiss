@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_components_mega_menus",
+  "info": {
+    "displayName": "megaMenu"
+  },
+  "options": {},
+  "attributes": {
+    "links": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.icon-link"
+    }
+  }
+}

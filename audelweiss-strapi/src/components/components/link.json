@@ -2,7 +2,8 @@
   "collectionName": "components_components_links",
   "info": {
     "displayName": "Link",
-    "icon": "attachment"
+    "icon": "attachment",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -11,6 +12,11 @@
     },
     "label": {
       "type": "string"
+    },
+    "megaMenu": {
+      "type": "component",
+      "repeatable": false,
+      "component": "components.mega-menu"
     }
   }
 }
