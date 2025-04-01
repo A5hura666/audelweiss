@@ -79,7 +79,6 @@ export default function Header() {
                     </button>
                 </div>
 
-                {/* Menu Mobile */}
                 {isOpen && (
                     <div className="lg:hidden absolute top-16 left-0 w-full bg-white shadow-md p-6 flex flex-col space-y-4">
                         {menuItems.map((item) => (
