@@ -1,5 +1,69 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface ComponentsIconLink extends Struct.ComponentSchema {
+  collectionName: 'components_components_icon_links';
+  info: {
+    displayName: 'icon-link';
+  };
+  attributes: {
+    icon: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    url: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface ComponentsLink extends Struct.ComponentSchema {
+  collectionName: 'components_components_links';
+  info: {
+    displayName: 'Link';
+    icon: 'attachment';
+  };
+  attributes: {
+    label: Schema.Attribute.String;
+    url: Schema.Attribute.String;
+  };
+}
+
+export interface LayoutFooter extends Struct.ComponentSchema {
+  collectionName: 'components_layout_footers';
+  info: {
+    displayName: 'footer';
+  };
+  attributes: {
+    logo: Schema.Attribute.Media<'images'>;
+    pageLinks: Schema.Attribute.Component<'components.link', true>;
+    socialLinks: Schema.Attribute.Component<'components.link', true>;
+    text: Schema.Attribute.Text;
+  };
+}
+
+export interface LayoutHeader extends Struct.ComponentSchema {
+  collectionName: 'components_layout_headers';
+  info: {
+    description: '';
+    displayName: 'header';
+  };
+  attributes: {
+    iconsLinks: Schema.Attribute.Component<'components.icon-link', true>;
+    links: Schema.Attribute.Component<'components.link', true> &
+      Schema.Attribute.Required;
+    logo: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+  };
+}
+
+export interface LayoutHero extends Struct.ComponentSchema {
+  collectionName: 'components_layout_heroes';
+  info: {
+    displayName: 'Hero';
+  };
+  attributes: {
+    callToAction: Schema.Attribute.Component<'components.link', false> &
+      Schema.Attribute.Required;
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
+    image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface SharedMedia extends Struct.ComponentSchema {
   collectionName: 'components_shared_media';
   info: {
@@ -65,6 +129,11 @@ export interface SharedSlider extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'components.icon-link': ComponentsIconLink;
+      'components.link': ComponentsLink;
+      'layout.footer': LayoutFooter;
+      'layout.header': LayoutHeader;
+      'layout.hero': LayoutHero;
       'shared.media': SharedMedia;
       'shared.quote': SharedQuote;
       'shared.rich-text': SharedRichText;
