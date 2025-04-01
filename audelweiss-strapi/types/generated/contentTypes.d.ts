@@ -514,11 +514,24 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    content: Schema.Attribute.DynamicZone<
+      [
+        'layout.hero',
+        'layout.header',
+        'shared.rich-text',
+        'shared.media',
+        'shared.slider',
+      ]
+    > &
+      Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     defaultSeo: Schema.Attribute.Component<'shared.seo', false>;
     favicon: Schema.Attribute.Media<'images' | 'files' | 'videos'>;
+    footer: Schema.Attribute.Component<'layout.footer', false>;
+    header: Schema.Attribute.Component<'layout.header', false> &
+      Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -528,36 +541,6 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     siteDescription: Schema.Attribute.Text & Schema.Attribute.Required;
     siteName: Schema.Attribute.String & Schema.Attribute.Required;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
-export interface ApiHeaderHeader extends Struct.SingleTypeSchema {
-  collectionName: 'headers';
-  info: {
-    description: '';
-    displayName: 'header';
-    pluralName: 'headers';
-    singularName: 'header';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    image: Schema.Attribute.Media<'images' | 'files'>;
-    links: Schema.Attribute.Component<'components.link', true>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::header.header'
-    > &
-      Schema.Attribute.Private;
-    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1078,7 +1061,6 @@ declare module '@strapi/strapi' {
       'api::author.author': ApiAuthorAuthor;
       'api::category.category': ApiCategoryCategory;
       'api::global.global': ApiGlobalGlobal;
-      'api::header.header': ApiHeaderHeader;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
