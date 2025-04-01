@@ -16,8 +16,7 @@
       "multiple": false,
       "required": false,
       "allowedTypes": [
-        "images",
-        "files"
+        "images"
       ]
     },
     "links": {
