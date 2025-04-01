@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ShoppingCart, User, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -80,7 +79,7 @@ export default function Header() {
                 </div>
 
                 {isOpen && (
-                    <div className="lg:hidden absolute top-16 left-0 w-full bg-white shadow-md p-6 flex flex-col space-y-4">
+                    <div className="lg:hidden border-t-3 border-[#E8A499] absolute top-14 left-0 w-full bg-white shadow-md px-12 pt-12 pb-8 flex flex-col space-y-4">
                         {menuItems.map((item) => (
                             <Link
                                 key={item.href}
@@ -91,6 +90,7 @@ export default function Header() {
                                 onClick={() => setIsOpen(false)}
                             >
                                 {item.title}
+                                <p className="mt-4 border-b-1 border-gray-100 w-full"></p>
                             </Link>
                         ))}
 
@@ -99,6 +99,7 @@ export default function Header() {
                             <User size={22} className="text-gray-700 hover:text-[#E8A499]" />
                             <span className="text-gray-700 hover:text-[#E8A499]">Se connecter</span>
                         </Link>
+                        <p className="border-b-1 border-gray-100 w-full"></p>
                     </div>
                 )}
             </div>
