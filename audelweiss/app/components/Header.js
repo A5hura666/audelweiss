@@ -6,6 +6,7 @@ import { ShoppingCart, User, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import {getStrapiCall} from "@/app/lib/utils";
 import siteData from "@/data/headerData.json";
+import MegaMenu from "./MegaMenu";
 
 export default function Header() {
     const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +16,7 @@ export default function Header() {
     const [headerData, setHeaderData] = useState(siteData);
     const [logoData, setLogoData] = useState('/logo-wide.svg');
     const [baseUrl, setBaseUrl] = useState('');
+    const [activeMegaMenu, setActiveMegaMenu] = useState(null);
     const pathname = usePathname();
     const cartCount = 3;
 
@@ -22,7 +24,7 @@ export default function Header() {
         const fetchHeaderData = async () => {
             try {
                 const response = await fetch(
-                    getStrapiCall('/api/global?populate[0]=header&populate[1]=header.iconsLinks&populate[2]=header.iconsLinks.icon&populate[3]=header.links&populate[4]=header.links.megaMenu&populate[5]=header.links.megaMenu.links')
+                    getStrapiCall('/api/global?populate[0]=header&populate[1]=header.iconsLinks&populate[2]=header.iconsLinks.icon&populate[3]=header.links&populate[4]=header.links.megaMenu&populate[5]=header.links.megaMenu.productLinks&populate[6]=header.links.megaMenu.productLinks.image')
                 );
                 const data = await response.json();
 
@@ -54,6 +56,8 @@ export default function Header() {
         const handleScroll = () => {
             if (window.scrollY > headerHeight && window.scrollY > lastScrollY) {
                 setIsVisible(false);
+                setIsOpen(false);
+                setActiveMegaMenu(null);
             } else {
                 setIsVisible(true);
             }
@@ -66,7 +70,7 @@ export default function Header() {
 
     return (
         <header className={`fixed z-50 top-0 left-0 w-full bg-white transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
-            <div className="container mx-auto flex justify-between items-center p-3 lg:p-8">
+            <div className="container mx-auto flex justify-between items-center p-3 lg:p-8 relative">
                 <Link href="/">
                     <img src={logoData} alt="Logo" className="w-[150px] lg:w-[200px]" />
                 </Link>
@@ -74,13 +78,21 @@ export default function Header() {
                 {/* MENU DESKTOP */}
                 <nav className="hidden lg:flex items-center space-x-5">
                     {headerData?.links?.map((item) => (
-                        <Link
+                        <div
                             key={item.id}
-                            href={item.url}
-                            className={`text-sm font-bold ${pathname === item.url ? "text-[#E8A499]" : "text-gray-700"} hover:text-[#E8A499] transition`}
+                            className="relative"
+                            onMouseEnter={() => item.megaMenu ? setActiveMegaMenu(item.id) : setActiveMegaMenu(null)}
                         >
-                            {item.label}
-                        </Link>
+                            <Link
+                                href={item.url}
+                                className={`text-sm font-bold ${pathname === item.url ? "text-[#E8A499]" : "text-gray-700"} hover:text-[#E8A499] transition`}
+                            >
+                                {item.label}
+                            </Link>
+                            {item.megaMenu && activeMegaMenu === item.id && (
+                                <MegaMenu productLinks={item.megaMenu.productLinks} baseUrl={baseUrl} />
+                            )}
+                        </div>
                     ))}
                     <div className="flex items-center space-x-4">
                         {headerData?.iconsLinks?.map((icon, index) => (
