@@ -48,7 +48,8 @@
         "shared.rich-text",
         "shared.media",
         "shared.slider",
-        "layout.category-highlight"
+        "layout.category-highlight",
+        "layout.blog-list"
       ],
       "required": true
     },

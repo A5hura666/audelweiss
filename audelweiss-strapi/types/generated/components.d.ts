@@ -72,6 +72,18 @@ export interface LayoutBlogItem extends Struct.ComponentSchema {
   };
 }
 
+export interface LayoutBlogList extends Struct.ComponentSchema {
+  collectionName: 'components_layout_blog_lists';
+  info: {
+    displayName: 'BlogList';
+  };
+  attributes: {
+    blogs: Schema.Attribute.Component<'layout.blog-item', true>;
+    pageTitle: Schema.Attribute.String & Schema.Attribute.Required;
+    text: Schema.Attribute.Text;
+  };
+}
+
 export interface LayoutCategoryHighlight extends Struct.ComponentSchema {
   collectionName: 'components_layout_category_highlights';
   info: {
@@ -195,6 +207,7 @@ declare module '@strapi/strapi' {
       'components.mega-menu': ComponentsMegaMenu;
       'components.product-link': ComponentsProductLink;
       'layout.blog-item': LayoutBlogItem;
+      'layout.blog-list': LayoutBlogList;
       'layout.category-highlight': LayoutCategoryHighlight;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;
