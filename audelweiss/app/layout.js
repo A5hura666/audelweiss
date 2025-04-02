@@ -12,7 +12,9 @@ export default function RootLayout({ children }) {
     useEffect(() => {
         const updateHeaderHeight = () => {
             const header = document.querySelector("header");
-            if (header) setHeaderHeight(header.offsetHeight);
+            if (header) {
+                setHeaderHeight(header.offsetHeight - 1);
+            }
         };
 
         updateHeaderHeight();
