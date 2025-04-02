@@ -156,6 +156,7 @@ declare module '@strapi/strapi' {
       'components.icon-link': ComponentsIconLink;
       'components.link': ComponentsLink;
       'components.mega-menu': ComponentsMegaMenu;
+      'layout.category-highlight': LayoutCategoryHighlight;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;
       'layout.hero': LayoutHero;

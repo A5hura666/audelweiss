@@ -45,10 +45,10 @@
       "type": "dynamiczone",
       "components": [
         "layout.hero",
-        "layout.header",
         "shared.rich-text",
         "shared.media",
-        "shared.slider"
+        "shared.slider",
+        "layout.category-highlight"
       ],
       "required": true
     },

@@ -517,10 +517,10 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
     content: Schema.Attribute.DynamicZone<
       [
         'layout.hero',
-        'layout.header',
         'shared.rich-text',
         'shared.media',
         'shared.slider',
+        'layout.category-highlight',
       ]
     > &
       Schema.Attribute.Required;

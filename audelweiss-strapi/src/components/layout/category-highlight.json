@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_layout_category_highlights",
+  "info": {
+    "displayName": "CategoryHighlight"
+  },
+  "options": {},
+  "attributes": {
+    "Categories": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.link",
+      "required": true
+    },
+    "Images": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": true,
+      "required": true
+    }
+  }
+}
