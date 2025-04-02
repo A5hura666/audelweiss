@@ -1,7 +1,8 @@
 {
   "collectionName": "components_components_product_links",
   "info": {
-    "displayName": "ProductLink"
+    "displayName": "ProductLink",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -10,16 +11,20 @@
       "required": true
     },
     "image": {
-      "allowedTypes": [
-        "images"
-      ],
       "type": "media",
       "multiple": false,
-      "required": true
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "description": {
       "type": "text",
       "required": false
+    },
+    "url": {
+      "type": "string",
+      "required": true
     }
   }
 }

@@ -42,12 +42,14 @@ export interface ComponentsMegaMenu extends Struct.ComponentSchema {
 export interface ComponentsProductLink extends Struct.ComponentSchema {
   collectionName: 'components_components_product_links';
   info: {
+    description: '';
     displayName: 'ProductLink';
   };
   attributes: {
     description: Schema.Attribute.Text;
     image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+    url: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
 
