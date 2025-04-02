@@ -1,0 +1,27 @@
+{
+  "kind": "singleType",
+  "collectionName": "blog_lists",
+  "info": {
+    "singularName": "blog-list",
+    "pluralName": "blog-lists",
+    "displayName": "BlogList"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "pageTitle": {
+      "type": "string",
+      "required": true
+    },
+    "text": {
+      "type": "text"
+    },
+    "blogs": {
+      "type": "component",
+      "repeatable": true,
+      "component": "layout.blog-item",
+      "required": true
+    }
+  }
+}
