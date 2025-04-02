@@ -3,9 +3,11 @@ import type { Schema, Struct } from '@strapi/strapi';
 export interface ComponentsIconLink extends Struct.ComponentSchema {
   collectionName: 'components_components_icon_links';
   info: {
+    description: '';
     displayName: 'icon-link';
   };
   attributes: {
+    actionType: Schema.Attribute.String;
     icon: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
     url: Schema.Attribute.String & Schema.Attribute.Required;
   };

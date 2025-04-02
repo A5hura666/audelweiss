@@ -1,21 +1,25 @@
 {
   "collectionName": "components_components_icon_links",
   "info": {
-    "displayName": "icon-link"
+    "displayName": "icon-link",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "icon": {
-      "allowedTypes": [
-        "images"
-      ],
       "type": "media",
       "multiple": false,
-      "required": true
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "url": {
       "type": "string",
       "required": true
+    },
+    "actionType": {
+      "type": "string"
     }
   }
 }
