@@ -21,6 +21,12 @@
       "type": "component",
       "repeatable": true,
       "component": "components.icon-link"
+    },
+    "pageLinks": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.classified-links",
+      "max": 2
     }
   }
 }

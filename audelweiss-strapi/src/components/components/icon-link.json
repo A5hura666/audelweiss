@@ -20,12 +20,6 @@
     },
     "actionType": {
       "type": "string"
-    },
-    "pageLinks": {
-      "type": "component",
-      "repeatable": true,
-      "component": "components.classified-links",
-      "required": false
     }
   }
 }

@@ -21,7 +21,6 @@ export interface ComponentsIconLink extends Struct.ComponentSchema {
   attributes: {
     actionType: Schema.Attribute.String;
     icon: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
-    pageLinks: Schema.Attribute.Component<'components.classified-links', true>;
     url: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
@@ -119,6 +118,13 @@ export interface LayoutFooter extends Struct.ComponentSchema {
   };
   attributes: {
     logo: Schema.Attribute.Media<'images'>;
+    pageLinks: Schema.Attribute.Component<'components.classified-links', true> &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 2;
+        },
+        number
+      >;
     socialLinks: Schema.Attribute.Component<'components.icon-link', true>;
     text: Schema.Attribute.Text;
   };
