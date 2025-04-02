@@ -34,55 +34,21 @@
   ],
   "iconsLinks": [
     {
-      "id": 3,
       "url": "/my-account",
       "actionType": null,
       "icon": {
-        "id": 15,
-        "documentId": "ta07x8dk7gw621vb6zpc1oxv",
         "name": "user.svg",
         "alternativeText": null,
-        "caption": null,
-        "width": 24,
-        "height": 24,
-        "formats": null,
-        "hash": "user_86820e98d4",
-        "ext": ".svg",
-        "mime": "image/svg+xml",
-        "size": 0.31,
-        "url": "/uploads/user_86820e98d4.svg",
-        "previewUrl": null,
-        "provider": "local",
-        "provider_metadata": null,
-        "createdAt": "2025-04-02T06:53:05.465Z",
-        "updatedAt": "2025-04-02T06:53:05.465Z",
-        "publishedAt": "2025-04-02T06:53:05.466Z"
+        "url": "/images/circle-dotted-user.svg"
       }
     },
     {
-      "id": 2,
       "url": "/cart",
       "actionType": "cart",
       "icon": {
-        "id": 14,
-        "documentId": "a8jvxyfun1o4jyj85d151df9",
         "name": "shopping-cart.svg",
         "alternativeText": null,
-        "caption": null,
-        "width": 24,
-        "height": 24,
-        "formats": null,
-        "hash": "shopping_cart_4e3bda8f32",
-        "ext": ".svg",
-        "mime": "image/svg+xml",
-        "size": 0.4,
-        "url": "/uploads/shopping_cart_4e3bda8f32.svg",
-        "previewUrl": null,
-        "provider": "local",
-        "provider_metadata": null,
-        "createdAt": "2025-04-01T14:58:54.091Z",
-        "updatedAt": "2025-04-01T15:01:01.575Z",
-        "publishedAt": "2025-04-01T14:58:54.091Z"
+        "url": "/images/shopping-cart.svg"
       }
     }
   ]

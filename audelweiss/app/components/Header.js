@@ -14,6 +14,7 @@ export default function Header() {
     const [headerHeight, setHeaderHeight] = useState(0);
     const [headerData, setHeaderData] = useState(siteData);
     const [logoData, setLogoData] = useState('/logo-wide.svg');
+    const [baseUrl, setBaseUrl] = useState('');
     const pathname = usePathname();
     const cartCount = 3;
 
@@ -25,7 +26,8 @@ export default function Header() {
                 );
                 const data = await response.json();
                 setHeaderData(data.data.header);
-                setLogoData(process.env.STRAPI_BASE_URL + data.data.header.logo.url);
+                setBaseUrl(process.env.STRAPI_BASE_URL);
+                setLogoData(baseUrl + data.data.header.logo.url);
             } catch (error) {
                 console.error("Erreur lors de la récupération du header :", error);
             }
@@ -74,7 +76,7 @@ export default function Header() {
                         {headerData?.iconsLinks?.map((icon) => (
                             <Link key={icon.id} href={icon.url} className="relative">
                                 <img
-                                    src={process.env.STRAPI_BASE_URL + icon.icon.url}
+                                    src={baseUrl + icon.icon.url}
                                     alt={icon.icon.alternativeText || "Icon"}
                                     className="w-6 h-6 hover:opacity-80 transition"
                                 />
@@ -94,7 +96,7 @@ export default function Header() {
                     {headerData?.iconsLinks?.map((icon) => (
                         <Link key={icon.id} href={icon.url} className="relative">
                             <img
-                                src={process.env.STRAPI_BASE_URL + icon.icon.url}
+                                src={baseUrl + icon.icon.url}
                                 alt={icon.icon.alternativeText || "Icon"}
                                 className="w-6 h-6 hover:opacity-80 transition"
                             />

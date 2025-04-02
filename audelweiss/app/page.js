@@ -28,7 +28,7 @@ export default function Home() {
             <div className="m-auto md:m-auto lg:ml-[30rem] xl:ml-[40rem] md:w-1/2 w-[80%] text-left">
                 <h1 className="flex flex-col text-[3rem] lg:text-[5.5rem] text-[#303028] lg:leading-[5.5rem] leading-[3.5rem]">
                     <span>Des créations</span>
-                    <span className="lg:text-pink-400 text-white">douce</span>
+                    <span className="lg:text-[#FF6187] text-white">douce</span>
                     <span>au crochet</span>
                 </h1>
                 <p className="mt-4 mb-8 max-w-2xl font-light  text-lg text-[#303028] leading-8">
