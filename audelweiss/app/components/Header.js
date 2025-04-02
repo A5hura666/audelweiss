@@ -65,7 +65,7 @@ export default function Header() {
     }, [lastScrollY, headerHeight]);
 
     return (
-        <header className={`fixed top-0 left-0 w-full bg-white transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
+        <header className={`fixed z-50 top-0 left-0 w-full bg-white transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
             <div className="container mx-auto flex justify-between items-center p-3 lg:p-8">
                 <Link href="/">
                     <img src={logoData} alt="Logo" className="w-[150px] lg:w-[200px]" />
