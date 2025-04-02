@@ -35,6 +35,27 @@ export interface ComponentsMegaMenu extends Struct.ComponentSchema {
   };
 }
 
+export interface LayoutBlogItem extends Struct.ComponentSchema {
+  collectionName: 'components_layout_blog_items';
+  info: {
+    description: '';
+    displayName: 'blogPreviewItem';
+  };
+  attributes: {
+    ArticleCategory: Schema.Attribute.Enumeration<
+      ['Infos', 'Conseils', 'Id\u00E9es cadeaux']
+    > &
+      Schema.Attribute.Required;
+    date: Schema.Attribute.Date & Schema.Attribute.Required;
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
+    linkToArticle: Schema.Attribute.Component<'components.link', false> &
+      Schema.Attribute.Required;
+    readingTime: Schema.Attribute.Integer;
+    thumbnail: Schema.Attribute.Media<'images'>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface LayoutCategoryHighlight extends Struct.ComponentSchema {
   collectionName: 'components_layout_category_highlights';
   info: {
@@ -156,6 +177,7 @@ declare module '@strapi/strapi' {
       'components.icon-link': ComponentsIconLink;
       'components.link': ComponentsLink;
       'components.mega-menu': ComponentsMegaMenu;
+      'layout.blog-item': LayoutBlogItem;
       'layout.category-highlight': LayoutCategoryHighlight;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;

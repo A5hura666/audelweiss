@@ -1,0 +1,49 @@
+{
+  "collectionName": "components_layout_blog_items",
+  "info": {
+    "displayName": "blogPreviewItem",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "ArticleCategory": {
+      "type": "enumeration",
+      "enum": [
+        "Infos",
+        "Conseils",
+        "Idées cadeaux"
+      ],
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "date": {
+      "type": "date",
+      "required": true
+    },
+    "readingTime": {
+      "type": "integer",
+      "required": false
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "linkToArticle": {
+      "type": "component",
+      "repeatable": false,
+      "component": "components.link",
+      "required": true
+    },
+    "thumbnail": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    }
+  }
+}
