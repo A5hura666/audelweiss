@@ -1,5 +1,17 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface ComponentsClassifiedLinks extends Struct.ComponentSchema {
+  collectionName: 'components_components_classified_links';
+  info: {
+    displayName: 'ClassifiedLinks';
+  };
+  attributes: {
+    Category: Schema.Attribute.String & Schema.Attribute.Required;
+    pageLinks: Schema.Attribute.Component<'components.link', true> &
+      Schema.Attribute.Required;
+  };
+}
+
 export interface ComponentsIconLink extends Struct.ComponentSchema {
   collectionName: 'components_components_icon_links';
   info: {
@@ -9,6 +21,7 @@ export interface ComponentsIconLink extends Struct.ComponentSchema {
   attributes: {
     actionType: Schema.Attribute.String;
     icon: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    pageLinks: Schema.Attribute.Component<'components.classified-links', true>;
     url: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
@@ -101,12 +114,12 @@ export interface LayoutCategoryHighlight extends Struct.ComponentSchema {
 export interface LayoutFooter extends Struct.ComponentSchema {
   collectionName: 'components_layout_footers';
   info: {
+    description: '';
     displayName: 'footer';
   };
   attributes: {
     logo: Schema.Attribute.Media<'images'>;
-    pageLinks: Schema.Attribute.Component<'components.link', true>;
-    socialLinks: Schema.Attribute.Component<'components.link', true>;
+    socialLinks: Schema.Attribute.Component<'components.icon-link', true>;
     text: Schema.Attribute.Text;
   };
 }
@@ -204,6 +217,7 @@ export interface SharedSlider extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'components.classified-links': ComponentsClassifiedLinks;
       'components.icon-link': ComponentsIconLink;
       'components.link': ComponentsLink;
       'components.mega-menu': ComponentsMegaMenu;
