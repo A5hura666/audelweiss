@@ -1,14 +1,16 @@
 {
   "collectionName": "components_components_mega_menus",
   "info": {
-    "displayName": "megaMenu"
+    "displayName": "megaMenu",
+    "description": ""
   },
   "options": {},
   "attributes": {
-    "links": {
+    "productLinks": {
       "type": "component",
       "repeatable": true,
-      "component": "components.icon-link"
+      "component": "components.product-link",
+      "required": true
     }
   }
 }
