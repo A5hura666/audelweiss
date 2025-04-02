@@ -34,6 +34,7 @@
   ],
   "iconsLinks": [
     {
+      "id": 3,
       "url": "/my-account",
       "actionType": null,
       "icon": {
@@ -43,6 +44,7 @@
       }
     },
     {
+      "id": 2,
       "url": "/cart",
       "actionType": "cart",
       "icon": {

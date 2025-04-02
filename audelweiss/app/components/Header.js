@@ -25,9 +25,19 @@ export default function Header() {
                     getStrapiCall('/api/global?populate[0]=header&populate[1]=header.iconsLinks&populate[2]=header.iconsLinks.icon&populate[3]=header.links&populate[4]=header.links.megaMenu&populate[5]=header.links.megaMenu.links')
                 );
                 const data = await response.json();
-                setHeaderData(data.data.header);
-                setBaseUrl(process.env.STRAPI_BASE_URL);
-                setLogoData(baseUrl + data.data.header.logo.url);
+
+                if (data?.data?.header) {
+                    setHeaderData(data.data.header);
+                }
+
+                const updatedBaseUrl = process.env.STRAPI_BASE_URL;
+                setBaseUrl(updatedBaseUrl);
+
+                if (data?.data?.header?.logo?.url) {
+                    setLogoData(updatedBaseUrl + data?.data?.header?.logo?.url);
+                } else {
+                    console.warn("Logo URL is missing from Strapi response");
+                }
             } catch (error) {
                 console.error("Erreur lors de la récupération du header :", error);
             }
@@ -73,14 +83,13 @@ export default function Header() {
                         </Link>
                     ))}
                     <div className="flex items-center space-x-4">
-                        {headerData?.iconsLinks?.map((icon) => (
-                            <Link key={icon.id} href={icon.url} className="relative">
+                        {headerData?.iconsLinks?.map((icon, index) => (
+                            <Link key={icon.id || `icon-${index}`} href={icon.url} className="relative">
                                 <img
                                     src={baseUrl + icon.icon.url}
                                     alt={icon.icon.alternativeText || "Icon"}
                                     className="w-6 h-6 hover:opacity-80 transition"
                                 />
-                                {/* Affichage du compteur si c'est le panier */}
                                 {icon.actionType === "cart" && cartCount > 0 && (
                                     <span className="absolute -top-2 -right-2 bg-[#E8A499] text-white text-xs font-bold rounded-full px-1">
                                         {cartCount}
@@ -93,8 +102,8 @@ export default function Header() {
 
                 {/* MENU MOBILE */}
                 <div className="lg:hidden flex items-center space-x-4">
-                    {headerData?.iconsLinks?.map((icon) => (
-                        <Link key={icon.id} href={icon.url} className="relative">
+                    {headerData?.iconsLinks?.map((icon, index) => (
+                        <Link key={icon.id || `icon-${index}`} href={icon.url} className="relative">
                             <img
                                 src={baseUrl + icon.icon.url}
                                 alt={icon.icon.alternativeText || "Icon"}
