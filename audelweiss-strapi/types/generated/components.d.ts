@@ -51,6 +51,27 @@ export interface ComponentsMegaMenu extends Struct.ComponentSchema {
   };
 }
 
+export interface ComponentsProductArticleCard extends Struct.ComponentSchema {
+  collectionName: 'components_components_product_article_cards';
+  info: {
+    description: '';
+    displayName: 'productArticleCard';
+    icon: 'shirt';
+  };
+  attributes: {
+    minProductPrice: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    productCategory: Schema.Attribute.Enumeration<
+      ['Scrunchy', 'Bandeaux', 'Accessoires', 'Sac/Bananes', 'Cuisine/Deco']
+    > &
+      Schema.Attribute.Required;
+    productImages: Schema.Attribute.Media<'images', true> &
+      Schema.Attribute.Required;
+    productLink: Schema.Attribute.Component<'components.link', false>;
+    productMaxPrice: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    productName: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface ComponentsProductLink extends Struct.ComponentSchema {
   collectionName: 'components_components_product_links';
   info: {
@@ -227,6 +248,7 @@ declare module '@strapi/strapi' {
       'components.icon-link': ComponentsIconLink;
       'components.link': ComponentsLink;
       'components.mega-menu': ComponentsMegaMenu;
+      'components.product-article-card': ComponentsProductArticleCard;
       'components.product-link': ComponentsProductLink;
       'layout.blog-item': LayoutBlogItem;
       'layout.blog-list': LayoutBlogList;
