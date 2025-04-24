@@ -23,24 +23,70 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="h-[600px] lg:h-[700px] bg-cover bg-center flex flex-col items-center justify-center text-center text-white py-[50px]"
-             style={{ backgroundImage: background }}>
-            <div className="m-auto md:m-auto lg:ml-[30rem] xl:ml-[40rem] md:w-1/2 w-[80%] text-left">
-                <h1 className="flex flex-col text-[3rem] lg:text-[5.5rem] text-[#303028] lg:leading-[5.5rem] leading-[3.5rem]">
-                    <span>Des créations</span>
-                    <span className="lg:text-[#FF6187] text-white">douce</span>
-                    <span>au crochet</span>
-                </h1>
-                <p className="mt-4 mb-8 max-w-2xl font-light  text-lg text-[#303028] leading-8">
-                    Chaque pièce est soigneusement confectionnée à la main dans les Hautes-Alpes.
-                    Offrez-vous ou à vos proches un savoir-faire authentique, alliant douceur et originalité.
-                </p>
-                <Link href="#">
-                    <span className="px-6 py-4 text-[#D6D0C2] bg-[#303028] text-white text-lg hover:bg-[#FF6187] transition">
+        <div>
+            <section
+                className="h-[600px] lg:h-[700px] bg-cover bg-center flex flex-col items-center justify-center text-center text-white py-[50px]"
+                style={{backgroundImage: background}}>
+                <article
+                    className="m-auto md:m-auto lg:ml-[30rem] xl:ml-[40rem] 2xl:ml-[60rem] md:w-1/2 w-[80%] text-left">
+                    <h1 className="flex flex-col text-[3rem] lg:text-[5.5rem] text-[#303028] lg:leading-[5.5rem] leading-[3.5rem]">
+                        <span>Des créations</span>
+                        <span className="lg:text-[#FF6187] text-white">douce</span>
+                        <span>au crochet</span>
+                    </h1>
+                    <p className="mt-4 mb-8 max-w-2xl font-light  text-lg text-[#303028] leading-8">
+                        Chaque pièce est soigneusement confectionnée à la main dans les Hautes-Alpes.
+                        Offrez-vous ou à vos proches un savoir-faire authentique, alliant douceur et originalité.
+                    </p>
+                    <Link href="#">
+                    <span
+                        className="px-6 py-4 text-[#D6D0C2] bg-[#303028] text-white text-lg hover:bg-[#FF6187] transition">
                         Découvrir la boutique
                     </span>
-                </Link>
-            </div>
+                    </Link>
+                </article>
+            </section>
+
+            <section className="bg-white px-4 py-24">
+                <div className="flex flex-col lg:flex-row justify-center items-center gap-16 lg:gap-28">
+                    <article className="w-86 max-w-md -translate-y-10">
+                        <div>
+                            <span className="text-[#F6B99C] text-3xl">01</span>
+                            <h2 className="w-5/6 uppercase text-2xl text-black mt-4">Artisanat embrunais</h2>
+                            <p className="text-gray-700 mt-2 leading-7">
+                                Je vis dans les Hautes-Alpes, un cadre qui m’inspire chaque jour.
+                                Toutes mes créations sont réalisées ici, à la main, avec des matériaux choisis avec soin.
+                                J’aime l’idée de proposer des pièces qui portent en elles un peu de cette authenticité montagnarde.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article className="w-86 max-w-md translate-y-10">
+                        <div>
+                            <span className="text-[#F6B99C] text-3xl">02</span>
+                            <h2 className="w-5/6 uppercase font-normal text-2xl text-black mt-4">Éditions limitées ou sur-mesure</h2>
+                            <p className="text-gray-700 mt-2 leading-7">
+                                Je suis une créatrice curieuse, toujours en quête de nouvelles idées.
+                                J’aime tester des techniques, des couleurs et des matières différentes.
+                                Cette envie d’explorer donne naissance à des pièces variées : certaines sont produites en petites séries,
+                                d’autres peuvent être personnalisées selon vos goûts et vos besoins.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article className="w-86 max-w-md -translate-y-10">
+                        <div>
+                            <span className="text-[#F6B99C] text-3xl">03</span>
+                            <h2 className="w-5/6 uppercase font-normal text-2xl text-black mt-4">Énergie et bien-être avec le Reiki</h2>
+                            <p className="text-gray-700 mt-2 leading-7">
+                                Depuis 2021, je suis certifiée praticienne Reiki.
+                                Chaque fois que je crée, je me connecte à cette énergie pour infuser mes pièces d’intentions positives.
+                                Mon but est de proposer des créations qui vous apportent à la fois bien-être et harmonie visuelle.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+            </section>
         </div>
     );
 }
