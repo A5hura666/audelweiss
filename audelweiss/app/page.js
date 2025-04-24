@@ -5,6 +5,39 @@ import {useEffect, useState} from "react";
 
 export default function Home() {
     const [background, setBackground] = useState("");
+    const [hoveredIndex, setHoveredIndex] = useState(null);
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+    const main_products = [
+        {
+            img: "https://audelweiss.fr/wp-content/uploads/2025/02/geocache-400x284.jpg.webp",
+            alt: "Objet voyageur",
+            title: "Objet voyageur",
+            category: "Amigurumis",
+            href: "https://audelweiss.fr/project/objet-voyageur/",
+        },
+        {
+            img: "https://audelweiss.fr/wp-content/uploads/2025/02/bandeaufantaisie-400x284.jpg.webp",
+            alt: "Bonnet panda",
+            title: "Bonnet panda",
+            category: "Bonnet",
+            href: "https://audelweiss.fr/project/bonnet-panda/",
+        },
+        {
+            img: "https://audelweiss.fr/wp-content/uploads/2025/02/cardigan-400x284.jpg.webp",
+            alt: "Cardigan",
+            title: "Cardigan",
+            category: "Vêtement",
+            href: "https://audelweiss.fr/project/cardigan/",
+        },
+        {
+            img: "https://audelweiss.fr/wp-content/uploads/2025/02/patate-positive-400x284.jpg.webp",
+            alt: "La Patate positive",
+            title: "La Patate positive",
+            category: "Amigurumis, Déco",
+            href: "https://audelweiss.fr/project/la-patate-positive/",
+        },
+    ];
 
     useEffect(() => {
         const updateBackground = () => {
@@ -85,6 +118,53 @@ export default function Home() {
                             </p>
                         </div>
                     </article>
+                </div>
+            </section>
+
+            <section id="home-portfolio" className="bg-white px-10 md:px-40 py-20 relative z-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {main_products.map((proj, i) => (
+                        <div
+                            key={i}
+                            className="group relative overflow-visible shadow-md"
+                            onMouseEnter={() => setHoveredIndex(i)}
+                            onMouseLeave={() => setHoveredIndex(null)}
+                            onMouseMove={(e) =>
+                                setMousePos({
+                                    x: e.nativeEvent.offsetX,
+                                    y: e.nativeEvent.offsetY,
+                                })
+                            }
+                        >
+                            <a href={proj.href}>
+                                <img
+                                    src={proj.img}
+                                    alt={proj.alt}
+                                    className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
+                                />
+                            </a>
+
+                            {hoveredIndex === i && (
+                                <div
+                                    className="absolute z-50 pointer-events-auto"
+                                    style={{
+                                        left: `${mousePos.x}px`,
+                                        top: `${mousePos.y}px`,
+                                    }}
+                                >
+                                    {/* Titre avec animation fade-down */}
+                                    <div className="bg-[#F6B99C] text-white px-4 py-2 w-56 shadow animate-fade-down">
+                                        <h2 className="text-2xl font-bold leading-tight">{proj.title}</h2>
+                                    </div>
+
+                                    {/* Catégorie avec animation fade-down-delay */}
+                                    <div className="bg-[#F6B99C] text-white px-4 py-2 w-40 animate-fade-down-delay">
+                                        <p className="text-sm">{proj.category}</p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    ))}
                 </div>
             </section>
         </div>
