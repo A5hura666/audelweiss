@@ -1,0 +1,47 @@
+{
+  "collectionName": "components_components_product_article_cards",
+  "info": {
+    "displayName": "productArticleCard",
+    "icon": "shirt",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "productName": {
+      "type": "string",
+      "required": true
+    },
+    "productCategory": {
+      "type": "enumeration",
+      "enum": [
+        "Scrunchy",
+        "Bandeaux",
+        "Accessoires",
+        "Sac/Bananes",
+        "Cuisine/Deco"
+      ],
+      "required": true
+    },
+    "productMaxPrice": {
+      "type": "decimal",
+      "required": true
+    },
+    "minProductPrice": {
+      "type": "decimal",
+      "required": true
+    },
+    "productImages": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "productLink": {
+      "type": "component",
+      "repeatable": false,
+      "component": "components.link"
+    }
+  }
+}
