@@ -10,13 +10,13 @@ function valuetext(value) {
   return `${value}€`;
 }
 
-let test = [
+let data = [
   {
     category: "BONNETS",
     model: "POMPOM",
     name: "Urban Yeti",
     price: "14.00€ - 18,00€",
-    link: "/shop/bonnets/pompom-urban-yeti",
+    link: "/shop/product/pompom-urban-yeti",
     img1: "/images/shop/bonnet.png",
     img2: "/images/shop/bg3.png.webp",
   },
@@ -57,7 +57,7 @@ let test = [
     model: "POMPOM",
     name: "Urban Yeti",
     price: "14.00€ - 18,00€",
-    link: "/shop/bonnets/pompom-urban-yeti6",
+    link: "/shop/products/pompom-urban-yeti6",
     img1: "/images/shop/bonnet.png",
   },
 ];
@@ -282,7 +282,7 @@ export default function Shop() {
           id="products"
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols- w-full md:w-3/4 gap-4"
         >
-          {test.map((item) => (
+          {data.map((item) => (
             <ShopCard
               key={item.link}
               category={item.category}
