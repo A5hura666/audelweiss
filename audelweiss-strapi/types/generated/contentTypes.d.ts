@@ -402,7 +402,7 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
   collectionName: 'articles';
   info: {
     description: 'Create your blog content';
-    displayName: 'Article';
+    displayName: 'BlogArticle';
     pluralName: 'articles';
     singularName: 'article';
   };
@@ -410,7 +410,6 @@ export interface ApiArticleArticle extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    author: Schema.Attribute.Relation<'manyToOne', 'api::author.author'>;
     blocks: Schema.Attribute.DynamicZone<
       ['shared.media', 'shared.quote', 'shared.rich-text', 'shared.slider']
     >;
@@ -450,7 +449,6 @@ export interface ApiAuthorAuthor extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
-    articles: Schema.Attribute.Relation<'oneToMany', 'api::article.article'>;
     avatar: Schema.Attribute.Media<'images' | 'files' | 'videos'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -542,6 +540,307 @@ export interface ApiGlobalGlobal extends Struct.SingleTypeSchema {
     publishedAt: Schema.Attribute.DateTime;
     siteDescription: Schema.Attribute.Text & Schema.Attribute.Required;
     siteName: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiProductAdditionnalInformationProductAdditionnalInformation
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'product_additionnal_informations';
+  info: {
+    description: '';
+    displayName: 'productAdditionnalInformation';
+    pluralName: 'product-additionnal-informations';
+    singularName: 'product-additionnal-information';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    informationIcon: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
+    informationTitle: Schema.Attribute.String;
+    informationValue: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-additionnal-information.product-additionnal-information'
+    > &
+      Schema.Attribute.Private;
+    product_article: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::product-article-card.product-article-card'
+    >;
+    product_article_description: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::product-article-description.product-article-description'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiProductArticleCardProductArticleCard
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'product_article_cards';
+  info: {
+    description: '';
+    displayName: 'productArticle';
+    pluralName: 'product-article-cards';
+    singularName: 'product-article-card';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-article-card.product-article-card'
+    > &
+      Schema.Attribute.Private;
+    product_additionnal_information: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::product-additionnal-information.product-additionnal-information'
+    >;
+    productAdultPrice: Schema.Attribute.Decimal;
+    productCategory: Schema.Attribute.Enumeration<
+      [
+        'Scrunchy',
+        'Bandeaux',
+        'Accessoires',
+        'Sac/Bananes',
+        'Cuisine/Deco',
+        'Bonnets',
+      ]
+    >;
+    productChildPrice: Schema.Attribute.Decimal;
+    productImages: Schema.Attribute.Media<'images', true> &
+      Schema.Attribute.Required;
+    productLink: Schema.Attribute.Text;
+    productName: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    quantity: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
+    score: Schema.Attribute.Decimal;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiProductArticleDescriptionProductArticleDescription
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'product_article_descriptions';
+  info: {
+    description: '';
+    displayName: 'productArticleDescription';
+    pluralName: 'product-article-descriptions';
+    singularName: 'product-article-description';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.RichText;
+    descriptionTitle: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-article-description.product-article-description'
+    > &
+      Schema.Attribute.Private;
+    product_additionnal_informations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-additionnal-information.product-additionnal-information'
+    >;
+    product_colors: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-color.product-color'
+    >;
+    productPhotos: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    technicalDetail: Schema.Attribute.RichText;
+    technicalDetailTitle: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiProductColorProductColor
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'product_colors';
+  info: {
+    description: '';
+    displayName: 'productColor';
+    pluralName: 'product-colors';
+    singularName: 'product-color';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    canBeSecondary: Schema.Attribute.Boolean;
+    colorImage: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios'
+    >;
+    colorName: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-color.product-color'
+    > &
+      Schema.Attribute.Private;
+    product_article_description: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::product-article-description.product-article-description'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiProductCommentResponseProductCommentResponse
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'product_comment_responses';
+  info: {
+    displayName: 'ProductCommentResponse';
+    pluralName: 'product-comment-responses';
+    singularName: 'product-comment-response';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-comment-response.product-comment-response'
+    > &
+      Schema.Attribute.Private;
+    product_comment: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::product-comment.product-comment'
+    >;
+    productCommentResponseDate: Schema.Attribute.Date;
+    productCommentResponseText: Schema.Attribute.Text;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users_permissions_user: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
+export interface ApiProductCommentProductComment
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'product_comments';
+  info: {
+    description: '';
+    displayName: 'ProductComment';
+    pluralName: 'product-comments';
+    singularName: 'product-comment';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    comment: Schema.Attribute.Text;
+    commentImage: Schema.Attribute.Media<
+      'images' | 'files' | 'videos' | 'audios',
+      true
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-comment.product-comment'
+    > &
+      Schema.Attribute.Private;
+    product_article_description: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::product-article-description.product-article-description'
+    >;
+    product_comment_responses: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-comment-response.product-comment-response'
+    >;
+    productCommentDate: Schema.Attribute.Date;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users_permissions_user: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
+export interface ApiProductOfferProductOffer
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'product_offers';
+  info: {
+    displayName: 'productOffer';
+    pluralName: 'product-offers';
+    singularName: 'product-offer';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-offer.product-offer'
+    > &
+      Schema.Attribute.Private;
+    product_article_description: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::product-article-description.product-article-description'
+    >;
+    productOfferDescription: Schema.Attribute.RichText;
+    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1062,6 +1361,13 @@ declare module '@strapi/strapi' {
       'api::author.author': ApiAuthorAuthor;
       'api::category.category': ApiCategoryCategory;
       'api::global.global': ApiGlobalGlobal;
+      'api::product-additionnal-information.product-additionnal-information': ApiProductAdditionnalInformationProductAdditionnalInformation;
+      'api::product-article-card.product-article-card': ApiProductArticleCardProductArticleCard;
+      'api::product-article-description.product-article-description': ApiProductArticleDescriptionProductArticleDescription;
+      'api::product-color.product-color': ApiProductColorProductColor;
+      'api::product-comment-response.product-comment-response': ApiProductCommentResponseProductCommentResponse;
+      'api::product-comment.product-comment': ApiProductCommentProductComment;
+      'api::product-offer.product-offer': ApiProductOfferProductOffer;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
