@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@import "tailwindcss";
-
 @layer utilities {
   @keyframes fadeDown {
     from {

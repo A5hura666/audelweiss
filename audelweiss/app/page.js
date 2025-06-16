@@ -3,6 +3,8 @@
 import Link from "next/link";
 import {useEffect, useState} from "react";
 import AccessoiresHoverSection from "./components/AccessoiresHoverSection";
+import ShopCard from "@/app/components/shopCard";
+import * as React from "react";
 
 export default function Home() {
     const [background, setBackground] = useState("");
@@ -66,6 +68,48 @@ export default function Home() {
             href: "/product-category/accessoires/",
         }
     };
+
+    let products = [
+        {
+            category: "BONNETS",
+            model: "POMPOM",
+            name: "Urban Yeti",
+            priceMin: 14.00,
+            priceMax: 18.00,
+            rating: 4,
+            link: "/shop/product/pompom-urban-yeti",
+            img1: "/images/shop/bonnet.png",
+            img2: "/images/shop/bg3.png.webp",
+            addToCart: false,
+        },
+        {
+            category: "BONNETS",
+            model: "POMPOM",
+            name: "Urban Yeti",
+            price: 14.00,
+            link: "/shop/bonnets/pompom-urban-yeti2",
+            img1: "/images/shop/bonnet.png",
+            addToCart: false,
+        },
+        {
+            category: "BONNETS",
+            model: "POMPOM",
+            name: "Urban Yeti",
+            price: 16.00,
+            link: "/shop/bonnets/pompom-urban-yeti3",
+            img1: "/images/shop/bonnet.png",
+            addToCart: false,
+        },
+        {
+            category: "BONNETS",
+            model: "POMPOM",
+            name: "Urban Yeti",
+            price: 20.00,
+            link: "/shop/bonnets/pompom-urban-yeti4",
+            img1: "/images/shop/bonnet.png",
+            addToCart: true,
+        },
+    ];
 
     useEffect(() => {
         const updateBackground = () => {
@@ -188,12 +232,14 @@ export default function Home() {
                                     }}
                                 >
                                     {/* Titre avec animation fade-down */}
-                                    <div className="bg-[#F6B99C] text-white px-4 py-2 min-w-54 w-full shadow animate-fade-down">
+                                    <div
+                                        className="bg-[#F6B99C] text-white px-4 py-2 min-w-54 w-full shadow animate-fade-down">
                                         <h2 className="text-xl font-bold leading-tight">{proj.title}</h2>
                                     </div>
 
                                     {/* Catégorie avec animation fade-down-delay */}
-                                    <div className="bg-[#F6B99C] text-white px-4 py-2 w-40 animate-fade-down-delay uppercase">
+                                    <div
+                                        className="bg-[#F6B99C] text-white px-4 py-2 w-40 animate-fade-down-delay uppercase">
                                         <p className="text-sm">{proj.category}</p>
                                     </div>
                                 </div>
@@ -222,12 +268,41 @@ export default function Home() {
 
                         {/* Section des accessoires qui prend plus de place */}
                         <div className="col-span-1 md:col-span-2">
-                            <AccessoiresHoverSection items={accessoiresCategory.accessoiresItems} buttonItem={accessoiresCategory.buttonAction} />
+                            <AccessoiresHoverSection items={accessoiresCategory.accessoiresItems}
+                                                     buttonItem={accessoiresCategory.buttonAction}/>
                         </div>
                     </div>
                 </div>
             </section>
 
+            <section className="bg-white py-12 px-4">
+                <div className="max-w-6xl mx-auto text-center mb-12 text-3xl text-gray-800">
+                    <h2>
+                        Des créations <em className="italic font-bold">artisanales</em> uniques
+                    </h2>
+                    <p className="mt-2">
+                        Fait main avec <strong className="font-bold">passion</strong>, pour toi et ceux que tu aimes ✨
+                    </p>
+                </div>
+
+                <div className="max-w-6xl mx-auto grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                    {products.map((item) => (
+                        <ShopCard
+                            key={item.link}
+                            category={item.category}
+                            model={item.model}
+                            name={item.name}
+                            price={item.price}
+                            link={item.link}
+                            img1={item.img1}
+                            img2={item.img2 !== undefined ? item.img2 : ""}
+                            addToCart={item.addToCart}
+                            priceMin={item.priceMin}
+                            priceMax={item.priceMax}
+                        />
+                    ))}
+                </div>
+            </section>
         </div>
     );
 }

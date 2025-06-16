@@ -2,58 +2,93 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { CirclePlus } from "lucide-react";
+import { CirclePlus, ShoppingCart, Star, StarOff } from "lucide-react";
 
 export default function ShopCard(props) {
   const [isHovered, setIsHovered] = useState(false);
 
+  const {
+    category,
+    model,
+    name,
+    price,
+    priceMin,
+    priceMax,
+    rating,
+    link,
+    addToCart,
+    img1,
+    img2,
+  } = props;
+
+  const displayPrice = typeof price === "number"
+      ? `${price.toFixed(2)}€`
+      : priceMin != null && priceMax != null
+          ? `${priceMin.toFixed(2)}€ - ${priceMax.toFixed(2)}€`
+          : "Prix non dispo";
+
+  const stars =
+      typeof rating === "number"
+          ? Array.from({ length: 5 }, (_, i) =>
+              i < rating ? (
+                  <Star key={i} className="w-4 h-4 text-yellow-400 inline-block" />
+              ) : (
+                  <StarOff key={i} className="w-4 h-4 text-gray-300 inline-block" />
+              )
+          )
+          : null;
+
   return (
-    <Link href={props.link} className="relative block">
-      <div className="flex flex-col items-center">
+      <div className="relative flex flex-col items-center w-60">
         <div
-          className="relative flex justify-center group w-60 h-60"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+            className="relative flex justify-center group w-full h-60"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
           <img
-            src="/images/shop/bonnet.png"
-            alt={`${props.category} ${props.model} ${props.name}`}
-            className={`absolute w-full h-full object-cover transition-opacity duration-300 ${
-              isHovered && props.img2 ? "opacity-0" : "opacity-100"
-            }`}
+              src={img1 || "/images/shop/bonnet.png"}
+              alt={`${category} ${model} ${name}`}
+              className={`absolute w-full h-full object-cover transition-opacity duration-300 ${
+                  isHovered && img2 ? "opacity-0" : "opacity-100"
+              }`}
           />
 
-          {props.img2 && (
-            <img
-              src={props.img2}
-              alt={`${props.category} ${props.model} ${props.name} - hover`}
-              className={`absolute w-full h-full object-cover transition-opacity duration-300 ${
-                isHovered ? "opacity-100" : "opacity-0"
-              }`}
-            />
+          {img2 && (
+              <img
+                  src={img2}
+                  alt={`${category} ${model} ${name} - hover`}
+                  className={`absolute w-full h-full object-cover transition-opacity duration-300 ${
+                      isHovered ? "opacity-100" : "opacity-0"
+                  }`}
+              />
           )}
 
-          {!props.img2 && (
-            <div className="absolute z-10 inset-0 bg-white flex items-center justify-center opacity-0 group-hover:opacity-80 transition-opacity duration-300 ease-in-out">
-              <CirclePlus className="w-12 h-12 text-[#ff6187]" />
-            </div>
-          )}
-
-          <a
-            href={props.link}
-            className="lg:w-11/12 z-11 absolute w-5/6 bottom-2 bg-black text-white p-2 px-4 hover:bg-[#ff6187] shadow-md transition duration-300 ease-in-out"
-          >
-            <CirclePlus className="inline-block mr-2" /> Choix des options
-          </a>
+          <div className="absolute z-10 bottom-2 w-full px-4">
+            {addToCart ? (
+                <button className="w-full bg-[#ff6187] text-white text-sm py-2 hover:bg-black transition flex items-center justify-center gap-2">
+                  <ShoppingCart className="w-4 h-4" />
+                  Ajouter au panier
+                </button>
+            ) : (
+                <Link
+                    href={link || "#"}
+                    className="w-full block bg-black text-white text-sm py-2 hover:bg-[#ff6187] transition text-center"
+                >
+                  <CirclePlus className="inline-block mr-1" />
+                  Choix des options
+                </Link>
+            )}
+          </div>
         </div>
+
         <div className="text-center mt-2">
-          <h2 className="text-lg font-semibold">{props.category}</h2>
+          <h2 className="text-lg font-semibold">{category}</h2>
           <h3 className="text-sm text-gray-600">
-            {props.model} {props.name ? `| ${props.name}` : ""}
+            {model} {name ? `| ${name}` : ""}
           </h3>
-          <h3 className="text-md font-bold">{props.price}</h3>
+          <h3 className="text-md font-bold">{displayPrice}</h3>
+          {stars && <div className="mt-1">{stars}</div>}
         </div>
       </div>
-    </Link>
   );
 }

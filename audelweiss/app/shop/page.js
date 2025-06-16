@@ -15,50 +15,57 @@ let data = [
     category: "BONNETS",
     model: "POMPOM",
     name: "Urban Yeti",
-    price: "14.00€ - 18,00€",
+    priceMin: 14.00,
+    priceMax: 18.00,
     link: "/shop/product/pompom-urban-yeti",
     img1: "/images/shop/bonnet.png",
     img2: "/images/shop/bg3.png.webp",
+    addToCart: false,
   },
   {
     category: "BONNETS",
     model: "POMPOM",
     name: "Urban Yeti",
-    price: "14.00€ - 18,00€",
+    price: 16.00,
     link: "/shop/bonnets/pompom-urban-yeti2",
     img1: "/images/shop/bonnet.png",
+    addToCart: false,
   },
   {
     category: "BONNETS",
     model: "POMPOM",
     name: "Urban Yeti",
-    price: "14.00€ - 18,00€",
+    price: 16.00,
     link: "/shop/bonnets/pompom-urban-yeti3",
     img1: "/images/shop/bonnet.png",
+    addToCart: false,
   },
   {
     category: "BONNETS",
     model: "POMPOM",
     name: "Urban Yeti",
-    price: "14.00€ - 18,00€",
+    price: 16.00,
     link: "/shop/bonnets/pompom-urban-yeti4",
     img1: "/images/shop/bonnet.png",
+    addToCart: false,
   },
   {
     category: "BONNETS",
     model: "POMPOM",
     name: "Urban Yeti",
-    price: "14.00€ - 18,00€",
+    price: 16.00,
     link: "/shop/bonnets/pompom-urban-yeti5",
     img1: "/images/shop/bonnet.png",
+    addToCart: false,
   },
   {
     category: "BONNETS",
     model: "POMPOM",
     name: "Urban Yeti",
-    price: "14.00€ - 18,00€",
+    price: 16.00,
     link: "/shop/products/pompom-urban-yeti6",
     img1: "/images/shop/bonnet.png",
+    addToCart: false,
   },
 ];
 
@@ -283,16 +290,19 @@ export default function Shop() {
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols- w-full md:w-3/4 gap-4"
         >
           {data.map((item) => (
-            <ShopCard
-              key={item.link}
-              category={item.category}
-              model={item.model}
-              name={item.name}
-              price={item.price}
-              link={item.link}
-              img1={item.img1}
-              img2={item.img2 !== undefined ? item.img2 : ""}
-            />
+              <ShopCard
+                  key={item.link}
+                  category={item.category}
+                  model={item.model}
+                  name={item.name}
+                  price={item.price}
+                  link={item.link}
+                  img1={item.img1}
+                  img2={item.img2 !== undefined ? item.img2 : ""}
+                  addToCart={item.addToCart}
+                  priceMin={item.priceMin}
+                  priceMax={item.priceMax}
+              />
           ))}
         </section>
       </section>
