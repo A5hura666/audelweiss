@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_comments",
+  "info": {
+    "singularName": "product-comment",
+    "pluralName": "product-comments",
+    "displayName": "ProductComment",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "product_article_description": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-article-description.product-article-description"
+    },
+    "comment": {
+      "type": "text"
+    },
+    "commentImage": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "product_comment_responses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-comment-response.product-comment-response",
+      "mappedBy": "product_comment"
+    },
+    "productCommentDate": {
+      "type": "date"
+    }
+  }
+}
