@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_comment_responses",
+  "info": {
+    "singularName": "product-comment-response",
+    "pluralName": "product-comment-responses",
+    "displayName": "ProductCommentResponse"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "product_comment": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::product-comment.product-comment",
+      "inversedBy": "product_comment_responses"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "productCommentResponseText": {
+      "type": "text"
+    },
+    "productCommentResponseDate": {
+      "type": "date"
+    }
+  }
+}
