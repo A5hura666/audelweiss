@@ -1,5 +1,43 @@
 @import "tailwindcss";
 
+@import "tailwindcss";
+
+@layer utilities {
+  @keyframes fadeDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px); /* Déplace l'élément vers le haut au début */
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0); /* L'élément revient à sa position d'origine */
+    }
+  }
+
+  .animate-fade-down {
+    animation: fadeDown 0.4s ease-out forwards;
+  }
+
+  @keyframes fadeDownCategory {
+    from {
+      opacity: 0;
+      transform: translateY(-20px); /* Même effet pour la catégorie, déplacement vers le haut */
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0); /* Retour à la position initiale */
+    }
+  }
+
+  .animate-fade-down-delay {
+    opacity: 0;
+    animation: fadeDownCategory 0.4s ease-out 0.4s forwards;
+  }
+}
+
+
+
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -23,4 +61,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.aboreto{
+  font-family: 'Aboreto', sans-serif;
 }

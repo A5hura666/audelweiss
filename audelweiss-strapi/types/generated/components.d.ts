@@ -56,12 +56,19 @@ export interface ComponentsProductArticleCard extends Struct.ComponentSchema {
   info: {
     description: '';
     displayName: 'productArticleCard';
+    icon: 'shirt';
   };
   attributes: {
-    product_article: Schema.Attribute.Relation<
-      'oneToOne',
-      'api::product-article-card.product-article-card'
-    >;
+    minProductPrice: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    productCategory: Schema.Attribute.Enumeration<
+      ['Scrunchy', 'Bandeaux', 'Accessoires', 'Sac/Bananes', 'Cuisine/Deco']
+    > &
+      Schema.Attribute.Required;
+    productImages: Schema.Attribute.Media<'images', true> &
+      Schema.Attribute.Required;
+    productLink: Schema.Attribute.Component<'components.link', false>;
+    productMaxPrice: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    productName: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
 
@@ -258,6 +265,7 @@ declare module '@strapi/strapi' {
       'components.icon-link': ComponentsIconLink;
       'components.link': ComponentsLink;
       'components.mega-menu': ComponentsMegaMenu;
+      'components.product-article-card': ComponentsProductArticleCard;
       'components.product-article-card': ComponentsProductArticleCard;
       'components.product-link': ComponentsProductLink;
       'components.product-page': ComponentsProductPage;
