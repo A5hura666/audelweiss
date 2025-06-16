@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_components_product_article_cards",
+  "info": {
+    "displayName": "productArticleCard",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "product_article": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-article-card.product-article-card"
+    }
+  }
+}

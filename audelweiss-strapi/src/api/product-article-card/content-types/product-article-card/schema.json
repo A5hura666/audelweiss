@@ -1,0 +1,60 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_article_cards",
+  "info": {
+    "singularName": "product-article-card",
+    "pluralName": "product-article-cards",
+    "displayName": "productArticle",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "productName": {
+      "type": "string"
+    },
+    "productCategory": {
+      "type": "enumeration",
+      "enum": [
+        "Scrunchy",
+        "Bandeaux",
+        "Accessoires",
+        "Sac/Bananes",
+        "Cuisine/Deco",
+        "Bonnets"
+      ]
+    },
+    "productChildPrice": {
+      "type": "decimal"
+    },
+    "productAdultPrice": {
+      "type": "decimal"
+    },
+    "productImages": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "productLink": {
+      "type": "text"
+    },
+    "quantity": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "score": {
+      "type": "decimal"
+    },
+    "product_additionnal_information": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-additionnal-information.product-additionnal-information",
+      "inversedBy": "product_article"
+    }
+  }
+}
