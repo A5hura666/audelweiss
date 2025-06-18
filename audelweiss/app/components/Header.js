@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ShoppingCart, User, Menu, X } from "lucide-react";
+import { User, Menu, X, LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
 import {getStrapiCall} from "@/app/lib/utils";
 import siteData from "@/data/headerData.json";
@@ -19,6 +19,20 @@ export default function Header() {
     const [activeMegaMenu, setActiveMegaMenu] = useState(null);
     const pathname = usePathname();
     const cartCount = 3;
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const storedUser = localStorage.getItem("user");
+            if (storedUser) {
+                try {
+                    setUser(JSON.parse(storedUser));
+                } catch (e) {
+                    console.error("Erreur parsing user", e);
+                }
+            }
+        }
+    }, []);
 
     useEffect(() => {
         const fetchHeaderData = async () => {
@@ -94,6 +108,7 @@ export default function Header() {
                             )}
                         </div>
                     ))}
+
                     <div className="flex items-center space-x-4">
                         {headerData?.iconsLinks?.map((icon, index) => (
                             <Link key={icon.id || `icon-${index}`} href={icon.url} className="relative">
@@ -110,6 +125,24 @@ export default function Header() {
                             </Link>
                         ))}
                     </div>
+
+                    {user && (
+                        <div className="flex items-center space-x-4 ml-4">
+                            <div className="text-sm font-semibold text-gray-700">
+                                {user.firstName} {user.lastName}
+                            </div>
+                            <button
+                                onClick={() => {
+                                    localStorage.removeItem("user");
+                                    setUser(null);
+                                    window.location.href = "/";
+                                }}
+                                className="flex items-center space-x-1 text-sm text-gray-600 hover:text-[#E8A499] transition"
+                            >
+                                <LogOut size={20} />
+                            </button>
+                        </div>
+                    )}
                 </nav>
 
                 {/* MENU MOBILE */}
@@ -132,6 +165,21 @@ export default function Header() {
                     <button onClick={() => setIsOpen(!isOpen)}>
                         {isOpen ? <X size={28} className="text-gray-700 hover:text-[#E8A499]" /> : <Menu size={28} className="text-gray-700 hover:text-[#E8A499]" />}
                     </button>
+
+                    {user && (
+                        <div className="flex items-center space-x-4 ml-4">
+                            <button
+                                onClick={() => {
+                                    localStorage.removeItem("user");
+                                    setUser(null);
+                                    window.location.href = "/";
+                                }}
+                                className="flex items-center space-x-1 text-sm text-gray-600 hover:text-[#E8A499] transition"
+                            >
+                                <LogOut size={20} />
+                            </button>
+                        </div>
+                    )}
                 </div>
 
                 {/* MENU BURGER OUVERT */}
