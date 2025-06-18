@@ -16,7 +16,9 @@ export default function MyAccount() {
 
     useEffect(() => {
         const stored = localStorage.getItem('user');
-        if (stored) setUser(JSON.parse(stored));
+        if (stored) {
+            setUser(JSON.parse(stored));
+        }
     }, []);
 
     function validateForm() {
@@ -64,6 +66,7 @@ export default function MyAccount() {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
             setUser(data.user);
+            window.location.reload();
         } else {
             setError(data.error || 'Une erreur est survenue');
         }
@@ -77,66 +80,82 @@ export default function MyAccount() {
 
     if (user) {
         return (
-            <div className="max-w-xl mx-auto mt-12 p-6 bg-white rounded-lg shadow">
-                <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                    Bienvenue, {user.firstName} {user.lastName}
-                </h2>
-                <p className="text-gray-600 mb-2"><strong>Email :</strong> {user.email}</p>
-                <p className="text-gray-600 mb-2"><strong>Téléphone :</strong> {user.phone}</p>
-                <button
-                    onClick={handleLogout}
-                    className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
-                >
-                    Se déconnecter
-                </button>
+            <div className="max-w-2xl mx-auto mt-12 p-6 bg-white rounded-lg shadow space-y-6 my-24">
+                <div>
+                    <h2 className="text-3xl font-bold text-gray-800 mb-4">Bienvenue, {user.firstName} 👋</h2>
+                    <p className="text-gray-600 text-lg">
+                        Voici vos informations personnelles enregistrées.
+                    </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="bg-gray-50 p-4 rounded shadow-sm">
+                        <p className="text-sm text-gray-500">Prénom</p>
+                        <p className="text-lg font-medium text-gray-800">{user.firstName}</p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded shadow-sm">
+                        <p className="text-sm text-gray-500">Nom</p>
+                        <p className="text-lg font-medium text-gray-800">{user.lastName}</p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded shadow-sm">
+                        <p className="text-sm text-gray-500">Email</p>
+                        <p className="text-lg font-medium text-gray-800">{user.email}</p>
+                    </div>
+                    <div className="bg-gray-50 p-4 rounded shadow-sm">
+                        <p className="text-sm text-gray-500">Téléphone</p>
+                        <p className="text-lg font-medium text-gray-800">{user.phone}</p>
+                    </div>
+                </div>
+                <div className="text-right">
+                    <button
+                        onClick={handleLogout}
+                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                    >
+                        Se déconnecter
+                    </button>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="max-w-md mx-auto mt-12 p-6 bg-white rounded-lg shadow">
+        <div className="max-w-md mx-auto mt-12 p-6 bg-white rounded-lg shadow my-24">
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
                 {isLogin ? 'Connexion' : 'Créer un compte'}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
                 {!isLogin && (
                     <>
-                        <input
+                        <InputField
                             type="text"
                             placeholder="Prénom"
                             value={form.firstName}
                             onChange={(e) => setForm({ ...form, firstName: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#E8A499]"
                         />
-                        <input
+                        <InputField
                             type="text"
                             placeholder="Nom"
                             value={form.lastName}
                             onChange={(e) => setForm({ ...form, lastName: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#E8A499]"
                         />
-                        <input
+                        <InputField
                             type="tel"
                             placeholder="Téléphone"
                             value={form.phone}
                             onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#E8A499]"
                         />
                     </>
                 )}
-                <input
+                <InputField
                     type="email"
                     placeholder="Email"
                     value={form.email}
                     onChange={(e) => setForm({ ...form, email: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#E8A499]"
                 />
-                <input
+                <InputField
                     type="password"
                     placeholder="Mot de passe"
                     value={form.password}
                     onChange={(e) => setForm({ ...form, password: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#E8A499]"
                 />
                 {error && <p className="text-red-600 text-sm">{error}</p>}
                 <button
@@ -158,5 +177,17 @@ export default function MyAccount() {
                 </button>
             </div>
         </div>
+    );
+}
+
+function InputField({ type, placeholder, value, onChange }) {
+    return (
+        <input
+            type={type}
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#E8A499]"
+        />
     );
 }
