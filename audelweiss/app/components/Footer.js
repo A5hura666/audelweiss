@@ -11,7 +11,7 @@ export default function Footer() {
                 <div className="text-center md:text-left">
                     <h3 className="text-lg font-semibold mb-3">Besoin d’aide ?</h3>
                     <ul className="space-y-2">
-                        <li><Link href="/conditions-generales-de-vente" className="hover:underline">CGV</Link></li>
+                        <li><Link href="/point-de-vente" className="hover:underline">Points de ventes physiques</Link></li>
                         <li><Link href="/livraison" className="hover:underline">Livraison</Link></li>
                         <li><Link href="/faq" className="hover:underline">Foire aux questions</Link></li>
                         <li><Link href="/contact" className="hover:underline">Me contacter</Link></li>
@@ -44,6 +44,7 @@ export default function Footer() {
                 <div className="text-center md:text-right">
                     <h3 className="text-lg font-semibold mb-3">Liens utiles</h3>
                     <ul className="space-y-2">
+                        <li><Link href="/cgv" className="hover:underline">CGV</Link></li>
                         <li><Link href="/mentions-legales" className="hover:underline">Mentions légales</Link></li>
                         <li><Link href="/privacy-policy" className="hover:underline">Politique de confidentialité</Link></li>
                     </ul>
