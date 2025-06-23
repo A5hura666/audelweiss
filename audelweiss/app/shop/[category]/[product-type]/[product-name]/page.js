@@ -8,29 +8,11 @@ import CustomerReview from "@/app/components/customerComment/customerReview";
 import Image from "next/image";
 import MarkdownRenderer from "@/app/components/MarkDownRenderer";
 import {getStrapiCall} from "@/app/lib/utils";
+import { redirect } from 'next/navigation'
 
 export default function Product() {
     let data = [];
-    const thumbnails = [
-        "https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg",
-        "https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg",
-        "https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg",
-    ];
-    useEffect(() => {
-        const mainImage = document.getElementById("main-image");
-        const thumbnails = document.querySelectorAll("[data-src]");
 
-        thumbnails.forEach((thumb) => {
-            thumb.addEventListener("click", () => {
-                const newSrc = thumb.getAttribute("data-src");
-                mainImage.src = newSrc;
-
-                // Optionnel : gérer la bordure active
-                thumbnails.forEach((t) => t.classList.remove("border-[#ff6187]"));
-                thumb.classList.add("border-[#ff6187]");
-            });
-        });
-    }, []);
 
     const defaultSize = "adulte";
     const defaultPompom = "oui";
@@ -51,17 +33,31 @@ export default function Product() {
     const [productOffers, setProductOffers] = useState(''); // State pour les offres du produit
     const [productSize, setProductSize] = useState(''); // State pour la taille du produit
     const [productWeight, setProductWeight] = useState(''); // State pour le poids du produit
-    const [selectedFilters, setSelectedFilters] = useState({
-        size: "",
-        pompom: ""
-    });
+    const [selectedFilters, setSelectedFilters] = useState({});
     const [productInformations, setProductInformations] = useState({
         composition: "",
         washingMachine: "",
         maxWashingTemperature: "",
     });
+    const [productImages, setProductImages] = useState([]); // State pour les images du produit
+    const [productPrice, setProductPrice] = useState(0); // State pour le prix du produit
+    const [descriptionId, setDescriptionId] = useState(''); // State pour l'ID de la description du produit
+
 
     useEffect(() => {
+        const mainImage = document.getElementById("main-image");
+        const thumbnails = document.querySelectorAll("[data-src]");
+
+        thumbnails.forEach((thumb) => {
+            thumb.addEventListener("click", () => {
+                const newSrc = thumb.getAttribute("data-src");
+                mainImage.src = newSrc;
+
+                // Optionnel : gérer la bordure active
+                thumbnails.forEach((t) => t.classList.remove("border-[#ff6187]"));
+                thumb.classList.add("border-[#ff6187]");
+            });
+        });
         const fetchHeaderData = async () => {
             try {
                 const response = await fetch(
@@ -88,6 +84,14 @@ export default function Product() {
                     maxWashingTemperature: data.data[0].maxWashingTemp,
                 });
                 setProductWeight(data.data[0].weight);
+                setProductImages(data.data[0].product_article.productImages.map(image => `http://ayun.myddns.me:5000${image.url}`));
+                data.data[0].product_filters.forEach(filter => {
+                    setSelectedFilters(prev => ({
+                        ...prev,
+                        [filter.filterName]: "",
+                    }));
+                });
+                setDescriptionId(data.data[0].id);
                 setIsLoaded(false); // Set isLoaded to false after data is fetched
             } catch (error) {
                 console.error("Error fetching header data:", error);
@@ -123,8 +127,8 @@ export default function Product() {
     // Met à jour l'index de l'image principale (bouclage)
     const changeImageByIndex = (newIndex) => {
         if (newIndex < 0) {
-            setCurrentIndex(thumbnails.length - 1);
-        } else if (newIndex >= thumbnails.length) {
+            setCurrentIndex(productImages.length - 1);
+        } else if (newIndex >= productImages.length) {
             setCurrentIndex(0);
         } else {
             setCurrentIndex(newIndex);
@@ -150,11 +154,49 @@ export default function Product() {
     const handleFilterChange = (filterName, value) => {
         setSelectedFilters((prev) => ({
             ...prev,
-            [filterName]: value
+            [filterName]: value,
         }));
+
+        if (filterName === "Taille") {
+            setProductPrice(value === "enfant" ? productChildPrice : productParentPrice);
+        }
     };
 
+    const addToCart = () => {
 
+        const allFiltersFilled = Object.values(selectedFilters).every((value) => value !== "");
+        if (!allFiltersFilled) {
+            alert("Veuillez remplir tous les filtres avant d'ajouter au panier.");
+            return;
+        } else if (!color) {
+            alert("Veuillez sélectionner une couleur avant d'ajouter au panier.");
+            return;
+        }
+
+        // Create the product object with all selected filters
+        const productSelection = {
+            productName,
+            productCategory,
+            productPrice,
+            quantity,
+            selectedFilters,
+            color,
+        };
+
+        // Retrieve existing cart data from localStorage
+        const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        // Add the new product selection to the cart
+        existingCart.push(productSelection);
+
+        // Save the updated cart back to localStorage
+        localStorage.setItem("cart", JSON.stringify(existingCart));
+
+        alert("Produit ajouté au panier !");
+
+        // Redirect to the shop page
+        redirect('/shop');
+    };
     return (
         <section className="">
             {/* Loader */}
@@ -201,7 +243,7 @@ export default function Product() {
                             <div>
                                 <img
                                     id="main-image"
-                                    src={thumbnails[currentIndex]}
+                                    src={productImages[currentIndex]}
                                     alt="Image principale"
                                     className={"h-auto max-w-full rounded-lg border-4 border-white shadow-lg cursor-pointer max-h-[650px]"}
                                     onClick={() => setIsOpen(true)}
@@ -211,7 +253,7 @@ export default function Product() {
                                         className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
                                         <div className="relative">
                                             <Image
-                                                src={thumbnails[currentIndex]}
+                                                src={productImages[currentIndex]}
                                                 alt="Zoom photo"
                                                 width={800}
                                                 height={800}
@@ -231,7 +273,7 @@ export default function Product() {
                             <div>
                                 {/* Miniatures */}
                                 <div className="flex justify-center gap-4 mt-4 overflow-x-auto">
-                                    {thumbnails.map((src, index) => (
+                                    {productImages.map((src, index) => (
                                         <img
                                             key={src}
                                             src={src}
@@ -259,16 +301,23 @@ export default function Product() {
                             <p className={"w-5/6 leading-7"}>
                                 {productDescription || "Aucun descriptif disponible pour ce produit."}
                             </p>
-                            <h4 className={"text-[#ff6187] text-3xl"}>{productChildPrice}€ - {productParentPrice}€</h4>
+                            { (productPrice!=0) && (
+                                <h4 className={"text-[#ff6187] text-3xl"}>{productPrice} €</h4>
+                                )
+                            }
+                            { (productPrice==0) && (
+                                <h4 className={"text-[#ff6187] text-3xl"}>{productChildPrice} € - {productParentPrice} €</h4>
+                            )
+                            }
                             <div>
-                                {filters.map(({ id, filterName, filterValues }) => {
+                                {filters.map(({id, filterName, filterValues}) => {
                                     const currentValue = selectedFilters[filterName] || "";
 
                                     return (
                                         <div key={id} className="mb-4">
                                             <h5>
                                                 {filterName.charAt(0).toUpperCase() + filterName.slice(1)} :{" "}
-                                                <span>{ currentValue=== '' ? "aucun choix n'a été fait"  :   currentValue.charAt(0).toUpperCase() + currentValue.slice(1)}</span>
+                                                <span>{currentValue === '' ? "aucun choix n'a été fait" : currentValue.charAt(0).toUpperCase() + currentValue.slice(1)}</span>
                                             </h5>
                                             <ul className="space-y-2 flex flex-col md:flex-row gap-2">
                                                 {Object.entries(filterValues).map(([key, val]) => (
@@ -305,15 +354,15 @@ export default function Product() {
                                         <li key={col.id} className="relative group">
                                             <input
                                                 type="radio"
-                                                id={`size-${col.id}`}
-                                                name="size"
+                                                id={`color-${col.id}`}
+                                                name="color"
                                                 value={col.colorName}
-                                                checked={size === col.colorName}
+                                                checked={color === col.colorName}
                                                 onChange={() => setColor(col.colorName)}
                                                 className="hidden peer"
                                             />
                                             <label
-                                                htmlFor={`size-${col.id}`}
+                                                htmlFor={`color-${col.id}`}
                                                 className="block cursor-pointer rounded border-gray-400 select-none peer-checked:border-[#e8a499] border-2 relative"
                                             >
                                                 <img
@@ -326,11 +375,10 @@ export default function Product() {
                                                 {/* Tooltip au-dessus de l’image avec fondu */}
                                                 <span
                                                     className="text-lg absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 rounded bg-[rgba(0,0,0,0.7)] text-white whitespace-nowrap z-10
-                   opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                                                           opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
                                                 >
-        {col.colorName}
-      </span>
-
+                                                {col.colorName}
+                                              </span>
                                             </label>
                                         </li>
                                     ))}
@@ -381,32 +429,29 @@ export default function Product() {
                     </section>
                 </div>
                 <div
-                    className={"flex flex-row md:flex-row space-between items-start justify-between text-center gap-12 py-[20px] w-full"}>
-                    <section className={"w-[60%] text-left flex flex-col gap-4"}>
+                    className={"flex flex-col md:flex-row space-between items-start justify-between text-center gap-12 py-[20px] w-full 2xl:px-[20%] xl:px-[10%] lg:px-[5%] "}>
+                    <section className={"w-[100%] text-left flex flex-col gap-4 md:w-[60%]"}>
                         <MarkdownRenderer markdownText={markdown}/>
                     </section>
-                    <section className={"w-[30%] text-left flex flex-col gap-4"}>
+                    <section className={"w-[70%] md:w-[30%] items-center md:items-start text-left flex flex-col gap-4 mx-auto"}>
                         <h3 className={"text-2xl aboreto"}>Informations</h3>
-                        <table>
+                        <table className={"w-full"}>
                             <tbody className={""}>
-                            <tr className={"border-pink leading-[50px]"}>
-                                <th className={"w-[15%]"}><img
-                                    src="https://audelweiss.fr/wp-content/uploads/2025/02/yarn.svg" alt=""/></th>
-                                <td>Composition : {productInformations.composition}</td>
-                            </tr>
-                            <tr className={"border-pink leading-[50px]"}>
-                                <th><img src="https://audelweiss.fr/wp-content/uploads/2025/02/washing-machine.svg"
-                                         alt=""/></th>
-                                <td>Lavage en machine : {productInformations.washingMachine ? "Oui": "Non"}</td>
-                            </tr>
-                            {productInformations.washingMachine &&(
                                 <tr className={"border-pink leading-[50px]"}>
-                                    <th><img
-                                        src="https://audelweiss.fr/wp-content/uploads/2025/02/washing-machine-temperature.svg"
-                                        alt=""/></th>
-                                    <td>Température max de lavage : {productInformations.maxWashingTemperature}°C</td>
+                                    <th className={"w-[15%]"}>
+                                        <img src="https://audelweiss.fr/wp-content/uploads/2025/02/yarn.svg" alt=""/></th>
+                                    <td>Composition : {productInformations.composition}</td>
                                 </tr>
-                            )}
+                                <tr className={"border-pink leading-[50px]"}>
+                                    <th><img src="https://audelweiss.fr/wp-content/uploads/2025/02/washing-machine.svg" alt=""/></th>
+                                    <td>Lavage en machine : {productInformations.washingMachine ? "Oui" : "Non"}</td>
+                                </tr>
+                                {productInformations.washingMachine && (
+                                    <tr className={"border-pink leading-[50px]"}>
+                                        <th><img src="https://audelweiss.fr/wp-content/uploads/2025/02/temperature-2.svg" alt=""/></th>
+                                        <td>Température max de lavage : {productInformations.maxWashingTemperature}°C</td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                         <h3 className={"text-2xl aboreto"}>Informations</h3>
@@ -427,7 +472,7 @@ export default function Product() {
             </section>
             <section id={"related-products"}>
                 <section>
-                    <CustomerReview></CustomerReview>
+                    <CustomerReview key={descriptionId} productDescriptionId={descriptionId} />
                 </section>
                 <section>
                     <h2>Tu pourrais aussi aimer ...</h2>
@@ -445,11 +490,9 @@ export default function Product() {
             >
                 <div
                     className="flex flex-wrap items-center justify-center gap-6 mb-3 text-sm text-gray-800 dark:text-gray-200">
-                    <span><strong>Taille :</strong> {size}</span>
-                    <span><strong>Pompom :</strong> {pompom}</span>
                     <span><strong>Couleur :</strong> {color || "Aucune couleur sélectionnée"}</span>
                     <span><strong>Quantité :</strong> {quantity}</span>
-                    <span><strong>Total :</strong> {(14 * quantity).toFixed(2)} €</span>
+                    <span><strong>Total :</strong> {(productPrice * quantity).toFixed(2)} €</span>
                 </div>
 
                 <div className="flex justify-center gap-4">
@@ -461,6 +504,7 @@ export default function Product() {
                     </button>
                     <button
                         type="button"
+                        onClick={addToCart}
                         className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5"
                     >
                         Ajouter au panier

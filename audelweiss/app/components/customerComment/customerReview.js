@@ -2,16 +2,55 @@
 
 import FormCreateComment from "@/app/components/customerComment/formCreateComment";
 import Comment from "@/app/components/customerComment/comment";
+import {getStrapiCall} from "@/app/lib/utils";
+import {useEffect, useState} from "react";
+import StarRating from "@/app/components/StarsComments";
 
-const ratings = [
-    {score: 5, count: 2, percent: 2},
-    {score: 4, count: 40, percent: 40},
-    {score: 3, count: 20, percent: 20},
-    {score: 2, count: 16, percent: 16},
-    {score: 1, count: 8, percent: 8},
-];
+export default function CustomerReview({ productDescriptionId }) {
+    const [ratings, setRatings] = useState([
+        {score: 5, count: 0, percent: 0},
+        {score: 4, count: 0, percent: 0},
+        {score: 3, count: 0, percent: 0},
+        {score: 2, count: 0, percent: 0},
+        {score: 1, count: 0, percent: 0},
+    ]);
+    const [comments, setComments] = useState([]);
+    const [averageRating, setAverageRating] = useState(0);
+    useEffect(() => {
+        if (!productDescriptionId) return;
 
-export default function CustomerReview() {
+        const fetchHeaderData = async () => {
+            try {
+                const response = await fetch(
+                    getStrapiCall(`/api/product-comments?populate=commentImage&populate=product_article_description&filters[product_article_description][id]=${productDescriptionId}`)
+                );
+                const data = await response.json();
+                setComments(data.data);
+
+                // Calculate ratings based on comments
+                const totalComments = data.data.length;
+                const updatedRatings = ratings.map((rating) => {
+                    const count = data.data.filter(
+                        (comment) => comment.commentNote === rating.score
+                    ).length;
+                    const percent = totalComments > 0 ? (count / totalComments) * 100 : 0;
+                    return {...rating, count, percent};
+                });
+
+                setRatings(updatedRatings);
+                // Calculate average rating
+                const totalScore = data.data.reduce((sum, comment) => sum + comment.commentNote, 0);
+                const average = totalComments > 0 ? (totalScore / totalComments).toFixed(1) : 0;
+                setAverageRating(average);
+
+            } catch (error) {
+                console.error("Error fetching header data:", error);
+            }
+        };
+
+        fetchHeaderData();
+    }, [productDescriptionId]);
+
     return (
         <section className="py-24 relative">
             <div className="w-full max-w-7xl px-4 md:px-5 lg:px-6 mx-auto">
@@ -51,75 +90,11 @@ export default function CustomerReview() {
                                         className="flex flex-col sm:flex-row items-center max-lg:justify-center w-full h-full">
                                         <div
                                             className="sm:pr-3 border-gray-200 flex items-center justify-center flex-col">
-                                            <h2 className="font-manrope font-bold text-5xl text-black text-center mb-4">4.3</h2>
+                                            <h2 className="font-manrope font-bold text-5xl text-black text-center mb-4">{averageRating}</h2>
                                             <div className="flex items-center gap-3 mb-4">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
-                                                     viewBox="0 0 36 36" fill="none">
-                                                    <g clipPath="url(#clip0_13624_3137)">
-                                                        <path
-                                                            d="M17.1033 2.71738C17.4701 1.97413 18.5299 1.97413 18.8967 2.71738L23.0574 11.1478C23.2031 11.4429 23.4846 11.6475 23.8103 11.6948L33.1139 13.0467C33.9341 13.1659 34.2616 14.1739 33.6681 14.7524L26.936 21.3146C26.7003 21.5443 26.5927 21.8753 26.6484 22.1997L28.2376 31.4656C28.3777 32.2825 27.5203 32.9055 26.7867 32.5198L18.4653 28.145C18.174 27.9919 17.826 27.9919 17.5347 28.145L9.21334 32.5198C8.47971 32.9055 7.62228 32.2825 7.76239 31.4656L9.35162 22.1997C9.40726 21.8753 9.29971 21.5443 9.06402 21.3146L2.33193 14.7524C1.73841 14.1739 2.06593 13.1659 2.88615 13.0467L12.1897 11.6948C12.5154 11.6475 12.7969 11.4429 12.9426 11.1478L17.1033 2.71738Z"
-                                                            fill="#FBBF24"/>
-                                                    </g>
-                                                    <defs>
-                                                        <clipPath id="clip0_13624_3137">
-                                                            <rect width="36" height="36" fill="white"/>
-                                                        </clipPath>
-                                                    </defs>
-                                                </svg>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
-                                                     viewBox="0 0 36 36" fill="none">
-                                                    <g clipPath="url(#clip0_13624_3137)">
-                                                        <path
-                                                            d="M17.1033 2.71738C17.4701 1.97413 18.5299 1.97413 18.8967 2.71738L23.0574 11.1478C23.2031 11.4429 23.4846 11.6475 23.8103 11.6948L33.1139 13.0467C33.9341 13.1659 34.2616 14.1739 33.6681 14.7524L26.936 21.3146C26.7003 21.5443 26.5927 21.8753 26.6484 22.1997L28.2376 31.4656C28.3777 32.2825 27.5203 32.9055 26.7867 32.5198L18.4653 28.145C18.174 27.9919 17.826 27.9919 17.5347 28.145L9.21334 32.5198C8.47971 32.9055 7.62228 32.2825 7.76239 31.4656L9.35162 22.1997C9.40726 21.8753 9.29971 21.5443 9.06402 21.3146L2.33193 14.7524C1.73841 14.1739 2.06593 13.1659 2.88615 13.0467L12.1897 11.6948C12.5154 11.6475 12.7969 11.4429 12.9426 11.1478L17.1033 2.71738Z"
-                                                            fill="#FBBF24"/>
-                                                    </g>
-                                                    <defs>
-                                                        <clipPath id="clip0_13624_3137">
-                                                            <rect width="36" height="36" fill="white"/>
-                                                        </clipPath>
-                                                    </defs>
-                                                </svg>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
-                                                     viewBox="0 0 36 36" fill="none">
-                                                    <g clipPath="url(#clip0_13624_3137)">
-                                                        <path
-                                                            d="M17.1033 2.71738C17.4701 1.97413 18.5299 1.97413 18.8967 2.71738L23.0574 11.1478C23.2031 11.4429 23.4846 11.6475 23.8103 11.6948L33.1139 13.0467C33.9341 13.1659 34.2616 14.1739 33.6681 14.7524L26.936 21.3146C26.7003 21.5443 26.5927 21.8753 26.6484 22.1997L28.2376 31.4656C28.3777 32.2825 27.5203 32.9055 26.7867 32.5198L18.4653 28.145C18.174 27.9919 17.826 27.9919 17.5347 28.145L9.21334 32.5198C8.47971 32.9055 7.62228 32.2825 7.76239 31.4656L9.35162 22.1997C9.40726 21.8753 9.29971 21.5443 9.06402 21.3146L2.33193 14.7524C1.73841 14.1739 2.06593 13.1659 2.88615 13.0467L12.1897 11.6948C12.5154 11.6475 12.7969 11.4429 12.9426 11.1478L17.1033 2.71738Z"
-                                                            fill="#FBBF24"/>
-                                                    </g>
-                                                    <defs>
-                                                        <clipPath id="clip0_13624_3137">
-                                                            <rect width="36" height="36" fill="white"/>
-                                                        </clipPath>
-                                                    </defs>
-                                                </svg>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
-                                                     viewBox="0 0 36 36" fill="none">
-                                                    <g clipPath="url(#clip0_13624_3137)">
-                                                        <path
-                                                            d="M17.1033 2.71738C17.4701 1.97413 18.5299 1.97413 18.8967 2.71738L23.0574 11.1478C23.2031 11.4429 23.4846 11.6475 23.8103 11.6948L33.1139 13.0467C33.9341 13.1659 34.2616 14.1739 33.6681 14.7524L26.936 21.3146C26.7003 21.5443 26.5927 21.8753 26.6484 22.1997L28.2376 31.4656C28.3777 32.2825 27.5203 32.9055 26.7867 32.5198L18.4653 28.145C18.174 27.9919 17.826 27.9919 17.5347 28.145L9.21334 32.5198C8.47971 32.9055 7.62228 32.2825 7.76239 31.4656L9.35162 22.1997C9.40726 21.8753 9.29971 21.5443 9.06402 21.3146L2.33193 14.7524C1.73841 14.1739 2.06593 13.1659 2.88615 13.0467L12.1897 11.6948C12.5154 11.6475 12.7969 11.4429 12.9426 11.1478L17.1033 2.71738Z"
-                                                            fill="#FBBF24"/>
-                                                    </g>
-                                                    <defs>
-                                                        <clipPath id="clip0_13624_3137">
-                                                            <rect width="36" height="36" fill="white"/>
-                                                        </clipPath>
-                                                    </defs>
-                                                </svg>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
-                                                     viewBox="0 0 36 36" fill="none">
-                                                    <g clipPath="url(#clip0_13624_3137)">
-                                                        <path
-                                                            d="M17.1033 2.71738C17.4701 1.97413 18.5299 1.97413 18.8967 2.71738L23.0574 11.1478C23.2031 11.4429 23.4846 11.6475 23.8103 11.6948L33.1139 13.0467C33.9341 13.1659 34.2616 14.1739 33.6681 14.7524L26.936 21.3146C26.7003 21.5443 26.5927 21.8753 26.6484 22.1997L28.2376 31.4656C28.3777 32.2825 27.5203 32.9055 26.7867 32.5198L18.4653 28.145C18.174 27.9919 17.826 27.9919 17.5347 28.145L9.21334 32.5198C8.47971 32.9055 7.62228 32.2825 7.76239 31.4656L9.35162 22.1997C9.40726 21.8753 9.29971 21.5443 9.06402 21.3146L2.33193 14.7524C1.73841 14.1739 2.06593 13.1659 2.88615 13.0467L12.1897 11.6948C12.5154 11.6475 12.7969 11.4429 12.9426 11.1478L17.1033 2.71738Z"
-                                                            fill="#FBBF24"/>
-                                                    </g>
-                                                    <defs>
-                                                        <clipPath id="clip0_13624_3137">
-                                                            <rect width="36" height="36" fill="white"/>
-                                                        </clipPath>
-                                                    </defs>
-                                                </svg>
+                                                <StarRating averageRating={averageRating} />
                                             </div>
-                                            <p className="font-normal text-lg leading-8 text-gray-400">46 Ratings</p>
+                                            <p className="font-normal text-lg leading-8 text-gray-400">{comments.length} Ratings</p>
                                         </div>
 
                                     </div>
@@ -132,11 +107,11 @@ export default function CustomerReview() {
                         <h4 className="font-manrope font-semibold text-3xl leading-10 text-black mb-6">Most helpful
                             positive
                             review</h4>
-                        <Comment></Comment>
+                        <Comment productComments={comments}></Comment>
                     </div>
                     <div
                         className="flex flex-col sm:flex-row items-center justify-between pt-8  max-xl:max-w-3xl max-xl:mx-auto">
-                        <p className="font-normal text-lg py-[1px] text-black">46 reviews</p>
+                        <p className="font-normal text-lg py-[1px] text-black">{comments.length} reviews</p>
                     </div>
                 </div>
             </div>
