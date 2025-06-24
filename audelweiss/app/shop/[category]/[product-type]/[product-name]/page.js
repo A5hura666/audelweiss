@@ -8,7 +8,7 @@ import CustomerReview from "@/app/components/customerComment/customerReview";
 import Image from "next/image";
 import MarkdownRenderer from "@/app/components/MarkDownRenderer";
 import {getStrapiCall} from "@/app/lib/utils";
-import { redirect } from 'next/navigation'
+import {redirect} from 'next/navigation'
 
 export default function Product() {
     let data = [];
@@ -42,6 +42,7 @@ export default function Product() {
     const [productImages, setProductImages] = useState([]); // State pour les images du produit
     const [productPrice, setProductPrice] = useState(0); // State pour le prix du produit
     const [descriptionId, setDescriptionId] = useState(''); // State pour l'ID de la description du produit
+    const [productRecommandation, setProductRecommandation] = useState([]); // State pour les produits recommandés
 
 
     useEffect(() => {
@@ -93,6 +94,11 @@ export default function Product() {
                 });
                 setDescriptionId(data.data[0].id);
                 setIsLoaded(false); // Set isLoaded to false after data is fetched
+                const productRecommandationResponse = await fetch(
+                    getStrapiCall(`/api/product-article-cards?populate=productImages&pagination[pageSize]=5&pagination[page]=1`)
+                );
+                const productRecommandationData = await productRecommandationResponse.json();
+                setProductRecommandation(productRecommandationData.data);
             } catch (error) {
                 console.error("Error fetching header data:", error);
             }
@@ -301,12 +307,13 @@ export default function Product() {
                             <p className={"w-5/6 leading-7"}>
                                 {productDescription || "Aucun descriptif disponible pour ce produit."}
                             </p>
-                            { (productPrice!=0) && (
+                            {(productPrice != 0) && (
                                 <h4 className={"text-[#ff6187] text-3xl"}>{productPrice} €</h4>
-                                )
+                            )
                             }
-                            { (productPrice==0) && (
-                                <h4 className={"text-[#ff6187] text-3xl"}>{productChildPrice} € - {productParentPrice} €</h4>
+                            {(productPrice == 0) && (
+                                <h4 className={"text-[#ff6187] text-3xl"}>{productChildPrice} €
+                                    - {productParentPrice} €</h4>
                             )
                             }
                             <div>
@@ -429,32 +436,35 @@ export default function Product() {
                     </section>
                 </div>
                 <div
-                    className={"flex flex-col md:flex-row space-between items-start justify-between text-center gap-12 py-[20px] w-full 2xl:px-[20%] xl:px-[10%] lg:px-[5%] "}>
-                    <section className={"w-[100%] text-left flex flex-col gap-4 md:w-[60%]"}>
+                    className={"flex flex-col md:flex-row space-between items-start justify-between text-center gap-12 py-[20px] w-full"}>
+                    <section className={"w-[100%] md:w-[70%] text-left flex flex-col gap-4"}>
                         <MarkdownRenderer markdownText={markdown}/>
                     </section>
-                    <section className={"w-[70%] md:w-[30%] items-center md:items-start text-left flex flex-col gap-4 mx-auto"}>
+                    <section
+                        className={"w-[70%] md:w-[30%] items-center md:items-start text-left flex flex-col gap-4 mx-auto"}>
                         <h3 className={"text-2xl aboreto"}>Informations</h3>
                         <table className={"w-full"}>
                             <tbody className={""}>
+                            <tr className={"border-pink leading-[50px]"}>
+                                <th className={"w-[15%]"}>
+                                    <img src="https://audelweiss.fr/wp-content/uploads/2025/02/yarn.svg" alt=""/></th>
+                                <td>Composition : {productInformations.composition}</td>
+                            </tr>
+                            <tr className={"border-pink leading-[50px]"}>
+                                <th><img src="https://audelweiss.fr/wp-content/uploads/2025/02/washing-machine.svg"
+                                         alt=""/></th>
+                                <td>Lavage en machine : {productInformations.washingMachine ? "Oui" : "Non"}</td>
+                            </tr>
+                            {productInformations.washingMachine && (
                                 <tr className={"border-pink leading-[50px]"}>
-                                    <th className={"w-[15%]"}>
-                                        <img src="https://audelweiss.fr/wp-content/uploads/2025/02/yarn.svg" alt=""/></th>
-                                    <td>Composition : {productInformations.composition}</td>
+                                    <th><img src="https://audelweiss.fr/wp-content/uploads/2025/02/temperature-2.svg"
+                                             alt=""/></th>
+                                    <td>Température max de lavage : {productInformations.maxWashingTemperature}°C</td>
                                 </tr>
-                                <tr className={"border-pink leading-[50px]"}>
-                                    <th><img src="https://audelweiss.fr/wp-content/uploads/2025/02/washing-machine.svg" alt=""/></th>
-                                    <td>Lavage en machine : {productInformations.washingMachine ? "Oui" : "Non"}</td>
-                                </tr>
-                                {productInformations.washingMachine && (
-                                    <tr className={"border-pink leading-[50px]"}>
-                                        <th><img src="https://audelweiss.fr/wp-content/uploads/2025/02/temperature-2.svg" alt=""/></th>
-                                        <td>Température max de lavage : {productInformations.maxWashingTemperature}°C</td>
-                                    </tr>
-                                )}
+                            )}
                             </tbody>
                         </table>
-                        <h3 className={"text-2xl aboreto"}>Informations</h3>
+                        <h3 className={"text-2xl aboreto w-full"}>Informations</h3>
                         <table>
                             <tbody>
                             <tr className={"border-pink leading-[50px]"}>
@@ -470,21 +480,31 @@ export default function Product() {
                     </section>
                 </div>
             </section>
-            <section id={"related-products"}>
+            <section id={"related-products"} className={"px-4 2xl:px-[20%] xl:px-[10%] lg:px-[5%] py-4"}>
                 <section>
-                    <CustomerReview key={descriptionId} productDescriptionId={descriptionId} />
+                    <CustomerReview key={descriptionId} productDescriptionId={descriptionId}/>
                 </section>
                 <section>
-                    <h2>Tu pourrais aussi aimer ...</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        {data.map((product, index) => (
-                            <ShopCard key={index} product={product}/>
+                    <h2 className={"aboreto text-3xl "}>Tu pourrais aussi aimer ...</h2>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 items-center justify-center py-8">
+                        {productRecommandation.map((product, index) => (
+                            <ShopCard
+                                key={product.productName + "-" + index}
+                                category={product.productCategory}
+                                model={product.subCategory}
+                                name={product.productName}
+                                price={product.price ? `${product.price}€` : `${product.productChildPrice}€ - ${product.productAdultPrice}€`}
+                                img1={product.productImages[0].url}
+                                img2={product.productImages[1].url !== undefined ? product.productImages[1].url : ""}
+                                rating={product.score}
+                                productId={product.id}
+                            />
                         ))}
                     </div>
                 </section>
             </section>
             <div
-                className={`fixed bottom-0 left-0 w-full bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-600 p-4 flex flex-col items-center shadow-lg transition-all duration-500 ease-in-out overflow-hidden ${
+                className={` fixed bottom-0 left-0 w-full bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-600 p-4 flex flex-col items-center shadow-lg transition-all duration-500 ease-in-out overflow-hidden ${
                     quantity > 0 ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'
                 }`}
             >
@@ -512,6 +532,5 @@ export default function Product() {
                 </div>
             </div>
         </section>
-    )
-        ;
+    );
 }

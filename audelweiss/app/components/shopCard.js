@@ -23,8 +23,8 @@ export default function ShopCard(props) {
             .replace(/(^-|-$)+/g, "");
 
     return (
-        <div className="relative flex flex-col items-center w-60">
-            <div className="relative flex flex-col items-center w-60">
+        <div className="relative flex flex-col items-center w-60 mx-auto">
+            <div className="relative flex flex-col items-center w-60 justify-center">
                 <div
                     className="relative flex justify-center group w-full h-60"
                     onMouseEnter={() => setIsHovered(true)}

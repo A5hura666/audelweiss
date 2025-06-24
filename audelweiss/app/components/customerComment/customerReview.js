@@ -104,9 +104,7 @@ export default function CustomerReview({ productDescriptionId }) {
                         </div>
                     </div>
                     <div className="pb-8 border-b border-gray-200 max-xl:max-w-3xl max-xl:mx-auto">
-                        <h4 className="font-manrope font-semibold text-3xl leading-10 text-black mb-6">Most helpful
-                            positive
-                            review</h4>
+                        <h4 className="font-manrope font-semibold text-3xl leading-10 text-black mb-6">Les commentaires des clients</h4>
                         <Comment productComments={comments}></Comment>
                     </div>
                     <div
@@ -115,7 +113,7 @@ export default function CustomerReview({ productDescriptionId }) {
                     </div>
                 </div>
             </div>
-            <FormCreateComment></FormCreateComment>
+            <FormCreateComment productCommentId={productDescriptionId}></FormCreateComment>
 
         </section>
     );

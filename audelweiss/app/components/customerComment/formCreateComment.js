@@ -1,22 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
-export default function FormCreateComment() {
+export default function FormCreateComment({productDescriptionId}) {
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
     const [images, setImages] = useState([]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // récupère les valeurs du formulaire
-        const formData = new FormData(e.target);
-        formData.append("rating", rating);
-        const data = Object.fromEntries(formData);
-        console.log(data);
-        // ici, tu peux envoyer data via fetch ou autre
-    };
-
+    useEffect(() => {
+        setRating(0);
+        setHover(0);
+        setImages([]);
+    }, [productDescriptionId]);
 
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
@@ -30,6 +25,90 @@ export default function FormCreateComment() {
 
         setImages(newImages);
     };
+
+    const handleRemoveImage = (index) => {
+        const newImages = images.filter((_, i) => i !== index);
+        setImages(newImages);
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        formData.append("rating", rating);
+        formData.append("product_article_description", productDescriptionId); // Ajout ici
+
+        const data = Object.fromEntries(formData);
+        console.log('Form data:', data);
+        console.log('Images:', images);
+        await createComment(data, images, productDescriptionId);
+    };
+
+
+
+    const createComment = async (data, images, productDescId) => {
+        try {
+            const imageIds = [];
+
+            if (images.length > 0) {
+                const uploadPromises = images.map(async (image) => {
+                    const formData = new FormData();
+                    formData.append("files", image);
+
+                    const res = await fetch("http://ayun.myddns.me:5000/api/upload", {
+                        method: "POST",
+                        body: formData,
+                    });
+
+                    if (!res.ok) {
+                        throw new Error("Échec de l'upload d'image");
+                    }
+
+                    const uploadResult = await res.json();
+                    return uploadResult[0].id;
+                });
+
+                const uploadedImageIds = await Promise.all(uploadPromises);
+                imageIds.push(...uploadedImageIds);
+            }
+
+            const commentData = {
+                data: {
+                    product_article_description: productDescId,
+                    comment: data.comment,
+                    commentImage: imageIds,
+                    productCommentDate: new Date().toISOString(),
+                    commentNote: data.rating,
+                    authorName: data.name,
+                    authorEmail: data.email,
+                },
+            };
+
+
+            // 3️⃣ POST du commentaire
+            const response = await fetch(
+                "http://ayun.myddns.me:5000/api/article-comments",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(commentData),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Erreur lors de la création du commentaire");
+            }
+
+            const result = await response.json();
+            console.log("Commentaire créé avec succès :", result);
+        } catch (error) {
+            console.error("Erreur lors de la création du commentaire :", error);
+        }
+    };
+
+
 
     return (
         <section className="w-full flex justify-center items-center py-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -94,6 +173,7 @@ export default function FormCreateComment() {
                                 type="file"
                                 id="image-upload"
                                 multiple
+                                accept="image/*" // Restrict input to image files
                                 onChange={handleImageChange}
                                 disabled={images.length >= 3}
                                 className="hidden"
