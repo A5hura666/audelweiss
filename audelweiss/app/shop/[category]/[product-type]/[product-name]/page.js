@@ -9,6 +9,7 @@ import Image from "next/image";
 import MarkdownRenderer from "@/app/components/MarkDownRenderer";
 import {getStrapiCall} from "@/app/lib/utils";
 import {redirect} from 'next/navigation'
+import Swal from 'sweetalert2'
 
 export default function Product() {
     let data = [];
@@ -16,7 +17,7 @@ export default function Product() {
 
     const defaultSize = "adulte";
     const defaultPompom = "oui";
-    const idArticle = localStorage.getItem('selectedProductId'); // Remplacez par l'ID de l'article que vous souhaitez afficher
+    const idArticle = localStorage.getItem('selectedProductId');
 
     const [size, setSize] = useState(defaultSize);
     const [color, setColor] = useState(null);
@@ -43,6 +44,7 @@ export default function Product() {
     const [productPrice, setProductPrice] = useState(0); // State pour le prix du produit
     const [descriptionId, setDescriptionId] = useState(''); // State pour l'ID de la description du produit
     const [productRecommandation, setProductRecommandation] = useState([]); // State pour les produits recommandés
+    const [subCategory, setSubCategory] = useState("");
 
 
     useEffect(() => {
@@ -72,6 +74,7 @@ export default function Product() {
                 setMarkdown(technicalDetail); // Update state
                 setProductName(data.data[0].product_article.productName);
                 setProductCategory(data.data[0].product_article.productCategory);
+                setSubCategory(data.data[0].product_article.subCategory);
                 setProductParentPrice(data.data[0].product_article.productAdultPrice);
                 setProductChildPrice(data.data[0].product_article.productChildPrice);
                 setProductDescription(data.data[0].description);
@@ -172,10 +175,18 @@ export default function Product() {
 
         const allFiltersFilled = Object.values(selectedFilters).every((value) => value !== "");
         if (!allFiltersFilled) {
-            alert("Veuillez remplir tous les filtres avant d'ajouter au panier.");
+            Swal.fire({
+                title: "Remplir les filtres",
+                text: "Il vous faut remplir les filtres avant d'ajouter au panier.",
+                icon: "error"
+            });
             return;
         } else if (!color) {
-            alert("Veuillez sélectionner une couleur avant d'ajouter au panier.");
+            Swal.fire({
+                title: "Remplir les filtres",
+                text: "Il vous manque la couleur de votre produit.",
+                icon: "error"
+            });
             return;
         }
 
@@ -198,7 +209,11 @@ export default function Product() {
         // Save the updated cart back to localStorage
         localStorage.setItem("cart", JSON.stringify(existingCart));
 
-        alert("Produit ajouté au panier !");
+        Swal.fire({
+            title: "Produit ajouté",
+            text: "Votre sélectioné a été rajouté dans votre panier",
+            icon: "success"
+        });
 
         // Redirect to the shop page
         redirect('/shop');
@@ -300,9 +315,9 @@ export default function Product() {
                     </section>
                     <section className={" py-[20px] text-left flex flex-col gap-4 align-middle px-[20px]"}>
                         <h2 className="text-5xl uppercase aboreto ">{productName}</h2>
-                        <h3 className="border-pink">
-                            Catégorie : <span className="color-pink">Bandeaux / bonnets</span>
-                        </h3>
+                        <a className="border-pink" href={`/shop/${productCategory}/${subCategory}`}>
+                            Catégorie : <span className="color-pink">{productCategory}/{subCategory}</span>
+                        </a>
                         <section className={"flex flex-col gap-4 list-none"}>
                             <p className={"w-5/6 leading-7"}>
                                 {productDescription || "Aucun descriptif disponible pour ce produit."}
@@ -421,10 +436,12 @@ export default function Product() {
                                         </svg>
                                     </button>
                                 </div>
-                                <section
-                                    className={"text-lg text-gray-500 mt-2 bg-[#fbedec] p-2 rounded flex flex-col gap-2"}>
-                                    <MarkdownRenderer markdownText={productOffers}/>
-                                </section>
+                                {productOffers && (
+                                    <section
+                                        className={"text-lg text-gray-500 mt-2 bg-[#fbedec] p-2 rounded flex flex-col gap-2"}>
+                                        <MarkdownRenderer markdownText={productOffers}/>
+                                    </section>
+                                )}
                             </section>
                         </section>
                     </section>
