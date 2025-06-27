@@ -51,6 +51,7 @@ export default function ShopCard(props) {
                         <Link
                             href={`/shop/${category}/${model}${name ? `/${slugify(name)}` : ""}`}
                             className="w-full block bg-black text-white text-sm py-2 hover:bg-[#ff6187] transition text-center"
+                            onClick={() => localStorage.setItem('selectedProductId', productId)}
                         >
                             Choix des options
                         </Link>

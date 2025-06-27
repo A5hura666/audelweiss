@@ -22,7 +22,7 @@ export default function CustomerReview({ productDescriptionId }) {
         const fetchHeaderData = async () => {
             try {
                 const response = await fetch(
-                    getStrapiCall(`/api/product-comments?populate=commentImage&populate=product_article_description&filters[product_article_description][id]=${productDescriptionId}`)
+                    getStrapiCall(`/api/product-comments?populate=commentImage&populate=product_article_description&filters[product_article_description][documentId]=${productDescriptionId}`)
                 );
                 const data = await response.json();
                 setComments(data.data);

@@ -62,7 +62,7 @@ export default function Product() {
         const fetchHeaderData = async () => {
             try {
                 const response = await fetch(
-                    getStrapiCall(`/api/product-article-descriptions?filters[product_article][id][$eq]=${idArticle}` +
+                    getStrapiCall(`/api/product-article-descriptions?filters[product_article][documentId][$eq]=${idArticle}` +
                         `&populate=*&populate[productImages]=*&populate[product_colors][populate]=colorImage&` +
                         `populate[product_filters][populate]=*&populate[product_article][populate]=*`)
                 );
@@ -92,7 +92,7 @@ export default function Product() {
                         [filter.filterName]: "",
                     }));
                 });
-                setDescriptionId(data.data[0].id);
+                setDescriptionId(data.data[0].documentId);
                 setIsLoaded(false); // Set isLoaded to false after data is fetched
                 const productRecommandationResponse = await fetch(
                     getStrapiCall(`/api/product-article-cards?populate=productImages&pagination[pageSize]=5&pagination[page]=1`)
@@ -423,13 +423,7 @@ export default function Product() {
                                 </div>
                                 <section
                                     className={"text-lg text-gray-500 mt-2 bg-[#fbedec] p-2 rounded flex flex-col gap-2"}>
-                                    <p>
-                                        🔥3 achetés = le lot à 9€ au lieu de 12€
-                                    </p>
-                                    <p>
-                                        Ajoute la quantité souhaitée au panier, la réduction apparaitra directement dans
-                                        le panier sous forme de réduction.
-                                    </p>
+                                    <MarkdownRenderer markdownText={productOffers}/>
                                 </section>
                             </section>
                         </section>

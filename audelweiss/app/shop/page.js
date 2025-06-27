@@ -37,7 +37,7 @@ export default function Shop() {
 
         // Mettre à jour la catégorie et toutes ses sous-catégories
         setCheckedCategories((prev) => {
-            const newState = { ...prev, [category]: isChecked };
+            const newState = {...prev, [category]: isChecked};
             subCategories.forEach((sub) => {
                 newState[`${category}-${sub}`] = isChecked;
             });
@@ -50,7 +50,7 @@ export default function Shop() {
         const isChecked = !checkedCategories[subCategoryKey];
 
         setCheckedCategories((prev) => {
-            const newState = { ...prev, [subCategoryKey]: isChecked };
+            const newState = {...prev, [subCategoryKey]: isChecked};
 
             // Vérifie si toutes les sous-catégories sont cochées → coche la catégorie
             const allChecked = allSubCategories.every(
@@ -311,7 +311,7 @@ export default function Shop() {
                             img1={item.productImages[0].formats.thumbnail.url}
                             img2={item.productImages[1].formats.thumbnail.url !== undefined ? item.productImages[1].formats.thumbnail.url : ""}
                             rating={item.score}
-                            productId={item.id}
+                            productId={item.documentId}
                         />
                     ))}
                 </section>

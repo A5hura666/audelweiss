@@ -2,10 +2,11 @@
 
 import {useEffect, useState} from "react";
 
-export default function FormCreateComment({productDescriptionId}) {
+export default function FormCreateComment(productDescriptionId) {
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
     const [images, setImages] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         setRating(0);
@@ -33,15 +34,17 @@ export default function FormCreateComment({productDescriptionId}) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // Démarre le loader
 
         const formData = new FormData(e.target);
         formData.append("rating", rating);
-        formData.append("product_article_description", productDescriptionId); // Ajout ici
 
         const data = Object.fromEntries(formData);
         console.log('Form data:', data);
         console.log('Images:', images);
         await createComment(data, images, productDescriptionId);
+
+        setLoading(false); // Arrête le loader après le traitement
     };
 
 
@@ -74,20 +77,18 @@ export default function FormCreateComment({productDescriptionId}) {
 
             const commentData = {
                 data: {
-                    product_article_description: productDescId,
                     comment: data.comment,
                     commentImage: imageIds,
                     productCommentDate: new Date().toISOString(),
                     commentNote: data.rating,
                     authorName: data.name,
                     authorEmail: data.email,
+                    product_article_description: productDescId.productCommentId,
                 },
             };
 
-
-            // 3️⃣ POST du commentaire
             const response = await fetch(
-                "http://ayun.myddns.me:5000/api/article-comments",
+                "http://ayun.myddns.me:5000/api/product-comments",
                 {
                     method: "POST",
                     headers: {
@@ -103,6 +104,9 @@ export default function FormCreateComment({productDescriptionId}) {
 
             const result = await response.json();
             console.log("Commentaire créé avec succès :", result);
+
+            // Refresh the page after successful comment creation
+            window.location.reload();
         } catch (error) {
             console.error("Erreur lors de la création du commentaire :", error);
         }
@@ -234,9 +238,32 @@ export default function FormCreateComment({productDescriptionId}) {
                     <div className="sm:col-span-2">
                         <button
                             type="submit"
-                            className="w-full bg-[#e8a499] text-white py-2 px-4 rounded-md hover:bg-[#e8a499]/90 transition duration-200"
+                            disabled={loading}
+                            className="w-full bg-[#e8a499] text-white py-2 px-4 rounded-md hover:bg-[#e8a499]/90 transition duration-200 flex items-center justify-center gap-2"
                         >
-                            Envoyer
+                            {loading && (
+                                <svg
+                                    className="animate-spin h-5 w-5 text-white"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle
+                                        className="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                        className="opacity-75"
+                                        fill="currentColor"
+                                        d="M4 12a8 8 0 018-8v8z"
+                                    ></path>
+                                </svg>
+                            )}
+                            {loading ? "Envoi..." : "Envoyer"}
                         </button>
                     </div>
                 </form>
