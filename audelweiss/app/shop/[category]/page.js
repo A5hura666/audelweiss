@@ -3,10 +3,11 @@
 import {Breadcrumbs} from "@/app/components/breadcrambs/breadcrumbs";
 import Slider from "@mui/material/Slider";
 import Box from "@mui/material/Box";
-import ShopCard from "../components/shopCard";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {getStrapiCall} from "@/app/lib/utils";
+import ShopCard from "@/app/components/shopCard";
+import {useSearchParams, usePathname} from "next/navigation";
 
 function valuetext(value) {
     return `${value}€`;
@@ -15,7 +16,7 @@ function valuetext(value) {
 
 let data = [];
 
-export default function Shop() {
+export default function ShopByCategory() {
     const [value, setValue] = React.useState([0, 100]);
     const [isPriceOpen, setPriceOpen] = React.useState(true);
     const [allProducts, setAllProducts] = React.useState([]);
@@ -23,6 +24,29 @@ export default function Shop() {
     const [isCategoryOpenD, setIsCategoryOpenD] = React.useState(true);
     const [checkedCategories, setCheckedCategories] = React.useState({});
     const [isLoaded, setIsLoaded] = useState(false);
+
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+    const categoryUrl = searchParams.get("category") || pathname.split("/").pop();
+
+    useEffect(() => {
+        if (!categoryUrl) return;
+        const fetchHeaderData = async () => {
+            try {
+                const response = await fetch(
+                    getStrapiCall(`/api/product-article-cards?filters[productCategory][$eq]=${categoryUrl}&populate=productImages`)
+                );
+                const data = await response.json();
+                setAllProducts(data.data);
+                setIsLoaded(true);
+                console.log("Fetched data:", data);
+            } catch (error) {
+                console.error("Error fetching header data:", error);
+            }
+        };
+
+        fetchHeaderData();
+    }, [pathname, searchParams]);
 
     const toggleCategoryOpen = (category) => {
         setisCategoryOpenData((prev) => ({
@@ -77,23 +101,6 @@ export default function Shop() {
             setValue(newValue);
         }
     };
-
-    useEffect(() => {
-        const fetchHeaderData = async () => {
-            try {
-                const response = await fetch(
-                    getStrapiCall(`/api/product-article-cards?populate=productImages`)
-                );
-                const data = await response.json();
-                setAllProducts(data.data);
-                setIsLoaded(true);
-                console.log("Fetched data:", data);
-            } catch (error) {
-                console.error("Error fetching header data:", error);
-            }
-        };
-        fetchHeaderData();
-    }, []);
 
     // Construire un objet catégorie → sous-catégories
     const categories = allProducts.reduce((acc, product) => {

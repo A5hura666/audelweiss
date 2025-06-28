@@ -76,5 +76,15 @@ body {
 }
 
 .aboreto{
-  font-family: 'Aboreto', sans-serif;
+    font-family: 'Aboreto', display, serif;
+}
+
+.border-pink{
+    border-bottom-width: 1px;
+    border-top-width: 1px;
+    border-color: rgba(232, 164, 153, 0.4);
+}
+
+.color-pink{
+    color: #E8A499 !important;
 }

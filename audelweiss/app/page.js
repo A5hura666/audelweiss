@@ -299,6 +299,7 @@ export default function Home() {
                             addToCart={item.addToCart}
                             priceMin={item.priceMin}
                             priceMax={item.priceMax}
+                            productId={item.documentId}
                         />
                     ))}
                 </div>

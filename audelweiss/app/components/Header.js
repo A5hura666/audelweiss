@@ -17,18 +17,27 @@ export default function Header() {
     const [logoData, setLogoData] = useState('/logo-wide.svg');
     const [baseUrl, setBaseUrl] = useState('');
     const [activeMegaMenu, setActiveMegaMenu] = useState(null);
+    const [cartCount, setCartCount] = useState(0);
     const pathname = usePathname();
-    const cartCount = 3;
     const [user, setUser] = useState(null);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
+            const cart = localStorage.getItem("cart");
             const storedUser = localStorage.getItem("user");
             if (storedUser) {
                 try {
                     setUser(JSON.parse(storedUser));
                 } catch (e) {
                     console.error("Erreur parsing user", e);
+                }
+            }
+
+            if (cart && cart !== "undefined") {
+                try {
+                    setCartCount(JSON.parse(cart).length);
+                } catch (error) {
+                    console.error("Error parsing cart:", error);
                 }
             }
         }
