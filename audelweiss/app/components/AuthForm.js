@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import InputField from './InputField';
 
 export default function AuthForm({ onLogin }) {
@@ -13,6 +14,17 @@ export default function AuthForm({ onLogin }) {
     });
     const [isLogin, setIsLogin] = useState(true);
     const [error, setError] = useState('');
+    const [redirectMessage, setRedirectMessage] = useState(false);
+
+    const searchParams = useSearchParams();
+    const router = useRouter();
+
+    useEffect(() => {
+        const redirectParam = searchParams.get('redirect');
+        if (redirectParam === 'cart') {
+            setRedirectMessage(true);
+        }
+    }, [searchParams]);
 
     function validateForm() {
         if (!form.email || !form.password) {
@@ -59,6 +71,11 @@ export default function AuthForm({ onLogin }) {
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
             onLogin(data.user);
+
+            const redirectParam = searchParams.get('redirect');
+            if (redirectParam === 'cart') {
+                router.push('/cart');
+            }
         } else {
             setError(data.error || 'Une erreur est survenue');
         }
@@ -69,6 +86,13 @@ export default function AuthForm({ onLogin }) {
             <h2 className="text-2xl font-bold text-gray-800 mb-6">
                 {isLogin ? 'Connexion' : 'Créer un compte'}
             </h2>
+
+            {redirectMessage && (
+                <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 text-sm p-3 mb-4 rounded">
+                    Connectez-vous pour accéder à votre panier. Vous serez redirigé automatiquement après la connexion.
+                </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-4">
                 {!isLogin && (
                     <>
