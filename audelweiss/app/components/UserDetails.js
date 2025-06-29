@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import InputField from './InputField';
 import ChangePasswordModal from './ChangePasswordModal';
+import OrderHistory from './OrderHistory';
 
 export default function UserDetails({ user, onLogout }) {
     const [form, setForm] = useState({
@@ -13,6 +14,42 @@ export default function UserDetails({ user, onLogout }) {
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false);
+
+    const [orders, setOrders] = useState([]);
+    const [loadingOrders, setLoadingOrders] = useState(false);
+    const [ordersError, setOrdersError] = useState('');
+
+    useEffect(() => {
+        const fetchOrders = async () => {
+            setLoadingOrders(true);
+            setOrdersError('');
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    setOrdersError('Utilisateur non authentifié');
+                    setLoadingOrders(false);
+                    return;
+                }
+                const res = await fetch('/api/orders', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                if (!res.ok) {
+                    const data = await res.json();
+                    throw new Error(data.error || 'Erreur lors du chargement des commandes');
+                }
+                const data = await res.json();
+                setOrders(data.orders || []);
+            } catch (err) {
+                setOrdersError(err.message);
+            } finally {
+                setLoadingOrders(false);
+            }
+        };
+
+        fetchOrders();
+    }, []);
 
     const handleUpdate = async (e) => {
         e.preventDefault();
@@ -33,7 +70,7 @@ export default function UserDetails({ user, onLogout }) {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
                 body: JSON.stringify(form),
             });
@@ -55,7 +92,7 @@ export default function UserDetails({ user, onLogout }) {
         <div className="max-w-2xl mx-auto mt-12 p-6 bg-white rounded-lg shadow space-y-6 my-24">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">Modifier mes informations</h2>
 
-            <form onSubmit={handleUpdate} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <form onSubmit={handleUpdate} className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700">
                 <InputField
                     type="text"
                     placeholder="Prénom"
@@ -81,6 +118,7 @@ export default function UserDetails({ user, onLogout }) {
                     type="email"
                     placeholder="Email"
                     value={user.email}
+                    onChange={() => {}}
                     disabled
                 />
 
@@ -103,6 +141,10 @@ export default function UserDetails({ user, onLogout }) {
                     </button>
                 </div>
             </form>
+
+            <div className="mt-12">
+                <OrderHistory />
+            </div>
 
             <div className="text-right mt-6">
                 <button

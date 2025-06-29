@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Trash2, Plus, Minus } from 'lucide-react';
+import Swal from 'sweetalert2';
 
 export default function CartPage() {
     const [user, setUser] = useState(null);
@@ -66,10 +67,38 @@ export default function CartPage() {
     };
 
     const handleCheckout = () => {
-        alert('Commande confirmée !');
-        // setCart([]);
-        // localStorage.removeItem('cart');
-        // router.push('/paiement');
+        Swal.fire({
+            title: 'Confirmer la commande ?',
+            text: 'Vous allez être redirigé vers le paiement sécurisé.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Oui, commander',
+            cancelButtonText: 'Annuler',
+            reverseButtons: true
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const res = await fetch('/api/create-checkout-session', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ cart }),
+                    });
+
+                    const data = await res.json();
+
+                    if (data.url) {
+                        window.location.href = data.url;
+                    } else {
+                        Swal.fire('Erreur', 'Impossible de démarrer le paiement.', 'error');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    Swal.fire('Erreur', 'Une erreur est survenue.', 'error');
+                }
+            }
+        });
     };
 
     if (!user) return null;
