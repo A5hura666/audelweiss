@@ -24,6 +24,9 @@ export default function ShopByCategory() {
     const [isCategoryOpenD, setIsCategoryOpenD] = React.useState(true);
     const [checkedCategories, setCheckedCategories] = React.useState({});
     const [isLoaded, setIsLoaded] = useState(false);
+    const [selectedSubCategories, setSelectedSubCategories] = useState([]);
+    const [minPrice, setMinPrice] = useState(0);
+    const [maxPrice, setMaxPrice] = useState(100);
 
     const searchParams = useSearchParams();
     const pathname = usePathname();
@@ -38,6 +41,14 @@ export default function ShopByCategory() {
                 );
                 const data = await response.json();
                 setAllProducts(data.data);
+                // Récupérer les prix pour déterminer le min et max
+                const prices = data.data.map((item) => Number(item.price || item.productChildPrice));
+                const minPrice = Math.min(...prices);
+                const maxPrice = Math.max(...prices);
+
+                setValue([minPrice, maxPrice]);
+                setMinPrice(minPrice);
+                setMaxPrice(maxPrice);
                 setIsLoaded(true);
                 console.log("Fetched data:", data);
             } catch (error) {
@@ -308,19 +319,24 @@ export default function ShopByCategory() {
                     id="products"
                     className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols- w-full md:w-3/4 gap-4"
                 >
-                    {allProducts.map((item, index) => (
-                        <ShopCard
-                            key={item.productName + "-" + index}
-                            category={item.productCategory}
-                            model={item.subCategory}
-                            name={item.productName}
-                            price={item.price ? `${item.price}€` : `${item.productChildPrice}€ - ${item.productAdultPrice}€`}
-                            img1={item.productImages[0].formats.thumbnail.url}
-                            img2={item.productImages[1].formats.thumbnail.url !== undefined ? item.productImages[1].formats.thumbnail.url : ""}
-                            rating={item.score}
-                            productId={item.documentId}
-                        />
-                    ))}
+                    {allProducts
+                        .filter(item => {
+                            const price = Number(item.price || item.productChildPrice);
+                            return price >= value[0] && price <= value[1];
+                        })
+                        .map((item, index) => (
+                            <ShopCard
+                                key={item.productName + "-" + index}
+                                category={item.productCategory}
+                                model={item.subCategory}
+                                name={item.productName}
+                                price={item.price ? `${item.price}€` : `${item.productChildPrice}€ - ${item.productAdultPrice}€`}
+                                img1={item.productImages[0].formats.thumbnail.url}
+                                img2={item.productImages[1].formats.thumbnail.url !== undefined ? item.productImages[1].formats.thumbnail.url : ""}
+                                rating={item.score}
+                                productId={item.documentId}
+                            />
+                        ))}
                 </section>
             </section>
         </div>
