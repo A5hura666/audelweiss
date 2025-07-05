@@ -70,6 +70,8 @@ export default function Product() {
                 );
                 const data = await response.json();
 
+                console.log("Fetched product data:", data);
+
                 const technicalDetail = data.data[0].technicalDetail;
                 setMarkdown(technicalDetail); // Update state
                 setProductName(data.data[0].product_article.productName);

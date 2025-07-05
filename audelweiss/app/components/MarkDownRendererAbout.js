@@ -1,23 +1,61 @@
 import ReactMarkdown from "react-markdown";
+import React from "react";
 
-export default function MarkdownRendererAbout({ markdownText }) {
+export default function MarkdownRenderer({ markdownText }) {
     return (
-        <div className="p-6  flex flex-col gap-12">
-            <ReactMarkdown
-                components={{
-                    h2: ({ node, ...props }) => (
-                        <p className=" text-6xl sm:text-6xl xl:text-8xl lg:text-7xl text-black" {...props} />
-                    ),
-                    p: ({ node, ...props }) => (
-                        <p className="text-xl text-black" {...props} />
-                    ),
-                    a: ({ node, ...props }) => (
-                        <a className="color-pink hover:underline duration-4" {...props} />
-                    ),
-                }}
-            >
-                {markdownText}
-            </ReactMarkdown>
-        </div>
+        <ReactMarkdown
+            components={{
+                h2: ({ node, ...props }) => (
+                    <h1 className="color-pink font-bold text-2xl sm:text-2xl xl:text-4xl lg:text-4xl " {...props} />
+                ),
+                h3: ({ node, ...props }) => (
+                    <h1 className="color-pink font-bold text-xl sm:text-xl xl:text-2xl lg:text-2xl " {...props} />
+                ),
+                h4: ({ node, ...props }) => (
+                    <h1 className="color-pink text-xl font-bold" {...props} />
+                ),
+                p: ({ node, children, ...props }) => {
+                    // Force children en tableau
+                    const childArray = React.Children.toArray(children);
+
+                    const onlyImages = childArray.every(
+                        (child) => child.type === "img"
+                    );
+
+                    if (onlyImages) {
+                        const imagesWithSmallSize = childArray.map((child, index) =>
+                            React.cloneElement(child, {
+                                key: index,
+                                className:
+                                    "w-24 sm:w-32 md:w-40 rounded-lg border border-gray-300",
+                            })
+                        );
+
+                        return (
+                            <div className="flex flex-wrap gap-4 my-4">
+                                {imagesWithSmallSize}
+                            </div>
+                        );
+                    }
+
+                    return (
+                        <div className="text-gray-700 leading-relaxed mb-4" {...props}>
+                            {children}
+                        </div>
+                    );
+                },
+                a: ({ node, ...props }) => (
+                    <a className="color-pink underline" {...props} />
+                ),
+                img: ({ node, ...props }) => (
+                    <img
+                        className="w-full rounded-lg border border-gray-300 my-4"
+                        {...props}
+                    />
+                ),
+            }}
+        >
+            {markdownText}
+        </ReactMarkdown>
     );
 }
