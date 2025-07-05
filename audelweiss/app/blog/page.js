@@ -13,14 +13,14 @@ export default function Blog() {
       try {
         const res = await fetch(
           getStrapiCall(
-            "/api/blog-page?populate[blogList][populate][blogs][populate]=thumbnail"
+            "/api/blog-pages?populate[blogList][populate][blogs][populate][thumbnail]=true&populate[blogList][populate][blogs][populate][linkToArticle]=true"
           )
         );
         if (!res.ok) {
           throw new Error("Erreur API");
         }
         const json = await res.json();
-        setBlogPage(json.data);
+        setBlogPage(json.data?.[0]);
       } catch (error) {
         console.error("Erreur lors du fetch blog-page :", error);
       } finally {
@@ -32,18 +32,18 @@ export default function Blog() {
   }, []);
 
   if (loading) return <p>Chargement...</p>;
-  if (!blogPage?.blogList) {
+  if (!blogPage?.blogList || blogPage.blogList.length === 0) {
     return <p>Données du blog introuvables.</p>;
   }
 
-  const blogList = blogPage.blogList?.[0];
+  const blogList = blogPage?.blogList?.[0];
   const articles = blogList?.blogs || [];
 
   return (
     <div className="bg-white text-black min-h-screen p-6">
       <div className="flex flex-col items-center text-center">
         <h1 className="text-3xl text-black">{blogList.pageTitle}</h1>
-        <p className="mt-4 max-w-2xl">{blogList.text}</p>
+        <p className="mt-8 max-w-2xl">{blogList.text}</p>
       </div>
 
       <div className="mt-10 space-y-16">
@@ -58,6 +58,7 @@ export default function Blog() {
               readingTime,
               ArticleCategory,
               thumbnail,
+              linkToArticle,
             } = article;
 
             const imageUrl = thumbnail?.url
@@ -85,7 +86,7 @@ export default function Blog() {
                     </p>
                     <p className="mt-4">{description}</p>
                     <Link
-                      href="#"
+                      href={`/blog/${linkToArticle.url}`}
                       className="inline-block mt-4 text-[#FF6187] underline underline-offset-8 hover:brightness-90"
                     >
                       Lire l'article
