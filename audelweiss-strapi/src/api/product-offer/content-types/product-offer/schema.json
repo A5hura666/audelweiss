@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_offers",
+  "info": {
+    "singularName": "product-offer",
+    "pluralName": "product-offers",
+    "displayName": "productOffer"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "productOfferDescription": {
+      "type": "richtext"
+    },
+    "product_article_description": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-article-description.product-article-description"
+    }
+  }
+}

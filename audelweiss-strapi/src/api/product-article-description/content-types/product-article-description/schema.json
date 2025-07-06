@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_article_descriptions",
+  "info": {
+    "singularName": "product-article-description",
+    "pluralName": "product-article-descriptions",
+    "displayName": "productArticleDescription",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "descriptionTitle": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "technicalDetailTitle": {
+      "type": "string"
+    },
+    "technicalDetail": {
+      "type": "richtext"
+    },
+    "product_additionnal_informations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-additionnal-information.product-additionnal-information",
+      "mappedBy": "product_article_description"
+    },
+    "productPhotos": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    },
+    "product_colors": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-color.product-color",
+      "mappedBy": "product_article_description"
+    }
+  }
+}

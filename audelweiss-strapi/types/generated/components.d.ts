@@ -51,6 +51,20 @@ export interface ComponentsMegaMenu extends Struct.ComponentSchema {
   };
 }
 
+export interface ComponentsProductArticleCard extends Struct.ComponentSchema {
+  collectionName: 'components_components_product_article_cards';
+  info: {
+    description: '';
+    displayName: 'productArticleCard';
+  };
+  attributes: {
+    product_article: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::product-article-card.product-article-card'
+    >;
+  };
+}
+
 export interface ComponentsProductLink extends Struct.ComponentSchema {
   collectionName: 'components_components_product_links';
   info: {
@@ -62,6 +76,23 @@ export interface ComponentsProductLink extends Struct.ComponentSchema {
     image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     url: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface ComponentsProductPage extends Struct.ComponentSchema {
+  collectionName: 'components_components_product_pages';
+  info: {
+    displayName: 'ProductPage';
+  };
+  attributes: {
+    product_article: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::product-article-card.product-article-card'
+    >;
+    product_article_description: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::product-article-description.product-article-description'
+    >;
   };
 }
 
@@ -227,7 +258,9 @@ declare module '@strapi/strapi' {
       'components.icon-link': ComponentsIconLink;
       'components.link': ComponentsLink;
       'components.mega-menu': ComponentsMegaMenu;
+      'components.product-article-card': ComponentsProductArticleCard;
       'components.product-link': ComponentsProductLink;
+      'components.product-page': ComponentsProductPage;
       'layout.blog-item': LayoutBlogItem;
       'layout.blog-list': LayoutBlogList;
       'layout.category-highlight': LayoutCategoryHighlight;

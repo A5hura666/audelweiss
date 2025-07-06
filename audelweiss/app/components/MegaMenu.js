@@ -24,9 +24,9 @@ const MegaMenu = ({ productLinks, baseUrl }) => {
                                 </p>
                             )}
                             {product.url && (
-                                <Link href={product.url} className="text-blue-500 text-xs hover:underline">
+                                <a href={product.url.startsWith("/") ? product.url : `/${product.url}`} className="text-blue-500 text-xs hover:underline">
                                     Voir le produit
-                                </Link>
+                                </a>
                             )}
                         </div>
                     </div>
