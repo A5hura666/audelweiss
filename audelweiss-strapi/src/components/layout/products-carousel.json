@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_layout_products_carousels",
+  "info": {
+    "displayName": "products-carousel"
+  },
+  "options": {},
+  "attributes": {
+    "product_articles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::product-article-card.product-article-card"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "kind": "singleType",
+  "collectionName": "home_pages",
+  "info": {
+    "singularName": "home-page",
+    "pluralName": "home-pages",
+    "displayName": "HomePage",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "sections": {
+      "type": "dynamiczone",
+      "components": [
+        "layout.products-carousel",
+        "layout.usp-section",
+        "layout.hero",
+        "layout.categories-section"
+      ],
+      "required": true,
+      "min": 1
+    },
+    "title": {
+      "type": "text",
+      "required": true
+    }
+  }
+}
