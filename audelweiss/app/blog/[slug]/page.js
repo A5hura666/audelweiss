@@ -2,9 +2,10 @@ import { getStrapiCall } from "@/app/lib/utils";
 import Link from "next/link";
 import CommentSection from "./CommentSection";
 import ReactMarkdown from "react-markdown";
+import {Breadcrumbs} from "@/app/components/breadcrambs/breadcrumbs";
 
 export default async function BlogArticle({ params }) {
-  const { slug } = params;
+  const { slug } = await params;
   const res = await fetch(
     getStrapiCall(
       `/api/blog-article-pages?filters[slug][$eq]=${slug}&populate[blogArticle][populate][cover]=true&populate[blogArticle][populate][paragraphes]=*`
@@ -33,20 +34,8 @@ export default async function BlogArticle({ params }) {
     <div className="min-h-screen bg-white">
       <div className="bg-[#E8A499] py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="text-sm">
-            <Link href="/" passHref>
-              <span className="text-white underline cursor-pointer">
-                Accueil
-              </span>
-            </Link>
-            <span className="mx-2 text-white">›</span>
-            <Link href="/blog" passHref>
-              <span className="text-white underline cursor-pointer">Blog</span>
-            </Link>
-            <span className="mx-2 text-white ">›</span>
-            <span className="text-white  underline cursor-pointer">Infos</span>
-            <span className="mx-2 text-white ">›</span>
-            <span className="text-white  font-medium">{article.title}</span>
+          <nav className="text-sm text-white">
+              <Breadcrumbs></Breadcrumbs>
           </nav>
         </div>
       </div>
