@@ -154,8 +154,8 @@ export default function CommentSection({ slug }) {
           rows={4}
           required
           placeholder="Commentaire *"
-          className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm 
-             focus:outline-none focus:ring-1 focus:ring-[#E8A499] focus:border-[#E8A499]"
+          className="w-full px-3 py-2 text-black border border-[#E8A499] bg-[#E8A499]/10 rounded-md shadow-sm 
+             focus:outline-none focus:ring-2 focus:ring-[#E8A499] focus:border-[#E8A499]"
           value={form.comment}
           onChange={handleChange}
         />
@@ -165,7 +165,7 @@ export default function CommentSection({ slug }) {
           name="name"
           placeholder="Nom *"
           required
-          className="w-100 px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm 
+          className="w-100 px-3 py-2 text-black border border-[#E8A499] bg-[#E8A499]/10 rounded-md shadow-sm 
             focus:outline-none focus:ring-1 focus:ring-[#E8A499] focus:border-[#E8A499]"
           value={form.name}
           onChange={handleChange}
@@ -176,7 +176,7 @@ export default function CommentSection({ slug }) {
           name="email"
           placeholder="Email *"
           required
-          className="w-100 px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm 
+          className="w-100 px-3 py-2 text-black border  border-[#E8A499] bg-[#E8A499]/10 rounded-md shadow-sm 
             focus:outline-none focus:ring-1 focus:ring-[#E8A499] focus:border-[#E8A499]"
           value={form.email}
           onChange={handleChange}
@@ -186,7 +186,7 @@ export default function CommentSection({ slug }) {
           type="url"
           name="website"
           placeholder="Site web"
-          className="w-100 px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm 
+          className="w-100 px-3 py-2 text-black border  border-[#E8A499] bg-[#E8A499]/10 rounded-md shadow-sm 
             focus:outline-none focus:ring-1 focus:ring-[#E8A499] focus:border-[#E8A499]"
           value={form.website}
           onChange={handleChange}
