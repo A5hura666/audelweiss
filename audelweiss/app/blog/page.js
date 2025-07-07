@@ -93,11 +93,13 @@ export default function Blog() {
                   </div>
 
                   <div className="w-full md:w-1/2">
-                    <img
-                      src={imageUrl}
-                      alt={title}
-                      className="w-full h-auto hover:brightness-110 transition duration-300"
-                    />
+                    <Link href={`/blog/${linkToArticle.url}`} passHref>
+                      <img
+                        src={imageUrl}
+                        alt={title}
+                        className="w-full h-auto hover:brightness-110 transition duration-300 cursor-pointer"
+                      />
+                    </Link>
                   </div>
                 </div>
               </article>
