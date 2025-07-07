@@ -64,4 +64,7 @@ model Comment {
   comment   String
   slug      String
   date      DateTime @default(now())
+  replyTo   Int?                        
+  parent    Comment?   @relation("CommentToReplies", fields: [replyTo], references: [id])
+  replies   Comment[]  @relation("CommentToReplies")
 }

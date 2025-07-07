@@ -9,6 +9,7 @@ export default function CommentSection({ slug }) {
     website: "",
     comment: "",
   });
+  const [replyTo, setReplyTo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
@@ -41,7 +42,7 @@ export default function CommentSection({ slug }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...form, slug }),
+        body: JSON.stringify({ ...form, slug, replyTo: replyTo?.id }),
       });
 
       if (!res.ok) throw new Error("Erreur soumission");
@@ -49,6 +50,7 @@ export default function CommentSection({ slug }) {
       await fetchComments();
 
       setForm({ name: "", email: "", website: "", comment: "" });
+      setReplyTo(null);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
@@ -59,21 +61,67 @@ export default function CommentSection({ slug }) {
   };
 
   return (
-    <div className="pb-12">
-      <ul className="mb-8 space-y-4">
+    <div className="pb-12 border-t-1 border-[#E8A499]">
+      <ul className="mb-12 space-y-2 mt-4">
         {comments.map((c) => (
-          <li key={c.id} className="p-4 rounded-md">
-            <p className="text-sm text-black">
-              <strong>{c.name}</strong> le{" "}
-              {new Date(c.date).toLocaleDateString("fr-FR")} à{" "}
-              {new Date(c.date)
-                .toLocaleTimeString("fr-FR", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
-                .replace(":", "h")}
-            </p>
-            <p className="text-gray-800 mt-2">{c.comment}</p>
+          <li key={c.id}>
+            <div className="flex justify-between items-center gap-4 w-full py-4">
+              <div className="flex-1">
+                <p className="text-sm text-black">
+                  <strong>{c.name}</strong> le{" "}
+                  {new Date(c.date).toLocaleDateString("fr-FR")} à{" "}
+                  {new Date(c.date)
+                    .toLocaleTimeString("fr-FR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                    .replace(":", "h")}
+                </p>
+                <p className="text-gray-800 mt-2">{c.comment}</p>
+              </div>
+
+              <div className="flex justify-end mt-1 text-right">
+                <button
+                  onClick={() => setReplyTo({ id: c.id, name: c.name })}
+                  className="w-fit bg-gray-800 text-white px-2 py-2 hover:bg-[#E8A499] hover:text-white transition-colors duration-200 font-medium"
+                >
+                  Réponse
+                </button>
+              </div>
+            </div>
+
+            {c.replies?.length > 0 && (
+              <ul className="mt-4 ml-80 space-y-2">
+                {c.replies.map((r) => (
+                  <li key={r.id} className="pl-2">
+                    <div className="flex justify-between items-center gap-4 w-full py-4">
+                      <div className="flex-1">
+                        <p className="text-sm text-black">
+                          <strong>{r.name}</strong> le{" "}
+                          {new Date(r.date).toLocaleDateString("fr-FR")} à{" "}
+                          {new Date(r.date)
+                            .toLocaleTimeString("fr-FR", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
+                            .replace(":", "h")}
+                        </p>
+                        <p className="text-gray-800 mt-1">{r.comment}</p>
+                      </div>
+
+                      <div className="mt-1 text-right">
+                        <button
+                          onClick={() => setReplyTo({ id: r.id, name: r.name })}
+                          className="w-fit bg-gray-800 text-white px-2 py-2 hover:bg-[#E8A499] hover:text-white transition-colors duration-200 font-medium"
+                        >
+                          Réponse
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         ))}
       </ul>
@@ -90,6 +138,19 @@ export default function CommentSection({ slug }) {
         <p className="text-green-600 text-sm mb-4">
           Commentaire ajouté avec succès !
         </p>
+      )}
+
+      {replyTo && (
+        <div className="mb-4 text-sm text-gray-700">
+          En réponse à <strong>{replyTo.name}</strong>
+          <button
+            type="button"
+            onClick={() => setReplyTo(null)}
+            className="ml-2 text-xs text-gray-500 underline hover:text-gray-700"
+          >
+            Annuler la réponse
+          </button>
+        </div>
       )}
 
       <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
@@ -138,7 +199,7 @@ export default function CommentSection({ slug }) {
 
         <button
           type="submit"
-          className="w-70 bg-gray-800 text-white px-1 py-3 hover:bg-[#E8A499] hover:text-white transition-colors duration-200 font-medium"
+          className="w-fit bg-gray-800 text-white px-4 py-3 hover:bg-[#E8A499] hover:text-white transition-colors duration-200 font-medium"
           disabled={loading}
         >
           {loading ? "Envoi..." : "Soumettre le commentaire"}
