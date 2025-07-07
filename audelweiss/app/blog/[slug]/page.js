@@ -1,4 +1,7 @@
 import { getStrapiCall } from "@/app/lib/utils";
+import Link from "next/link";
+import CommentSection from "./CommentSection";
+import ReactMarkdown from "react-markdown";
 import {Breadcrumbs} from "@/app/components/breadcrambs/breadcrumbs";
 
 export default async function BlogArticle({ params }) {
@@ -29,7 +32,6 @@ export default async function BlogArticle({ params }) {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Breadcrumb */}
       <div className="bg-[#E8A499] py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="text-sm text-white">
@@ -38,13 +40,10 @@ export default async function BlogArticle({ params }) {
         </div>
       </div>
 
-      {/* Hero Section avec texte en arrière-plan */}
       <div className="relative overflow-hidden">
-        {/* Texte en arrière-plan */}
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            {/* Image à gauche */}
             <div className="order-2 lg:order-1">
               <img
                 src={imageUrl}
@@ -53,7 +52,6 @@ export default async function BlogArticle({ params }) {
               />
             </div>
 
-            {/* Contenu à droite */}
             <div className="order-1 lg:order-2">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-6 leading-tight">
                 {article.title}
@@ -74,20 +72,33 @@ export default async function BlogArticle({ params }) {
         </div>
       </div>
 
-      {/* Contenu principal */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="text-black mb-6 leading-loose">{article.description}</div>
+        <div className="text-black mb-6 leading-loose">
+          {article.introduction}
+        </div>
         <article className="prose prose-lg max-w-none">
           {article.paragraphes?.map((para, index) => (
-            <section key={index} className="mb-16">
-              <h2 className="text-2xl md:text-4xl font-bold text-[#E8A499] mb-6 pb-3">
+            <section key={index} className="mb-12">
+              <h2 className="text-2xl font-bold text-[#E8A499] mb-4">
                 {`${para.title}`}
               </h2>
               <div className="space-y-6">
                 <div className="gap-6">
                   <div>
                     <pre className="text-gray-700 whitespace-pre-line font-sans leading-loose">
-                      {para.description}
+                      <ReactMarkdown
+                        components={{
+                          a: ({ node, ...props }) => (
+                            <a
+                              {...props}
+                              className="text-[#FF6187]"
+                              target="_blank"
+                            />
+                          ),
+                        }}
+                      >
+                        {para.description}
+                      </ReactMarkdown>
                     </pre>
                   </div>
                 </div>
@@ -96,65 +107,7 @@ export default async function BlogArticle({ params }) {
           ))}
         </article>
 
-        {/* Section commentaires */}
-        <div className="pb-12">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
-            SOUMETTRE UN COMMENTAIRE
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Votre adresse e-mail ne sera pas publiée. Les champs obligatoires
-            sont indiqués avec *
-          </p>
-
-          <form className="space-y-6">
-            <div>
-              <textarea
-                id="comment"
-                name="comment"
-                rows={6}
-                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-                placeholder="Commentaire *"
-              />
-            </div>
-
-            <div>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                className="w-100 px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-                placeholder="Nom *"
-              />
-            </div>
-
-            <div>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className="w-100 px-3 py-2 text-black border border-gray-300  rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-                placeholder="Email *"
-              />
-            </div>
-
-            <div>
-              <input
-                type="url"
-                id="website"
-                name="website"
-                className="w-100 px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:ring-rose-500 focus:border-rose-500"
-                placeholder="Site web"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="bg-gray-800 text-white px-6 py-3 hover:bg-gray-700 transition-colors duration-200 font-medium"
-            >
-              Soumettre le commentaire
-            </button>
-          </form>
-        </div>
+        <CommentSection slug={slug} />
 
         <section className="my-16 bg-rose-50 p-8">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
@@ -171,9 +124,11 @@ export default async function BlogArticle({ params }) {
             </div>
 
             <div className="shrink-0">
-              <button className="bg-gray-800 text-white px-8 py-3 font-medium hover:bg-[#E8A499] hover:text-white transition-colors">
-                Découvrir la boutique
-              </button>
+              <Link href="/shop" passHref>
+                <button className="bg-gray-800 text-white px-8 py-3 font-medium hover:bg-[#E8A499] hover:text-white transition-colors">
+                  Découvrir la boutique
+                </button>
+              </Link>
             </div>
           </div>
         </section>
