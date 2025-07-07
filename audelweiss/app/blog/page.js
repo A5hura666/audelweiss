@@ -31,7 +31,7 @@ export default function Blog() {
     fetchBlogPage();
   }, []);
 
-  if (loading) return <p>Chargement...</p>;
+  if (loading) return <p className="text-black">Chargement...</p>;
   if (!blogPage?.blogList || blogPage.blogList.length === 0) {
     return <p>Données du blog introuvables.</p>;
   }
@@ -65,7 +65,6 @@ export default function Blog() {
               ? `http://ayun.myddns.me:5000${thumbnail.url}`
               : "/placeholder.png";
 
-            // Inverse la ligne tous les articles avec index impair
             const isOdd = index % 2 === 1;
 
             return (
