@@ -8,7 +8,7 @@ function isValidEmail(email) {
 }
 
 function isValidPhone(phone) {
-    return /^\+?\d{7,15}$/.test(phone); // chiffres, optionnel + au début, longueur raisonnable
+    return /^\+?\d{7,15}$/.test(phone);
 }
 
 export async function POST(req) {
