@@ -13,6 +13,8 @@ export default function CommentSection({ slug }) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  const isAuthor = true;
+
   const fetchComments = async () => {
     try {
       const res = await fetch(`/api/comments?slug=${slug}`);
@@ -80,14 +82,16 @@ export default function CommentSection({ slug }) {
                 <p className="text-gray-800 mt-2">{c.comment}</p>
               </div>
 
-              <div className="flex justify-end mt-1 text-right">
-                <button
-                  onClick={() => setReplyTo({ id: c.id, name: c.name })}
-                  className="w-fit bg-gray-800 text-white px-2 py-2 hover:bg-[#E8A499] hover:text-white transition-colors duration-200 font-medium"
-                >
-                  Réponse
-                </button>
-              </div>
+              {isAuthor && (
+                <div className="w-25 self-center">
+                  <button
+                    onClick={() => setReplyTo({ id: c.id, name: c.name })}
+                    className="bg-gray-800 text-white px-3 py-2 hover:bg-[#E8A499] transition-colors duration-200"
+                  >
+                    Répondre
+                  </button>
+                </div>
+              )}
             </div>
 
             {c.replies?.length > 0 && (
@@ -107,15 +111,6 @@ export default function CommentSection({ slug }) {
                             .replace(":", "h")}
                         </p>
                         <p className="text-gray-800 mt-1">{r.comment}</p>
-                      </div>
-
-                      <div className="mt-1 text-right">
-                        <button
-                          onClick={() => setReplyTo({ id: r.id, name: r.name })}
-                          className="w-fit bg-gray-800 text-white px-2 py-2 hover:bg-[#E8A499] hover:text-white transition-colors duration-200 font-medium"
-                        >
-                          Réponse
-                        </button>
                       </div>
                     </div>
                   </li>
