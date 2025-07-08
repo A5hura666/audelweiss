@@ -39,7 +39,6 @@ export default function ShopByCategory() {
                 const data = await response.json();
                 setAllProducts(data.data);
                 setIsLoaded(true);
-                console.log("Fetched data:", data);
             } catch (error) {
                 console.error("Error fetching header data:", error);
             }

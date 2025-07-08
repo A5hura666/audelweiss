@@ -40,8 +40,6 @@ export default function FormCreateComment(productDescriptionId) {
         formData.append("rating", rating);
 
         const data = Object.fromEntries(formData);
-        console.log('Form data:', data);
-        console.log('Images:', images);
         await createComment(data, images, productDescriptionId);
 
         setLoading(false); // Arrête le loader après le traitement
@@ -103,7 +101,6 @@ export default function FormCreateComment(productDescriptionId) {
             }
 
             const result = await response.json();
-            console.log("Commentaire créé avec succès :", result);
 
             // Refresh the page after successful comment creation
             window.location.reload();

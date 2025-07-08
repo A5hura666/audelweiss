@@ -41,18 +41,15 @@ export default function Creation() {
                 let url = getStrapiCall(`/api/creations?populate=creationImages&populate=hashtags&filters[documentId][$eq]=${idCreation}`);
                 let response = await fetch(url);
                 let data = await response.json();
-                console.log("Fetched creation data:", data);
                 setProductImages(data.data[0].creationImages.map(image => `http://ayun.myddns.me:5000${image.url}`));
                 setProductName(data.data[0].name);
                 setCreationHashtag(data.data[0].hashtags.map(tag => tag.title).join(", "));
                 setProductDescription(data.data[0].creationDescription || "Aucun descriptif disponible pour ce produit.");
                 setCreationInformation(data.data[0].creationInformation || "Aucune information disponible pour cette création.");
-                console.log(isLoaded);
 
                 url = getStrapiCall(`/api/creations?populate=creationImages&populate=hashtags&pagination[limit]=4&filters[documentId][$ne]=${idCreation}`);
                 response = await fetch(url);
                 data = await response.json();
-                console.log("Fetched creations:", data);
                 setCreations(data.data);
 
                 setIsLoaded(false); // Assurez-vous que cette ligne est bien présente
@@ -66,7 +63,6 @@ export default function Creation() {
                     });
                 });
                 setHashtags(hashtagsArray);
-                console.log("Hashtags uniques :", hashtagsArray);
 
 
             } catch (error) {

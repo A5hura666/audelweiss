@@ -50,7 +50,6 @@ export default function ShopByCategory() {
                 setMinPrice(minPrice);
                 setMaxPrice(maxPrice);
                 setIsLoaded(true);
-                console.log("Fetched data:", data);
             } catch (error) {
                 console.error("Error fetching header data:", error);
             }

@@ -27,7 +27,6 @@ export default function Comment({ productComments }) {
             }
         };
         window.addEventListener("keydown", handleKeyDown);
-        console.log(productComments);
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [currentIndex, productComments]);
 

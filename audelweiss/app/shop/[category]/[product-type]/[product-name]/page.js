@@ -70,11 +70,9 @@ export default function Product() {
                 );
                 const data = await response.json();
 
-                console.log("Fetched product data:", data);
-
                 const technicalDetail = data.data[0].technicalDetail;
-                setMarkdown(technicalDetail); // Update state
-                setProductName(data.data[0].product_article.productName);
+                setMarkdown(technicalDetail);
+                setProductName(data.data[0].productName);
                 setProductCategory(data.data[0].product_article.productCategory);
                 setSubCategory(data.data[0].product_article.subCategory);
                 setProductParentPrice(data.data[0].product_article.productAdultPrice);
@@ -370,7 +368,7 @@ export default function Product() {
                             </div>
                             <div className={"space-y-6"}>
                                 <h5>
-                                    Couleur :
+                                    Couleur : {""}
                                     <span>{color ? color : "Aucune couleur sélectionnée"}</span>
                                 </h5>
                                 <ul className={"flex"}>
@@ -485,7 +483,7 @@ export default function Product() {
                                 <td>{productWeight} kg</td>
                             </tr>
                             <tr className={"border-pink leading-[50px]"}>
-                                <td>Dimensions</td>
+                                <td>Dimensions {""}</td>
                                 <td>{productSize}</td>
                             </tr>
                             </tbody>
