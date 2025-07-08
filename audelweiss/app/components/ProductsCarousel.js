@@ -34,8 +34,8 @@ export default function ProductsCarousel({ productsData }) {
                             priceMin={product.productChildPrice}
                             priceMax={product.productAdultPrice}
                             link={`/shop/product/${product.documentId}`}
-                            img1={firstImage?.url ? `http://ayun.myddns.me:5000${firstImage.url}` : ''}
-                            img2={secondImage?.url ? `http://ayun.myddns.me:5000${secondImage.url}` : ''}
+                            img1={firstImage?.url ? `${firstImage.url}` : ''}
+                            img2={secondImage?.url ? `${secondImage.url}` : ''}
                             addToCart={true}
                             rating={product.score}
                         />
