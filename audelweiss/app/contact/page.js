@@ -74,7 +74,7 @@ export default function Contact() {
               </span>
             </p>
           </div>
-          <div className="flex flex-col items-center mt-4">
+          <div className="flex flex-col items-center">
             <img
               src={"/images/hautes-alpes.png.webp"}
               alt={`hautes-alpes`}
