@@ -36,7 +36,7 @@ export default function CategoriesSection({ categoriesData }) {
                             }))}
                             buttonItem={{
                                 label: "Découvrir les accessoires",
-                                href: "/product-category/accessoires/"
+                                href: "/shop/Accessoires/"
                             }}
                         />
                     </div>
