@@ -15,14 +15,29 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  firstName String?
-  lastName  String?
-  phone     String?
-  createdAt DateTime @default(now())
-  orders    Order[]
+  id                 Int      @id @default(autoincrement())
+  email              String   @unique
+  password           String
+  firstName          String?
+  lastName           String?
+  phone              String?
+  createdAt          DateTime @default(now())
+  orders             Order[]
+  shippingFirstName  String?
+  shippingLastName   String?
+  shippingLine1      String?
+  shippingLine2      String?
+  shippingPostalCode String?
+  shippingCity       String?
+  shippingCountry    String?
+
+  billingFirstName  String?
+  billingLastName   String?
+  billingLine1      String?
+  billingLine2      String?
+  billingPostalCode String?
+  billingCity       String?
+  billingCountry    String?
 }
 
 model Order {
@@ -34,6 +49,22 @@ model Order {
   total     Float
 
   items OrderItem[]
+
+  shippingFirstName  String?
+  shippingLastName   String?
+  shippingLine1      String
+  shippingLine2      String?
+  shippingPostalCode String
+  shippingCity       String
+  shippingCountry    String
+
+  billingFirstName  String?
+  billingLastName   String?
+  billingLine1      String
+  billingLine2      String?
+  billingPostalCode String
+  billingCity       String
+  billingCountry    String
 }
 
 model OrderItem {
@@ -57,14 +88,14 @@ enum OrderStatus {
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String
-  website   String?
-  comment   String
-  slug      String
-  date      DateTime @default(now())
-  replyTo   Int?                        
-  parent    Comment?   @relation("CommentToReplies", fields: [replyTo], references: [id])
-  replies   Comment[]  @relation("CommentToReplies")
+  id      Int       @id @default(autoincrement())
+  name    String
+  email   String
+  website String?
+  comment String
+  slug    String
+  date    DateTime  @default(now())
+  replyTo Int?
+  parent  Comment?  @relation("CommentToReplies", fields: [replyTo], references: [id])
+  replies Comment[] @relation("CommentToReplies")
 }

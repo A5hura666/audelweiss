@@ -1,0 +1,15 @@
+-- AlterTable
+ALTER TABLE `User` ADD COLUMN `billingCity` VARCHAR(191) NULL,
+    ADD COLUMN `billingCountry` VARCHAR(191) NULL,
+    ADD COLUMN `billingFirstName` VARCHAR(191) NULL,
+    ADD COLUMN `billingLastName` VARCHAR(191) NULL,
+    ADD COLUMN `billingLine1` VARCHAR(191) NULL,
+    ADD COLUMN `billingLine2` VARCHAR(191) NULL,
+    ADD COLUMN `billingPostalCode` VARCHAR(191) NULL,
+    ADD COLUMN `shippingCity` VARCHAR(191) NULL,
+    ADD COLUMN `shippingCountry` VARCHAR(191) NULL,
+    ADD COLUMN `shippingFirstName` VARCHAR(191) NULL,
+    ADD COLUMN `shippingLastName` VARCHAR(191) NULL,
+    ADD COLUMN `shippingLine1` VARCHAR(191) NULL,
+    ADD COLUMN `shippingLine2` VARCHAR(191) NULL,
+    ADD COLUMN `shippingPostalCode` VARCHAR(191) NULL;

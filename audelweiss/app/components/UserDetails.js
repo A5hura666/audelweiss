@@ -6,10 +6,29 @@ import ChangePasswordModal from './ChangePasswordModal';
 import OrderHistory from './OrderHistory';
 
 export default function UserDetails({ user, onLogout }) {
+    const [sameAddress, setSameAddress] = useState(false);
     const [form, setForm] = useState({
         firstName: user.firstName || '',
         lastName: user.lastName || '',
         phone: user.phone || '',
+        shippingAddress: user.shippingAddress || {
+            firstName: '',
+            lastName: '',
+            line1: '',
+            line2: '',
+            postalCode: '',
+            city: '',
+            country: '',
+        },
+        billingAddress: user.billingAddress || {
+            firstName: '',
+            lastName: '',
+            line1: '',
+            line2: '',
+            postalCode: '',
+            city: '',
+            country: '',
+        },
     });
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
@@ -50,6 +69,16 @@ export default function UserDetails({ user, onLogout }) {
 
         fetchOrders();
     }, []);
+
+
+    useEffect(() => {
+        if (sameAddress) {
+            setForm((prev) => ({
+                ...prev,
+                billingAddress: { ...prev.shippingAddress },
+            }));
+        }
+    }, [sameAddress, form.shippingAddress]);
 
     const handleUpdate = async (e) => {
         e.preventDefault();
@@ -121,6 +150,63 @@ export default function UserDetails({ user, onLogout }) {
                     onChange={() => {}}
                     disabled
                 />
+
+                <h3 className="text-xl font-semibold col-span-2 mt-8">Adresse de livraison</h3>
+                {["firstName", "lastName", "line1", "line2", "postalCode", "city", "country"].map((field) => (
+                    <InputField
+                        key={`shipping-${field}`}
+                        type="text"
+                        placeholder={field}
+                        value={form.shippingAddress[field]}
+                        onChange={(e) =>
+                            setForm((prev) => ({
+                                ...prev,
+                                shippingAddress: {
+                                    ...prev.shippingAddress,
+                                    [field]: e.target.value,
+                                },
+                            }))
+                        }
+                        required={["line1", "postalCode", "city", "country"].includes(field)}
+                    />
+                ))}
+
+                <div className="col-span-2 flex items-center gap-3">
+                    <input
+                        type="checkbox"
+                        id="sameAddress"
+                        checked={sameAddress}
+                        onChange={(e) => setSameAddress(e.target.checked)}
+                        className="w-4 h-4"
+                    />
+                    <label htmlFor="sameAddress" className="text-sm text-gray-700">
+                        Utiliser la même adresse pour la facturation
+                    </label>
+                </div>
+
+                {!sameAddress && (
+                    <>
+                        <h3 className="text-xl font-semibold col-span-2 mt-8">Adresse de facturation</h3>
+                        {["firstName", "lastName", "line1", "line2", "postalCode", "city", "country"].map((field) => (
+                            <InputField
+                                key={`billing-${field}`}
+                                type="text"
+                                placeholder={field}
+                                value={form.billingAddress[field]}
+                                onChange={(e) =>
+                                    setForm((prev) => ({
+                                        ...prev,
+                                        billingAddress: {
+                                            ...prev.billingAddress,
+                                            [field]: e.target.value,
+                                        },
+                                    }))
+                                }
+                                required={["line1", "postalCode", "city", "country"].includes(field)}
+                            />
+                        ))}
+                    </>
+                )}
 
                 {error && <p className="text-red-600 text-sm col-span-2">{error}</p>}
                 {success && <p className="text-green-600 text-sm col-span-2">{success}</p>}

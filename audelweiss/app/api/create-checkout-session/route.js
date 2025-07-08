@@ -23,6 +23,11 @@ export async function POST(req) {
             metadata: {
                 cart: JSON.stringify(body.cart),
             },
+            shipping_address_collection: {
+                allowed_countries: ['FR'],
+            },
+            billing_address_collection: 'required',
+
             success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/paiement-success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart`,
         });
