@@ -47,7 +47,7 @@ export default function Header() {
         const fetchHeaderData = async () => {
             try {
                 const response = await fetch(
-                    getStrapiCall('/api/global?populate[0]=header&populate[1]=header.iconsLinks&populate[2]=header.iconsLinks.icon&populate[3]=header.links&populate[4]=header.links.megaMenu&populate[5]=header.links.megaMenu.productLinks&populate[6]=header.links.megaMenu.productLinks.image')
+                    getStrapiCall('/api/global?populate[0]=header&populate[1]=header.iconsLinks&populate[2]=header.iconsLinks.icon&populate[3]=header.links&populate[4]=header.links.MegaMenu&populate[5]=header.links.MegaMenu.productLinks&populate[6]=header.links.MegaMenu.productLinks.image')
                 );
                 const data = await response.json();
 
@@ -91,6 +91,7 @@ export default function Header() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, [lastScrollY, headerHeight]);
 
+
     return (
         <header className={`fixed z-50 top-0 left-0 w-full bg-white transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
             <div className="container mx-auto flex justify-between items-center p-3 lg:p-8 relative">
@@ -104,7 +105,7 @@ export default function Header() {
                         <div
                             key={item.id}
                             className="relative"
-                            onMouseEnter={() => item.megaMenu ? setActiveMegaMenu(item.id) : setActiveMegaMenu(null)}
+                            onMouseEnter={() => item.MegaMenu ? setActiveMegaMenu(item.id) : setActiveMegaMenu(null)}
                         >
                             <Link
                                 href={item.url}
@@ -112,8 +113,8 @@ export default function Header() {
                             >
                                 {item.label}
                             </Link>
-                            {item.megaMenu && activeMegaMenu === item.id && (
-                                <MegaMenu productLinks={item.megaMenu.productLinks} baseUrl={baseUrl} />
+                            {item.MegaMenu && activeMegaMenu === item.id && (
+                                <MegaMenu productLinks={item.MegaMenu.productLinks} baseUrl={baseUrl} />
                             )}
                         </div>
                     ))}
