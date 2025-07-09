@@ -34,18 +34,27 @@ export default function Shop() {
     setIsCategoryOpenD(!isCategoryOpenD);
   };
 
-  const handleCategoryChange = (category, subCategories) => {
-    const isChecked = !checkedCategories[category];
+    const handleCategoryChange = (category, subCategories) => {
+        const isChecked = !checkedCategories[category];
 
-    // Mettre à jour la catégorie et toutes ses sous-catégories
-    setCheckedCategories((prev) => {
-      const newState = { ...prev, [category]: isChecked };
-      subCategories.forEach((sub) => {
-        newState[`${category}-${sub}`] = isChecked;
-      });
-      return newState;
-    });
-  };
+        setCheckedCategories((prev) => {
+            const newState = { ...prev, [category]: isChecked };
+            subCategories.forEach((sub) => {
+                newState[`${category}-${sub}`] = isChecked;
+            });
+            return newState;
+        });
+
+        setSelectedSubCategories((prevSelected) => {
+            if (isChecked) {
+                // Ajoute toutes les sous-catégories cochées
+                return [...prevSelected, ...subCategories.filter(sub => !prevSelected.includes(sub))];
+            } else {
+                // Retire toutes les sous-catégories décochées
+                return prevSelected.filter((sub) => !subCategories.includes(sub));
+            }
+        });
+    };
 
   const handleSubCategoryChange = (category, subCategory, allSubCategories) => {
     const subCategoryKey = `${category}-${subCategory}`;
