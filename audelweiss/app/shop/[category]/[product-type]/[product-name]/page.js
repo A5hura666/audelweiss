@@ -671,7 +671,7 @@ export default function Product() {
                 </tr>
                 <tr className="border-pink leading-[50px]">
                   <td>Dimensions</td>
-                  <td className="pl-4">{productSize}</td>{" "}
+                  <td className="pl-4">{productSize}</td>
                 </tr>
               </tbody>
             </table>

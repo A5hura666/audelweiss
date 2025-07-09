@@ -110,7 +110,6 @@ export default function OrderHistory() {
         doc.setFontSize(12);
         doc.text(`Date : ${new Date(order.createdAt).toLocaleDateString()}`, 14, 30);
 
-        console.log('user', user);
         // Information User
         doc.text(`Prénom : ${user.firstName}`, 24, 70);
         doc.text(`Nom : ${user.lastName}`, 24, 80);

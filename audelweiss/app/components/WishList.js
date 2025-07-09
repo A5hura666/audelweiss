@@ -109,7 +109,7 @@ export default function WishList() {
                         ? `${product.price} €`
                         : `${product.productChildPrice} € - ${product.productAdultPrice} €`;
                     const subCategory = product.subCategory || '';
-                    console.log(`/shop/${category}/${subCategory}${productName ? `/${slugify(productName)}` : ""}`)
+
                     return (
 
                         <div

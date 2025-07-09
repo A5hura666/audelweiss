@@ -185,15 +185,6 @@ export const emailService = {
       // Envoi de l'email
       const result = await transporter.sendMail(mailOptions);
 
-      // Logging détaillé pour le debugging
-      console.log(`✅ Email envoyé avec succès:`, {
-        messageId: result.messageId,
-        to,
-        subject,
-        timestamp: new Date().toISOString(),
-        env: process.env.NODE_ENV,
-      });
-
       return {
         success: true,
         messageId: result.messageId,
