@@ -28,7 +28,6 @@ export default function CreationList() {
                 let url = getStrapiCall(`/api/creations?populate=creationImages&populate=hashtags`);
                 const response = await fetch(url);
                 const data = await response.json();
-                console.log("Fetched creations:", data);
                 setCreations(data.data);
                 setIsLoaded(true);
 
@@ -42,7 +41,6 @@ export default function CreationList() {
                     });
                 });
                 setHashtags(hashtagsArray);
-                console.log("Hashtags uniques :", hashtagsArray);
 
             } catch (error) {
                 console.error("Error fetching filtered products:", error);
