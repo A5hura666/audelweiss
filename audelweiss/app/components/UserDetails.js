@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import InputField from './InputField';
 import ChangePasswordModal from './ChangePasswordModal';
 import OrderHistory from './OrderHistory';
+import WishList from "@/app/components/WishList";
 
 export default function UserDetails({ user, onLogout }) {
     const [sameAddress, setSameAddress] = useState(false);
@@ -33,6 +34,7 @@ export default function UserDetails({ user, onLogout }) {
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
     const [showModal, setShowModal] = useState(false);
+    const [activeTab, setActiveTab] = useState('orders'); // 'orders' ou 'wishlist'
 
     const [orders, setOrders] = useState([]);
     const [loadingOrders, setLoadingOrders] = useState(false);
@@ -119,6 +121,9 @@ export default function UserDetails({ user, onLogout }) {
 
     return (
         <div className="max-w-2xl mx-auto mt-12 p-6 bg-white rounded-lg shadow space-y-6 my-24">
+
+
+
             <h2 className="text-3xl font-bold text-gray-800 mb-4">Modifier mes informations</h2>
 
             <form onSubmit={handleUpdate} className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700">
@@ -227,9 +232,25 @@ export default function UserDetails({ user, onLogout }) {
                     </button>
                 </div>
             </form>
-
+            <div className="flex gap-4 pb-2 mb-6 justify-center">
+                <button
+                    onClick={() => setActiveTab('orders')}
+                    className={`px-3 py-1 hover:cursor-pointer  rounded-t ${activeTab === 'orders' ? 'bg-[#E8A499] text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}
+                >
+                    Mes commandes
+                </button>
+                <button
+                    onClick={() => setActiveTab('wishlist')}
+                    className={`px-3 py-1 hover:cursor-pointer rounded-t ${activeTab === 'wishlist' ? 'bg-[#E8A499] text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}
+                >
+                    Ma wishlist
+                </button>
+            </div>
             <div className="mt-12">
-                <OrderHistory />
+                <div className="mt-8">
+                    {activeTab === 'orders' && <OrderHistory />}
+                    {activeTab === 'wishlist' && <WishList />}
+                </div>
             </div>
 
             <div className="text-right mt-6">
@@ -243,5 +264,6 @@ export default function UserDetails({ user, onLogout }) {
 
             {showModal && <ChangePasswordModal onClose={() => setShowModal(false)} />}
         </div>
+
     );
 }
