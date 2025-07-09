@@ -52,7 +52,7 @@ export default function Header() {
           )
         );
         const data = await response.json();
-        console.log("Header data fetched:", data);
+
         if (data?.data?.header) {
           setHeaderData(data.data.header);
         }
