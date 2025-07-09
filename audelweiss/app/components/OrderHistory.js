@@ -1,18 +1,24 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import {
     Clock,
     CreditCard,
     Truck,
     CheckCircle,
-    XCircle
+    XCircle,
+    Download
 } from 'lucide-react';
+
+// … ton code existant …
 
 export default function OrderHistory() {
     const [orders, setOrders] = useState([]);
     const [loadingOrders, setLoadingOrders] = useState(false);
     const [ordersError, setOrdersError] = useState('');
+    const [user , setUser] = useState(null);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -33,6 +39,8 @@ export default function OrderHistory() {
                 }
                 const data = await res.json();
                 setOrders(data.orders || []);
+                const userData = localStorage.getItem('user');
+                setUser(JSON.parse(userData));
             } catch (err) {
                 setOrdersError(err.message);
             } finally {
@@ -62,6 +70,113 @@ export default function OrderHistory() {
         }
     };
 
+    const generatePDF = async (order) => {
+        const doc = new jsPDF();
+
+        // Charger le logo depuis le dossier public et le convertir en base64
+        const loadImageAsBase64 = (url) => {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => {
+                    const canvas = document.createElement("canvas");
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext("2d");
+                    ctx.drawImage(img, 0, 0);
+                    resolve(canvas.toDataURL("image/png"));
+                };
+                img.onerror = reject;
+                img.src = url;
+            });
+        };
+
+        const logoBase64 = await loadImageAsBase64("http://ayun.myddns.me:5000/uploads/logo_wide_00e3f30449.svg");
+
+        // Définir opacité à 0.75
+        doc.setGState(new doc.GState({ opacity: 0.20 }));
+
+        // Ajouter l'image (x, y, width, height)
+        doc.addImage(logoBase64, 'PNG', 14, 60, 150, 40);
+
+        // Remettre l'opacité à 1 pour le contenu texte
+        doc.setGState(new doc.GState({ opacity: 1 }));
+
+        // Titre
+        doc.setFontSize(18);
+        doc.text(`Facture Commande #${order.id}`, 14, 20);
+
+        // Infos
+        doc.setFontSize(12);
+        doc.text(`Date : ${new Date(order.createdAt).toLocaleDateString()}`, 14, 30);
+
+        console.log('user', user);
+        // Information User
+        doc.text(`Prénom : ${user.firstName}`, 24, 70);
+        doc.text(`Nom : ${user.lastName}`, 24, 80);
+        doc.text(`Numéro de téléphone : ${user.phone}`, 24, 90);
+        doc.text(`Email : ${user.email}`, 24, 100);
+
+        // Adresse livraison
+        doc.text('Adresse de livraison :', 120, 20);
+        doc.text(`${order.shippingFirstName || ''} ${order.shippingLastName || ''}`, 120, 30);
+        doc.text(`${order.shippingLine1}`, 120, 40);
+        if (order.shippingLine2){
+            doc.text(`${order.shippingLine2}`, 120, 50);
+            doc.text(`${order.shippingPostalCode} ${order.shippingCity}, ${order.shippingCountry}`, 120, 60);
+        } else{
+            doc.text(`${order.shippingPostalCode} ${order.shippingCity}, ${order.shippingCountry}`, 120, 50);
+        }
+
+        // Adresse facturation
+        doc.text('Adresse de facturation :', 120, 70);
+        doc.text(`${order.billingFirstName || ''} ${order.billingLastName || ''}`, 120, 80);
+        doc.text(`${order.billingLine1}`, 120, 90);
+        if (order.billingLine2){
+            doc.text(`${order.billingLine2}`, 120, 100);
+            doc.text(`${order.billingPostalCode} ${order.billingCity}, ${order.billingCountry}`, 120, 110);
+        }else{
+            doc.text(`${order.billingPostalCode} ${order.billingCity}, ${order.billingCountry}`, 120, 100);
+        }
+
+        // Tableau articles
+        autoTable(doc, {
+            startY: 120,
+            headStyles: {
+                fillColor: [232, 164, 153],
+                textColor: 255,
+            },
+            styles: {
+                fillColor: [255, 255, 255],
+                textColor: 50,
+                lineColor: [200, 200, 200],
+                lineWidth: 0.2,
+            },
+            alternateRowStyles: {
+                fillColor: [245, 245, 245],
+            },
+            head: [['Produit', 'Quantité', 'Prix unitaire (€)', 'Total (€)']],
+            body: order.items.map((item) => [
+                item.productName,
+                item.quantity,
+                item.productPrice.toFixed(2),
+                (item.productPrice * item.quantity).toFixed(2),
+            ]),
+        });
+
+// Récupérer la position Y après le tableau
+        const finalY = doc.lastAutoTable.finalY || 100;
+
+// Afficher le total juste après
+        doc.setFontSize(12);
+        doc.text(`Total : ${order.total.toFixed(2)} €`, 14, finalY + 10);
+
+        // Sauvegarder le PDF
+        doc.save(`commande_${order.id}.pdf`);
+    };
+
+
+
     return (
         <div className="mt-12 text-gray-700">
             <h3 className="text-2xl font-semibold mb-4">Historique des commandes</h3>
@@ -78,17 +193,23 @@ export default function OrderHistory() {
                             {renderStatusBadge(order.status)}
                         </div>
                         <p className="text-sm text-gray-600">Date : {new Date(order.createdAt).toLocaleDateString()}</p>
-                        <p className="text-sm text-gray-600 mb-2">Total : {(order.total).toFixed(2)} €</p>
+                        <p className="text-sm text-gray-600 mb-2">Total : {order.total.toFixed(2)} €</p>
                         <details className="mt-2">
                             <summary className="cursor-pointer text-blue-600">Articles</summary>
                             <ul className="pl-4 list-disc mt-1 text-sm">
                                 {order.items.map((item) => (
                                     <li key={item.id}>
-                                        {item.productName} – {item.quantity} x {(item.productPrice).toFixed(2)} €
+                                        {item.productName} – {item.quantity} x {item.productPrice.toFixed(2)} €
                                     </li>
                                 ))}
                             </ul>
                         </details>
+                        <button
+                            onClick={() => generatePDF(order)}
+                            className="mt-3 inline-flex items-center gap-1 text-sm text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded"
+                        >
+                            <Download size={14} /> Télécharger PDF
+                        </button>
                     </li>
                 ))}
             </ul>
