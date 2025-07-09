@@ -48,6 +48,7 @@ export default function Product() {
     const [descriptionId, setDescriptionId] = useState(''); // State pour l'ID de la description du produit
     const [productRecommandation, setProductRecommandation] = useState([]); // State pour les produits recommandés
     const [subCategory, setSubCategory] = useState("");
+    const [token] = useState(localStorage.getItem("token"));
 
     useEffect(() => {
         const mainImage = document.getElementById("main-image");
@@ -190,7 +191,6 @@ export default function Product() {
 
     useEffect(() => {
         const getWishlistStatus = async () => {
-            const token = localStorage.getItem("token");
             if (!token) return;
 
             try {
@@ -213,7 +213,7 @@ export default function Product() {
         };
 
         getWishlistStatus();
-    }, [idArticle]);
+    }, [idArticle, token]);
 
     // Fonction pour setter la valeur en fonction du nom du filtre
     const handleFilterChange = (filterName, value) => {
@@ -396,26 +396,30 @@ export default function Product() {
               <h2 className="text-5xl uppercase aboreto flex justify-between">{productName}
                   <section className={"text-left flex flex-col gap-4 align-middle"}>
                       {/* Bouton Like */}
-                      <button
-                          onClick={() => {
-                              setLiked(!liked);
-                              addProductToWishlist(idArticle);
-                          }}
-                          className="top-2 right-2 z-20 p-2 rounded-full bg-white shadow-md"
-                      >
-                          <AnimatePresence>
-                              <motion.div
-                                  key={liked ? "liked" : "unliked"}
-                                  animate={{ scale: 1.2, opacity: 1 }}
-                                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                      {
+                          token && (
+                              <button
+                                  onClick={() => {
+                                      setLiked(!liked);
+                                      addProductToWishlist(idArticle);
+                                  }}
+                                  className="top-2 right-2 z-20 p-2 rounded-full bg-white shadow-md"
                               >
-                                  <Heart
-                                      size={28}
-                                      className={`transition-colors ${liked ? "fill-[#e8a499] text-[#e8a499]" : "text-gray-400"}`}
-                                  />
-                              </motion.div>
-                          </AnimatePresence>
-                      </button>
+                                  <AnimatePresence>
+                                      <motion.div
+                                          key={liked ? "liked" : "unliked"}
+                                          animate={{scale: 1.2, opacity: 1}}
+                                          transition={{type: "spring", stiffness: 300, damping: 15}}
+                                      >
+                                          <Heart
+                                              size={28}
+                                              className={`transition-colors ${liked ? "fill-[#e8a499] text-[#e8a499]" : "text-gray-400"}`}
+                                          />
+                                      </motion.div>
+                                  </AnimatePresence>
+                              </button>
+                          )
+                      }
                   </section>
               </h2>
             <a
@@ -694,7 +698,7 @@ export default function Product() {
                 img1={product.productImages?.[0]?.formats?.thumbnail?.url || ""}
                 img2={product.productImages?.[1]?.formats?.thumbnail?.url || ""}
                 rating={product.score}
-                productId={product.id}
+                productId={product.documentId}
               />
             ))}
           </div>

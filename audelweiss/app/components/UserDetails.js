@@ -235,13 +235,13 @@ export default function UserDetails({ user, onLogout }) {
             <div className="flex gap-4 pb-2 mb-6 justify-center">
                 <button
                     onClick={() => setActiveTab('orders')}
-                    className={`px-3 py-1 rounded-t ${activeTab === 'orders' ? 'bg-[#E8A499] text-white' : 'bg-gray-200 text-gray-700'}`}
+                    className={`px-3 py-1 hover:cursor-pointer  rounded-t ${activeTab === 'orders' ? 'bg-[#E8A499] text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}
                 >
                     Mes commandes
                 </button>
                 <button
                     onClick={() => setActiveTab('wishlist')}
-                    className={`px-3 py-1 rounded-t ${activeTab === 'wishlist' ? 'bg-[#E8A499] text-white' : 'bg-gray-200 text-gray-700'}`}
+                    className={`px-3 py-1 hover:cursor-pointer rounded-t ${activeTab === 'wishlist' ? 'bg-[#E8A499] text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}
                 >
                     Ma wishlist
                 </button>

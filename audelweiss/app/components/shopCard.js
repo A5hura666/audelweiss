@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import {useState, useEffect} from "react";
 import Link from "next/link";
-import { Heart } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import {Heart} from "lucide-react";
+import {motion, AnimatePresence} from "framer-motion";
 
 export default function ShopCard(props) {
     const [isHovered, setIsHovered] = useState(false);
@@ -74,29 +74,33 @@ export default function ShopCard(props) {
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                 >
-                    {/* Bouton Like */}
-                    <button
-                        onClick={() => {
-                            setLiked(!liked);
-                            addProductToWishlist(productId);
-                        }}
-                        className="absolute top-2 right-2 z-20 p-2 rounded-full bg-white shadow-md"
-                    >
-                        <AnimatePresence>
-                            <motion.div
-                                key={liked ? "liked" : "unliked"}
-                                animate={{ scale: 1.2, opacity: 1 }}
-                                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                    {
+                        localStorage.getItem("user") && (
+                            <button
+                                onClick={() => {
+                                    setLiked(!liked);
+                                    addProductToWishlist(productId);
+                                }}
+                                className="absolute top-2 right-2 z-20 p-2 rounded-full bg-white shadow-md"
                             >
-                                <Heart
-                                    size={24}
-                                    className={`transition-colors ${
-                                        liked ? "fill-[#e8a499] text-[#e8a499]" : "text-gray-400"
-                                    }`}
-                                />
-                            </motion.div>
-                        </AnimatePresence>
-                    </button>
+                                <AnimatePresence>
+                                    <motion.div
+                                        key={liked ? "liked" : "unliked"}
+                                        animate={{scale: 1.2, opacity: 1}}
+                                        transition={{type: "spring", stiffness: 300, damping: 15}}
+                                    >
+                                        <Heart
+                                            size={24}
+                                            className={`transition-colors ${
+                                                liked ? "fill-[#e8a499] text-[#e8a499]" : "text-gray-400"
+                                            }`}
+                                        />
+                                    </motion.div>
+                                </AnimatePresence>
+                            </button>
+                        )
+                    }
+
 
                     {/* Image principale */}
                     <img
@@ -131,7 +135,8 @@ export default function ShopCard(props) {
                 </div>
             </div>
 
-            {/* Infos produit */}
+            {/* Infos produit */
+            }
             <div className="text-center mt-2">
                 <h2 className="text-sm font-semibold">
                     {category} {model ? `| ${model}` : ""}
@@ -140,5 +145,6 @@ export default function ShopCard(props) {
                 <h3 className="text-md font-bold">{price}</h3>
             </div>
         </div>
-    );
+    )
+        ;
 }
