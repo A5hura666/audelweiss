@@ -144,6 +144,7 @@ export default function Header() {
                             <button
                                 onClick={() => {
                                     localStorage.removeItem("user");
+                                    localStorage.removeItem("token");
                                     setUser(null);
                                     window.location.href = "/";
                                 }}

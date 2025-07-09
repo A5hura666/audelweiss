@@ -76,6 +76,7 @@ export default function AuthForm({ onLogin }) {
             if (redirectParam === 'cart') {
                 router.push('/cart');
             }
+            window.location.reload();
         } else {
             setError(data.error || 'Une erreur est survenue');
         }
