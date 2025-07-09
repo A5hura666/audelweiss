@@ -16,6 +16,7 @@ datasource db {
 
 model User {
   id                 Int      @id @default(autoincrement())
+  role               Roles    @default(USER)
   email              String   @unique
   password           String
   firstName          String?
@@ -85,6 +86,11 @@ enum OrderStatus {
   SHIPPED
   DELIVERED
   CANCELED
+}
+
+enum Roles {
+  USER
+  ADMIN
 }
 
 model Comment {
