@@ -46,7 +46,7 @@ export default function Blog() {
         <p className="mt-8 max-w-2xl">{blogList.text}</p>
       </div>
 
-      <div className="mt-10 space-y-16">
+      <div className="mt-12 space-y-16">
         {articles.length === 0 ? (
           <p>Aucun article disponible.</p>
         ) : (
@@ -70,11 +70,11 @@ export default function Blog() {
             return (
               <article key={index} className="flex justify-center">
                 <div
-                  className={`flex items-center gap-6 max-w-5xl ${
-                    isOdd ? "flex-row-reverse" : "flex-row"
+                  className={`flex flex-col md:flex-row items-center gap-6 max-w-5xl ${
+                    isOdd ? "md:flex-row-reverse" : ""
                   }`}
                 >
-                  <div className="w-full md:w-1/2">
+                  <div className="w-full md:w-1/2 order-2 md:order-none">
                     <p className="bg-black text-white px-3 py-1 text-sm inline-block">
                       {ArticleCategory || "Catégorie"}
                     </p>
@@ -92,12 +92,12 @@ export default function Blog() {
                     </Link>
                   </div>
 
-                  <div className="w-full md:w-1/2">
+                  <div className="w-full md:w-1/2 order-1 md:order-none">
                     <Link href={`/blog/${linkToArticle.url}`} passHref>
                       <img
                         src={imageUrl}
                         alt={title}
-                        className="w-full h-auto hover:brightness-110 transition duration-300 cursor-pointer"
+                        className="w-full h-auto max-h-100 object-cover hover:brightness-110 transition duration-300 cursor-pointer"
                       />
                     </Link>
                   </div>
