@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 Int      @id @default(autoincrement())
+  role               Roles    @default(USER)
+  email              String   @unique
+  password           String
+  firstName          String?
+  lastName           String?
+  phone              String?
+  createdAt          DateTime @default(now())
+  orders             Order[]
+  shippingFirstName  String?
+  shippingLastName   String?
+  shippingLine1      String?
+  shippingLine2      String?
+  shippingPostalCode String?
+  shippingCity       String?
+  shippingCountry    String?
+
+  billingFirstName  String?
+  billingLastName   String?
+  billingLine1      String?
+  billingLine2      String?
+  billingPostalCode String?
+  billingCity       String?
+  billingCountry    String?
+  ProductWish       ProductWish[]
+
+  customerStripeId String?
+}
+
+model Order {
+  id        Int         @id @default(autoincrement())
+  user      User        @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime    @default(now())
+  status    OrderStatus @default(PENDING)
+  total     Float
+
+  items OrderItem[]
+
+  shippingFirstName  String?
+  shippingLastName   String?
+  shippingLine1      String
+  shippingLine2      String?
+  shippingPostalCode String
+  shippingCity       String
+  shippingCountry    String
+
+  billingFirstName  String?
+  billingLastName   String?
+  billingLine1      String
+  billingLine2      String?
+  billingPostalCode String
+  billingCity       String
+  billingCountry    String
+}
+
+model OrderItem {
+  id      Int   @id @default(autoincrement())
+  order   Order @relation(fields: [orderId], references: [id])
+  orderId Int
+
+  productName  String
+  productPrice Float
+  quantity     Int
+  color        String?
+  taille       String?
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
+enum Roles {
+  USER
+  ADMIN
+}
+
+model Comment {
+  id      Int       @id @default(autoincrement())
+  name    String
+  email   String
+  website String?
+  comment String
+  slug    String
+  date    DateTime  @default(now())
+  replyTo Int?
+  parent  Comment?  @relation("CommentToReplies", fields: [replyTo], references: [id])
+  replies Comment[] @relation("CommentToReplies")
+}
+
+model ProductWish {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
