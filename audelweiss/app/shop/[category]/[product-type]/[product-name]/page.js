@@ -221,14 +221,15 @@ export default function Product() {
     // Save the updated cart back to localStorage
     localStorage.setItem("cart", JSON.stringify(existingCart));
 
+    // reload the page with redirect
     Swal.fire({
       title: "Produit ajouté",
       text: "Votre sélectioné a été rajouté dans votre panier",
       icon: "success",
+      confirmButtonText: "Continuer",
+    }).then(() => {
+      window.location.href = "/shop";
     });
-
-    // Redirect to the shop page
-    redirect("/shop");
   };
   return (
     <section className="">

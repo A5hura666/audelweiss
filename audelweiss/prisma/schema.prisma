@@ -39,6 +39,8 @@ model User {
   billingPostalCode String?
   billingCity       String?
   billingCountry    String?
+
+  customerStripeId String?
 }
 
 model Order {

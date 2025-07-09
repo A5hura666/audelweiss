@@ -4,21 +4,39 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Trash2, Plus, Minus } from 'lucide-react';
 import Swal from 'sweetalert2';
+import AddressModal from '../components/AddressModal';
 
 export default function CartPage() {
     const [user, setUser] = useState(null);
     const [cart, setCart] = useState([]);
     const [hasInitialized, setHasInitialized] = useState(false);
+    const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+    const [selectedAddresses, setSelectedAddresses] = useState({ shippingAddress: null, billingAddress: null });
+
     const router = useRouter();
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (!storedUser) {
+        const token = localStorage.getItem('token');
+        if (!token) {
             router.push('/my-account?redirect=cart');
             return;
         }
 
-        setUser(JSON.parse(storedUser));
+        fetch('/api/user/me', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then(async (res) => {
+                if (!res.ok) {
+                    throw new Error('Non autorisé');
+                }
+                const data = await res.json();
+                setUser(data.user);
+            })
+            .catch(() => {
+                router.push('/my-account?redirect=cart');
+            });
 
         const storedCart = localStorage.getItem('cart');
         if (storedCart) {
@@ -67,41 +85,54 @@ export default function CartPage() {
     };
 
     const handleCheckout = () => {
-        Swal.fire({
-            title: 'Confirmer la commande ?',
-            text: 'Vous allez être redirigé vers le paiement sécurisé.',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Oui, commander',
-            cancelButtonText: 'Annuler',
-            reverseButtons: true
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    const res = await fetch('/api/create-checkout-session', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ cart }),
-                    });
-
-                    const data = await res.json();
-
-                    if (data.url) {
-                        window.location.href = data.url;
-                    } else {
-                        Swal.fire('Erreur', 'Impossible de démarrer le paiement.', 'error');
-                    }
-                } catch (err) {
-                    console.error(err);
-                    Swal.fire('Erreur', 'Une erreur est survenue.', 'error');
-                }
-            }
-        });
+        setIsAddressModalOpen(true);
     };
 
-    if (!user) return null;
+    const handleAddressConfirm = async ({ shippingAddress, billingAddress }) => {
+        setIsAddressModalOpen(false);
+
+        try {
+            Swal.fire({
+                title: 'Redirection...',
+                text: 'Nous préparons votre paiement sécurisé.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const res = await fetch('/api/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ cart, shippingAddress, billingAddress, email: user.email }),
+            });
+
+            const data = await res.json();
+
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: 'Impossible de démarrer le paiement. Veuillez réessayer.',
+                });
+            }
+        } catch (err) {
+            console.error(err);
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur serveur',
+                text: 'Une erreur est survenue lors de la création de la session de paiement.',
+            });
+        }
+    };
+
+    if (!user) {
+        return null;
+    }
 
     const total = cart.reduce((sum, item) => sum + item.productPrice * item.quantity, 0);
 
@@ -172,6 +203,15 @@ export default function CartPage() {
                             Commander
                         </button>
                     </div>
+
+                    {isAddressModalOpen && (
+                        <AddressModal
+                            shippingAddress={user.shippingAddress}
+                            billingAddress={user.billingAddress}
+                            onClose={() => setIsAddressModalOpen(false)}
+                            onConfirm={handleAddressConfirm}
+                        />
+                    )}
                 </>
             )}
         </div>
