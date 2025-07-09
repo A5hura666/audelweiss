@@ -66,7 +66,7 @@ export default function RootLayout({ children }) {
             <link rel="icon" href={favicon} sizes="any" />
             <title>{title}</title>
         </head>
-        <body className="flex flex-col">
+        <body className="flex flex-col min-h-screen">
         <Header />
         <main style={{ paddingTop: `${headerHeight}px` }} className="flex-grow">{children}</main>
         <Footer />

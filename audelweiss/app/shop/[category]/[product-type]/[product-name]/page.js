@@ -240,7 +240,7 @@ export default function Product() {
         icon: "error",
       });
       return;
-    } else if (!color) {
+    } else if (!color && colorFilter.length > 0) {
       Swal.fire({
         title: "Remplir les filtres",
         text: "Il vous manque la couleur de votre produit.",

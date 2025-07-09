@@ -314,29 +314,34 @@ export default function ShopByCategory() {
             </section>
           </div>
         </form>
-
-        <section
-          id="products"
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols- w-full md:w-3/4 gap-4"
-        >
-          {allProducts.map((item, index) => (
-            <ShopCard
-              key={item.productName + "-" + index}
-              category={item.productCategory}
-              model={item.subCategory}
-              name={item.productName}
-              price={
-                item.price
-                  ? `${item.price}€`
-                  : `${item.productChildPrice}€ - ${item.productAdultPrice}€`
-              }
-              img1={item.productImages?.[0]?.formats?.thumbnail?.url || ""}
-              img2={item.productImages?.[1]?.formats?.thumbnail?.url || ""}
-              rating={item.score}
-              productId={item.documentId}
-            />
-          ))}
-        </section>
+          <section
+              id="products"
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols- w-full md:w-3/4 gap-4"
+          >
+              {isLoaded && allProducts.length === 0 ? (
+                  <div className="col-span-full text-center text-gray-500 text-lg">
+                      Aucun produit trouvé pour cette catégorie.
+                  </div>
+              ) : (
+                  allProducts.map((item, index) => (
+                      <ShopCard
+                          key={item.productName + "-" + index}
+                          category={item.productCategory}
+                          model={item.subCategory}
+                          name={item.productName}
+                          price={
+                              item.price
+                                  ? `${item.price}€`
+                                  : `${item.productChildPrice}€ - ${item.productAdultPrice}€`
+                          }
+                          img1={item.productImages?.[0]?.formats?.thumbnail?.url || ""}
+                          img2={item.productImages?.[1]?.formats?.thumbnail?.url || ""}
+                          rating={item.score}
+                          productId={item.documentId}
+                      />
+                  ))
+              )}
+          </section>
       </section>
     </div>
   );

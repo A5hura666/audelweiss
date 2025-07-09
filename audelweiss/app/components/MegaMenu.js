@@ -1,6 +1,12 @@
 import Link from "next/link";
 
 const MegaMenu = ({ data, baseUrl }) => {
+
+
+    const setProductIdSelected = (productId) => {
+        localStorage.setItem("selectedProductId", productId);
+    }
+
     return (
         <div className="fixed top-full left-0 w-full bg-white shadow-xl border-t border-gray-200 transform transition-all duration-300 ease-in-out z-50">
             <div className="max-w-7xl mx-auto py-6 px-8 grid grid-cols-3 gap-8">
@@ -33,6 +39,7 @@ const MegaMenu = ({ data, baseUrl }) => {
                                     )}
                                     {product.url && (
                                         <a
+                                            onClick={()=> setProductIdSelected(product.productId)}
                                             href={
                                                 product.url.startsWith("/")
                                                     ? product.url

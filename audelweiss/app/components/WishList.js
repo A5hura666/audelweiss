@@ -128,13 +128,13 @@ export default function WishList() {
                             </div>
                             <button
                                 onClick={() => deleteProductToWishlist(product.documentId)}
-                                className="flex items-center gap-2 text-[#E8A499] hover:text-[#d28a7e] transition text-sm"
+                                className="flex items-center gap-2 text-[#E8A499] hover:text-[#d28a7e] transition text-lg hover:cursor-pointer"
                             >
                                 Retirer
                             </button>
                             <Link
                                 href={`/shop/${category}/${subCategory}${productName ? `/${slugify(productName)}` : ""}`}
-                                className="w-full block bg-black text-white text-sm py-2 hover:bg-[#ff6187] transition text-center"
+                                className="w-full block bg-black text-white text-lg py-2 hover:bg-[#ff6187] transition text-center"
                                 onClick={() => localStorage.setItem("selectedProductId", product.documentId)}
                             >
                                 Voir le produit
