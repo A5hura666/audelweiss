@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "hashtags",
+  "info": {
+    "singularName": "hashtag",
+    "pluralName": "hashtags",
+    "displayName": "hashtag",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "creations": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::creation.creation",
+      "mappedBy": "hashtags"
+    }
+  }
+}
