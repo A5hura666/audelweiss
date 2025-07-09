@@ -52,7 +52,7 @@ export default function Header() {
           )
         );
         const data = await response.json();
-
+        console.log("Header data fetched:", data);
         if (data?.data?.header) {
           setHeaderData(data.data.header);
         }
@@ -124,12 +124,11 @@ export default function Header() {
               >
                 {item.label}
               </Link>
-              {item.MegaMenu && activeMegaMenu === item.id && (
-                <MegaMenu
-                  data={item.MegaMenu}
-                  baseUrl={baseUrl}
-                />
-              )}
+              {Array.isArray(item.MegaMenu) &&
+                item.MegaMenu.length > 0 &&
+                activeMegaMenu === item.id && (
+                  <MegaMenu data={item.MegaMenu} baseUrl={baseUrl} />
+                )}
             </div>
           ))}
 
