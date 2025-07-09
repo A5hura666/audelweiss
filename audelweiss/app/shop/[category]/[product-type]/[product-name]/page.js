@@ -665,7 +665,7 @@ export default function Product() {
             <h3 className={"text-2xl aboreto w-full"}>Autres Informations</h3>
             <table>
               <tbody>
-                <tr className={"border-pink leading-[50px]"}>
+                <tr className="border-pink leading-[50px]">
                   <td>Poids</td>
                   <td className="pl-4">{productWeight} kg</td>
                 </tr>

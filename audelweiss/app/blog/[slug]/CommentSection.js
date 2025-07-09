@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 
 export default function CommentSection({ slug }) {
@@ -12,8 +13,35 @@ export default function CommentSection({ slug }) {
   const [replyTo, setReplyTo] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const isAuthor = true;
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        const res = await fetch("/api/user/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) throw new Error("Échec récupération utilisateur");
+
+        const data = await res.json();
+        setUser(data.user);
+      } catch (error) {
+        console.error("Erreur récupération user :", error);
+        setUser(null);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const isAdmin = user?.role === "ADMIN"
+
 
   const fetchComments = async () => {
     try {
@@ -82,7 +110,7 @@ export default function CommentSection({ slug }) {
                 <p className="text-gray-800 mt-2">{c.comment}</p>
               </div>
 
-              {isAuthor && (
+              {isAdmin && (
                 <div className="w-25 self-center">
                   <button
                     onClick={() => setReplyTo({ id: c.id, name: c.name })}
