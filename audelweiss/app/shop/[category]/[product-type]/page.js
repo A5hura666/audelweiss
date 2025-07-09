@@ -291,39 +291,42 @@ export default function ShopByCategory() {
                                     )}
                                 </button>
                                 {isPriceOpen && (
-                                    <section
-                                        className="flex flex-col gap-2 items-center panel border-b-[#E8A499] border-b-1 pb-4">
-                                        <Box sx={{width: "80%"}}>
+                                    <section className="flex flex-col gap-2 items-center panel border-b-[#E8A499] border-b-1 pb-4">
+                                        <Box sx={{ width: "80%" }}>
                                             <Slider
                                                 value={value}
                                                 onChange={handleSliderChange}
                                                 valueLabelDisplay="auto"
                                                 getAriaValueText={valuetext}
-                                                style={{color: "#E8A499"}}
-                                                min={0}
-                                                max={100}
+                                                style={{ color: "#E8A499" }}
+                                                min={minPrice}
+                                                max={maxPrice}
                                             />
                                         </Box>
                                         <div className="flex gap-2 items-center">
-                    <span className="flex items-center">
-                      <input
-                          type="number"
-                          className="border border-[#E8A499] w-16 md:w-20 p-2 text-center"
-                          value={value[0]}
-                          onChange={(e) => handleInputChange(0, e)}
-                      />
-                      €
-                    </span>
-                                            <span>-</span>
-                                            <span>
-                      <input
-                          type="number"
-                          className="border border-[#E8A499] w-16 md:w-20 p-2 text-center"
-                          value={value[1]}
-                          onChange={(e) => handleInputChange(1, e)}
-                      />
-                      €
-                    </span>
+                                            <span className="flex items-center">
+                                              <input
+                                                  type="number"
+                                                  min={minPrice}
+                                                  max={maxPrice}
+                                                  className="border border-[#E8A499] w-16 md:w-20 p-2 text-center"
+                                                  value={value[0]}
+                                                  onChange={(e) => handleInputChange(0, e)}
+                                              />
+                                              €
+                                            </span>
+                                                                    <span>-</span>
+                                                                    <span>
+                                              <input
+                                                  type="number"
+                                                  min={minPrice}
+                                                  max={maxPrice}
+                                                  className="border border-[#E8A499] w-16 md:w-20 p-2 text-center"
+                                                  value={value[1]}
+                                                  onChange={(e) => handleInputChange(1, e)}
+                                              />
+                                              €
+                                            </span>
                                         </div>
                                     </section>
                                 )}
@@ -342,23 +345,28 @@ export default function ShopByCategory() {
                             Aucun produit trouvé pour cette catégorie.
                         </div>
                     ) : (
-                        allProducts.map((item, index) => (
-                            <ShopCard
-                                key={item.productName + "-" + index}
-                                category={item.productCategory}
-                                model={item.subCategory}
-                                name={item.productName}
-                                price={
-                                    item.price
-                                        ? `${item.price}€`
-                                        : `${item.productChildPrice}€ - ${item.productAdultPrice}€`
-                                }
-                                img1={item.productImages?.[0]?.formats?.thumbnail?.url || ""}
-                                img2={item.productImages?.[1]?.formats?.thumbnail?.url || ""}
-                                rating={item.score}
-                                productId={item.documentId}
-                            />
-                        ))
+                        allProducts
+                            .filter((item) => {
+                                const price = Number(item.price || item.productChildPrice);
+                                return price >= value[0] && price <= value[1];
+                            })
+                            .map((item, index) => (
+                                <ShopCard
+                                    key={item.productName + "-" + index}
+                                    category={item.productCategory}
+                                    model={item.subCategory}
+                                    name={item.productName}
+                                    price={
+                                        item.price
+                                            ? `${item.price}€`
+                                            : `${item.productChildPrice}€ - ${item.productAdultPrice}€`
+                                    }
+                                    img1={item.productImages?.[0]?.formats?.thumbnail?.url || ""}
+                                    img2={item.productImages?.[1]?.formats?.thumbnail?.url || ""}
+                                    rating={item.score}
+                                    productId={item.documentId}
+                                />
+                            ))
                     )}
                 </section>
             </section>
