@@ -25,6 +25,7 @@ export async function GET(req) {
                 firstName: true,
                 lastName: true,
                 phone: true,
+                role: true,
 
                 shippingFirstName: true,
                 shippingLastName: true,
@@ -54,6 +55,7 @@ export async function GET(req) {
             firstName: userData.firstName || '',
             lastName: userData.lastName || '',
             phone: userData.phone || '',
+            role: userData.role || 'USER',
 
             shippingAddress: {
                 firstName: userData.shippingFirstName || '',

@@ -12,6 +12,7 @@ export default function UserDetails({ user, onLogout }) {
         firstName: user.firstName || '',
         lastName: user.lastName || '',
         phone: user.phone || '',
+        role: user.role || 'USER',
         shippingAddress: user.shippingAddress || {
             firstName: '',
             lastName: '',
