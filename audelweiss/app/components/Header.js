@@ -124,12 +124,11 @@ export default function Header() {
               >
                 {item.label}
               </Link>
-              {item.MegaMenu && activeMegaMenu === item.id && (
-                <MegaMenu
-                  data={item.MegaMenu}
-                  baseUrl={baseUrl}
-                />
-              )}
+              {Array.isArray(item.MegaMenu) &&
+                item.MegaMenu.length > 0 &&
+                activeMegaMenu === item.id && (
+                  <MegaMenu data={item.MegaMenu} baseUrl={baseUrl} />
+                )}
             </div>
           ))}
 
