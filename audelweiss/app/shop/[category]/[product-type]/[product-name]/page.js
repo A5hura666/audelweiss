@@ -16,43 +16,42 @@ import Swal from "sweetalert2";
 export default function Product() {
   let data = [];
 
+  const defaultSize = "adulte";
+  const defaultPompom = "oui";
+  const idArticle = localStorage.getItem("selectedProductId");
 
-    const defaultSize = "adulte";
-    const defaultPompom = "oui";
-    const idArticle = localStorage.getItem('selectedProductId');
+  const [liked, setLiked] = useState(false);
+  const [size, setSize] = useState(defaultSize);
+  const [color, setColor] = useState(null);
+  const [pompom, setPompom] = useState(defaultPompom);
+  const [markdown, setMarkdown] = useState("");
+  const [productName, setProductName] = useState("");
+  const [productCategory, setProductCategory] = useState("");
+  const [productParentPrice, setProductParentPrice] = useState(0);
+  const [productChildPrice, setProductChildPrice] = useState(0);
+  const [productDescription, setProductDescription] = useState("");
+  const [isLoaded, setIsLoaded] = useState(true);
+  const [filters, setFilters] = useState([]); // State pour les filtres
+  const [colorFilter, setColorFilter] = useState([]); // State pour le filtre de couleur
+  const [productOffers, setProductOffers] = useState(""); // State pour les offres du produit
+  const [productSize, setProductSize] = useState(""); // State pour la taille du produit
+  const [productWeight, setProductWeight] = useState(""); // State pour le poids du produit
+  const [selectedFilters, setSelectedFilters] = useState({});
+  const [productInformations, setProductInformations] = useState({
+    composition: "",
+    washingMachine: "",
+    maxWashingTemperature: "",
+  });
+  const [productImages, setProductImages] = useState([]); // State pour les images du produit
+  const [productPrice, setProductPrice] = useState(0); // State pour le prix du produit
+  const [descriptionId, setDescriptionId] = useState(""); // State pour l'ID de la description du produit
+  const [productRecommandation, setProductRecommandation] = useState([]); // State pour les produits recommandés
+  const [subCategory, setSubCategory] = useState("");
+  const [token] = useState(localStorage.getItem("token"));
 
-    const [liked, setLiked] = useState(false);
-    const [size, setSize] = useState(defaultSize);
-    const [color, setColor] = useState(null);
-    const [pompom, setPompom] = useState(defaultPompom);
-    const [markdown, setMarkdown] = useState("");
-    const [productName, setProductName] = useState("");
-    const [productCategory, setProductCategory] = useState("");
-    const [productParentPrice, setProductParentPrice] = useState(0);
-    const [productChildPrice, setProductChildPrice] = useState(0);
-    const [productDescription, setProductDescription] = useState("");
-    const [isLoaded, setIsLoaded] = useState(true);
-    const [filters, setFilters] = useState([]); // State pour les filtres
-    const [colorFilter, setColorFilter] = useState([]); // State pour le filtre de couleur
-    const [productOffers, setProductOffers] = useState(''); // State pour les offres du produit
-    const [productSize, setProductSize] = useState(''); // State pour la taille du produit
-    const [productWeight, setProductWeight] = useState(''); // State pour le poids du produit
-    const [selectedFilters, setSelectedFilters] = useState({});
-    const [productInformations, setProductInformations] = useState({
-        composition: "",
-        washingMachine: "",
-        maxWashingTemperature: "",
-    });
-    const [productImages, setProductImages] = useState([]); // State pour les images du produit
-    const [productPrice, setProductPrice] = useState(0); // State pour le prix du produit
-    const [descriptionId, setDescriptionId] = useState(''); // State pour l'ID de la description du produit
-    const [productRecommandation, setProductRecommandation] = useState([]); // State pour les produits recommandés
-    const [subCategory, setSubCategory] = useState("");
-    const [token] = useState(localStorage.getItem("token"));
-
-    useEffect(() => {
-        const mainImage = document.getElementById("main-image");
-        const thumbnails = document.querySelectorAll("[data-src]");
+  useEffect(() => {
+    const mainImage = document.getElementById("main-image");
+    const thumbnails = document.querySelectorAll("[data-src]");
 
     thumbnails.forEach((thumb) => {
       thumb.addEventListener("click", () => {
@@ -176,51 +175,52 @@ export default function Product() {
   // Fonction pour setter la valeur en fonction du nom du filtre
 
   const addProductToWishlist = async (productId) => {
-      const res = await fetch("/api/wishList", {
-          method: liked ? "DELETE" : "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-              productId,
-              userId: JSON.parse(localStorage.getItem("user")).id,
-          }),
-      });
+    const res = await fetch("/api/wishList", {
+      method: liked ? "DELETE" : "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        productId,
+        userId: JSON.parse(localStorage.getItem("user")).id,
+      }),
+    });
   };
 
+  useEffect(() => {
+    const getWishlistStatus = async () => {
+      if (!token) return;
 
-    useEffect(() => {
-        const getWishlistStatus = async () => {
-            if (!token) return;
+      try {
+        const res = await fetch("/api/wishList", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-            try {
-                const res = await fetch("/api/wishList", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+        const data = await res.json();
+        if (data?.wishList) {
+          const isLiked = data.wishList.some(
+            (item) => item.productId === idArticle
+          );
+          setLiked(isLiked);
+        }
+      } catch (err) {
+        console.error("Erreur récupération wishlist :", err);
+      }
+    };
 
-                const data = await res.json();
-                if (data?.wishList) {
-                    const isLiked = data.wishList.some((item) => item.productId === idArticle);
-                    setLiked(isLiked);
-                }
-            } catch (err) {
-                console.error("Erreur récupération wishlist :", err);
-            }
-        };
+    getWishlistStatus();
+  }, [idArticle, token]);
 
-        getWishlistStatus();
-    }, [idArticle, token]);
-
-    // Fonction pour setter la valeur en fonction du nom du filtre
-    const handleFilterChange = (filterName, value) => {
-        setSelectedFilters((prev) => ({
-            ...prev,
-            [filterName]: value,
-        }));
+  // Fonction pour setter la valeur en fonction du nom du filtre
+  const handleFilterChange = (filterName, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [filterName]: value,
+    }));
 
     if (filterName === "Taille") {
       setProductPrice(
@@ -393,35 +393,42 @@ export default function Product() {
               " py-[20px] text-left flex flex-col gap-4 align-middle px-[20px]"
             }
           >
-              <h2 className="text-5xl uppercase aboreto flex justify-between">{productName}
-                  <section className={"text-left flex flex-col gap-4 align-middle"}>
-                      {/* Bouton Like */}
-                      {
-                          token && (
-                              <button
-                                  onClick={() => {
-                                      setLiked(!liked);
-                                      addProductToWishlist(idArticle);
-                                  }}
-                                  className="top-2 right-2 z-20 p-2 rounded-full bg-white shadow-md"
-                              >
-                                  <AnimatePresence>
-                                      <motion.div
-                                          key={liked ? "liked" : "unliked"}
-                                          animate={{scale: 1.2, opacity: 1}}
-                                          transition={{type: "spring", stiffness: 300, damping: 15}}
-                                      >
-                                          <Heart
-                                              size={28}
-                                              className={`transition-colors ${liked ? "fill-[#e8a499] text-[#e8a499]" : "text-gray-400"}`}
-                                          />
-                                      </motion.div>
-                                  </AnimatePresence>
-                              </button>
-                          )
-                      }
-                  </section>
-              </h2>
+            <h2 className="text-5xl uppercase aboreto flex justify-between">
+              {productName}
+              <section className={"text-left flex flex-col gap-4 align-middle"}>
+                {/* Bouton Like */}
+                {token && (
+                  <button
+                    onClick={() => {
+                      setLiked(!liked);
+                      addProductToWishlist(idArticle);
+                    }}
+                    className="top-2 right-2 z-20 p-2 rounded-full bg-white shadow-md"
+                  >
+                    <AnimatePresence>
+                      <motion.div
+                        key={liked ? "liked" : "unliked"}
+                        animate={{ scale: 1.2, opacity: 1 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 15,
+                        }}
+                      >
+                        <Heart
+                          size={28}
+                          className={`transition-colors ${
+                            liked
+                              ? "fill-[#e8a499] text-[#e8a499]"
+                              : "text-gray-400"
+                          }`}
+                        />
+                      </motion.div>
+                    </AnimatePresence>
+                  </button>
+                )}
+              </section>
+            </h2>
             <a
               className="border-pink"
               href={`/shop/${productCategory}/${subCategory}`}
@@ -492,7 +499,7 @@ export default function Product() {
                   Couleur : {""}
                   <span>{color ? color : "Aucune couleur sélectionnée"}</span>
                 </h5>
-                <ul className={"flex"}>
+                <ul className={"flex gap-2"}>
                   {colorFilter.map((col) => (
                     <li key={col.id} className="relative group">
                       <input
@@ -660,11 +667,11 @@ export default function Product() {
               <tbody>
                 <tr className={"border-pink leading-[50px]"}>
                   <td>Poids</td>
-                  <td>{productWeight} kg</td>
+                  <td className="pl-4">{productWeight} kg</td>
                 </tr>
-                <tr className={"border-pink leading-[50px]"}>
-                  <td>Dimensions {""}</td>
-                  <td>{productSize}</td>
+                <tr className="border-pink leading-[50px]">
+                  <td>Dimensions</td>
+                  <td className="pl-4">{productSize}</td>{" "}
                 </tr>
               </tbody>
             </table>

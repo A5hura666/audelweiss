@@ -41,12 +41,10 @@ export default function ProductsCarousel({ productsData }) {
               model={product.subCategory || ""}
               name={product.productName || ""}
               price={
-                product.productAdultPrice ||
-                product.productChildPrice ||
                 product.price
+                  ? `${product.price}€`
+                  : `${product.productChildPrice}€ - ${product.productAdultPrice}€`
               }
-              priceMin={product.productChildPrice}
-              priceMax={product.productAdultPrice}
               img1={firstImage?.url ? `${firstImage.url}` : ""}
               img2={secondImage?.url ? `${secondImage.url}` : ""}
               addToCart={true}
