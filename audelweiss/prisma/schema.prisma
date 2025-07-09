@@ -39,6 +39,7 @@ model User {
   billingPostalCode String?
   billingCity       String?
   billingCountry    String?
+  ProductWish       ProductWish[]
 }
 
 model Order {
@@ -104,4 +105,13 @@ model Comment {
   replyTo Int?
   parent  Comment?  @relation("CommentToReplies", fields: [replyTo], references: [id])
   replies Comment[] @relation("CommentToReplies")
+}
+
+model ProductWish {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
 }

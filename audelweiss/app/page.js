@@ -82,7 +82,7 @@ export default function Home() {
     const uspSection = sections.find(section => section.__component === 'layout.usp-section');
     const categoriesSection = sections.find(section => section.__component === 'layout.categories-section');
     const productsSection = sections.find(section => section.__component === 'layout.products-carousel');
-
+    console.log(productsSection)
     return (
         <div>
             {/* Hero Section */}
