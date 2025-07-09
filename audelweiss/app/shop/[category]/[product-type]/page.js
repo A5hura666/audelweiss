@@ -88,9 +88,18 @@ export default function ShopByCategory() {
         const isChecked = !checkedCategories[subCategoryKey];
 
         setCheckedCategories((prev) => {
-            const newState = {...prev, [subCategoryKey]: isChecked};
+            const newState = { ...prev, [subCategoryKey]: isChecked };
 
-            // Vérifie si toutes les sous-catégories sont cochées → coche la catégorie
+            // Mettre à jour les subCategories sélectionnées
+            setSelectedSubCategories((prevSelected) => {
+                if (isChecked) {
+                    return [...prevSelected, subCategory];
+                } else {
+                    return prevSelected.filter((item) => item !== subCategory);
+                }
+            });
+
+            // Update la catégorie si toutes ses sous-catégories sont cochées
             const allChecked = allSubCategories.every(
                 (sub) => newState[`${category}-${sub}`]
             );

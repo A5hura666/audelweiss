@@ -29,6 +29,7 @@ export default function ShopByCategory() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const categoryUrl = searchParams.get("category") || pathname.split("/").pop();
+    const [selectedSubCategories, setSelectedSubCategories] = useState([]);
 
   useEffect(() => {
     if (!categoryUrl) return;
@@ -57,7 +58,45 @@ export default function ShopByCategory() {
     };
 
     fetchHeaderData();
-  }, [pathname, searchParams]);
+  }, [categoryUrl, pathname, searchParams]);
+
+    useEffect(() => {
+        const fetchFilteredProducts = async () => {
+            try {
+                let url = getStrapiCall(
+                    `/api/product-article-cards?filters[productCategory][$eq]=${categoryUrl}&populate=productImages`
+                );
+
+                if (selectedSubCategories.length > 0) {
+                    const filters = selectedSubCategories
+                        .map(
+                            (sub) => `filters[subCategory][$in]=${encodeURIComponent(sub)}`
+                        )
+                        .join("&");
+                    url += `&${filters}`;
+                }
+
+                const response = await fetch(url);
+                const data = await response.json();
+                setAllProducts(data.data);
+                // Récupérer les prix pour déterminer le min et max
+                const prices = data.data.map((item) =>
+                    Number(item.price || item.productChildPrice)
+                );
+                const minPrice = Math.min(...prices);
+                const maxPrice = Math.max(...prices);
+
+                setValue([minPrice, maxPrice]);
+                setMinPrice(minPrice);
+                setMaxPrice(maxPrice);
+                setIsLoaded(true);
+            } catch (error) {
+                console.error("Error fetching filtered products:", error);
+            }
+        };
+
+        fetchFilteredProducts();
+    }, [categoryUrl, selectedSubCategories]);
 
   const toggleCategoryOpen = (category) => {
     setisCategoryOpenData((prev) => ({
@@ -80,22 +119,31 @@ export default function ShopByCategory() {
     });
   };
 
-  const handleSubCategoryChange = (category, subCategory, allSubCategories) => {
-    const subCategoryKey = `${category}-${subCategory}`;
-    const isChecked = !checkedCategories[subCategoryKey];
+    const handleSubCategoryChange = (category, subCategory, allSubCategories) => {
+        const subCategoryKey = `${category}-${subCategory}`;
+        const isChecked = !checkedCategories[subCategoryKey];
 
-    setCheckedCategories((prev) => {
-      const newState = { ...prev, [subCategoryKey]: isChecked };
+        setCheckedCategories((prev) => {
+            const newState = { ...prev, [subCategoryKey]: isChecked };
 
-      // Vérifie si toutes les sous-catégories sont cochées → coche la catégorie
-      const allChecked = allSubCategories.every(
-        (sub) => newState[`${category}-${sub}`]
-      );
-      newState[category] = allChecked;
+            // Mettre à jour les subCategories sélectionnées
+            setSelectedSubCategories((prevSelected) => {
+                if (isChecked) {
+                    return [...prevSelected, subCategory];
+                } else {
+                    return prevSelected.filter((item) => item !== subCategory);
+                }
+            });
 
-      return newState;
-    });
-  };
+            // Update la catégorie si toutes ses sous-catégories sont cochées
+            const allChecked = allSubCategories.every(
+                (sub) => newState[`${category}-${sub}`]
+            );
+            newState[category] = allChecked;
+
+            return newState;
+        });
+    };
 
   const handleSliderChange = (event, newValue) => {
     if (newValue[0] <= newValue[1]) {
