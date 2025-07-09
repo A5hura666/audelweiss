@@ -11,25 +11,40 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "descriptionTitle": {
-      "type": "string"
-    },
     "description": {
       "type": "richtext"
-    },
-    "technicalDetailTitle": {
-      "type": "string"
     },
     "technicalDetail": {
       "type": "richtext"
     },
-    "product_additionnal_informations": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::product-additionnal-information.product-additionnal-information",
-      "mappedBy": "product_article_description"
+    "whashing": {
+      "type": "boolean"
     },
-    "productPhotos": {
+    "composition": {
+      "type": "string"
+    },
+    "maxWashingTemp": {
+      "type": "decimal"
+    },
+    "reduction": {
+      "type": "richtext"
+    },
+    "weight": {
+      "type": "decimal"
+    },
+    "size": {
+      "type": "string"
+    },
+    "productName": {
+      "type": "string"
+    },
+    "product_article": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-article-card.product-article-card",
+      "inversedBy": "product_article_description"
+    },
+    "productImages": {
       "allowedTypes": [
         "images",
         "files",
@@ -41,9 +56,15 @@
     },
     "product_colors": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "manyToMany",
       "target": "api::product-color.product-color",
-      "mappedBy": "product_article_description"
+      "inversedBy": "product_article_descriptions"
+    },
+    "product_filters": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product-filter.product-filter",
+      "inversedBy": "product_article_descriptions"
     }
   }
 }

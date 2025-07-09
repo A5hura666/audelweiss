@@ -31,12 +31,6 @@
       "type": "text",
       "required": true
     },
-    "linkToArticle": {
-      "type": "component",
-      "repeatable": false,
-      "component": "components.link",
-      "required": true
-    },
     "thumbnail": {
       "type": "media",
       "multiple": false,
@@ -44,6 +38,11 @@
       "allowedTypes": [
         "images"
       ]
+    },
+    "linkToArticle": {
+      "type": "component",
+      "repeatable": false,
+      "component": "components.link"
     }
   }
 }

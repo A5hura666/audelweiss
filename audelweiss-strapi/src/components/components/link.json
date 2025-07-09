@@ -13,9 +13,9 @@
     "label": {
       "type": "string"
     },
-    "megaMenu": {
+    "MegaMenu": {
       "type": "component",
-      "repeatable": false,
+      "repeatable": true,
       "component": "components.mega-menu"
     }
   }

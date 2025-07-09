@@ -1,7 +1,7 @@
 {
   "collectionName": "components_components_mega_menus",
   "info": {
-    "displayName": "megaMenu",
+    "displayName": "megaMenuItem",
     "description": ""
   },
   "options": {},
@@ -10,6 +10,10 @@
       "type": "component",
       "repeatable": true,
       "component": "components.product-link",
+      "required": true
+    },
+    "category": {
+      "type": "string",
       "required": true
     }
   }

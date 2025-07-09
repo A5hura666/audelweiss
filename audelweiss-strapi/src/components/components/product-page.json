@@ -1,15 +1,11 @@
 {
   "collectionName": "components_components_product_pages",
   "info": {
-    "displayName": "ProductPage"
+    "displayName": "ProductPage",
+    "description": ""
   },
   "options": {},
   "attributes": {
-    "product_article_description": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::product-article-description.product-article-description"
-    },
     "product_article": {
       "type": "relation",
       "relation": "oneToOne",

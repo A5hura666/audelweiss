@@ -1,7 +1,8 @@
 {
   "collectionName": "components_layout_blog_lists",
   "info": {
-    "displayName": "BlogList"
+    "displayName": "BlogList",
+    "description": ""
   },
   "options": {},
   "attributes": {
