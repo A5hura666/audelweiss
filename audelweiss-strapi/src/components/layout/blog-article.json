@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_layout_blog_articles",
+  "info": {
+    "displayName": "BlogArticle",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "ArticleCategory": {
+      "type": "enumeration",
+      "enum": [
+        "Infos",
+        "Idées Cadeaux",
+        "Conseils"
+      ]
+    },
+    "paragraphes": {
+      "type": "component",
+      "repeatable": true,
+      "component": "layout.contenu-article-blog"
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "introduction": {
+      "type": "text"
+    }
+  }
+}

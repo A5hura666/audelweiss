@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "blog_article_pages",
+  "info": {
+    "singularName": "blog-article-page",
+    "pluralName": "blog-article-pages",
+    "displayName": "BlogArticlePage",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "blogArticle": {
+      "type": "component",
+      "repeatable": false,
+      "component": "layout.blog-article"
+    },
+    "slug": {
+      "type": "uid"
+    }
+  }
+}
