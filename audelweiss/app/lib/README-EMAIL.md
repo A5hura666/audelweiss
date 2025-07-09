@@ -27,8 +27,8 @@ EMAIL_USER=votre-email@gmail.com
 EMAIL_PASSWORD=votre-mot-de-passe-app
 
 # Configuration optionnelle
-EMAIL_FROM=noreply@audelweiss.fr
-ADMIN_EMAIL=admin@audelweiss.fr
+EMAIL_FROM=noreply@audelweiss.fr - Email d'envoi
+ADMIN_EMAIL=admin@audelweiss.fr - Email de reception
 ```
 
 ### Vérification de la configuration
