@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "creations",
+  "info": {
+    "singularName": "creation",
+    "pluralName": "creations",
+    "displayName": "creation",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "creationImages": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "creationDescription": {
+      "type": "richtext"
+    },
+    "creationInformation": {
+      "type": "richtext"
+    },
+    "productionTime": {
+      "type": "richtext"
+    },
+    "hashtags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::hashtag.hashtag",
+      "inversedBy": "creations"
+    }
+  }
+}

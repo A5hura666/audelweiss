@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_layout_contenu_article_blogs",
+  "info": {
+    "displayName": "ContenuArticleBlog",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    }
+  }
+}

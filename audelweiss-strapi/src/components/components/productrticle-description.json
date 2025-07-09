@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_components_productrticle_descriptions",
+  "info": {
+    "displayName": "productArticleDescription",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "product_article_description": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-article-description.product-article-description"
+    },
+    "productFilters": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.product-filters"
+    },
+    "productComment": {
+      "type": "component",
+      "repeatable": true,
+      "component": "layout.product-comment"
+    }
+  }
+}

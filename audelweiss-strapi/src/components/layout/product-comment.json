@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_layout_product_comments",
+  "info": {
+    "displayName": "productComment"
+  },
+  "options": {},
+  "attributes": {
+    "product_comment": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-comment.product-comment"
+    }
+  }
+}

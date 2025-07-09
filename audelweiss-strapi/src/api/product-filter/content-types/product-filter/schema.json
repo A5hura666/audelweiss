@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_filters",
+  "info": {
+    "singularName": "product-filter",
+    "pluralName": "product-filters",
+    "displayName": "productFilter"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "filterName": {
+      "type": "string"
+    },
+    "filterValues": {
+      "type": "json"
+    },
+    "product_article_descriptions": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::product-article-description.product-article-description",
+      "mappedBy": "product_filters"
+    }
+  }
+}

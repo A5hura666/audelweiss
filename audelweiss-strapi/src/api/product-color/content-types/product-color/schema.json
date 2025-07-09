@@ -14,25 +14,24 @@
     "colorName": {
       "type": "string"
     },
+    "canBeSecondary": {
+      "type": "boolean"
+    },
     "colorImage": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ]
+      ],
+      "type": "media",
+      "multiple": false
     },
-    "canBeSecondary": {
-      "type": "boolean"
-    },
-    "product_article_description": {
+    "product_article_descriptions": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "manyToMany",
       "target": "api::product-article-description.product-article-description",
-      "inversedBy": "product_colors"
+      "mappedBy": "product_colors"
     }
   }
 }

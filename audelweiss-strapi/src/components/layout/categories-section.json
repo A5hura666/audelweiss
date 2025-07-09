@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_layout_categories_sections",
+  "info": {
+    "displayName": "categories-section"
+  },
+  "options": {},
+  "attributes": {
+    "categories": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.category-card"
+    }
+  }
+}

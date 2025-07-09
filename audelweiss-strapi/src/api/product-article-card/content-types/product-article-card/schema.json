@@ -17,12 +17,10 @@
     "productCategory": {
       "type": "enumeration",
       "enum": [
-        "Scrunchy",
-        "Bandeaux",
+        "Cuisine",
         "Accessoires",
-        "Sac/Bananes",
-        "Cuisine/Deco",
-        "Bonnets"
+        "Déco",
+        "vêtements"
       ]
     },
     "productChildPrice": {
@@ -39,9 +37,6 @@
         "images"
       ]
     },
-    "productLink": {
-      "type": "text"
-    },
     "quantity": {
       "type": "integer",
       "default": 0,
@@ -50,11 +45,24 @@
     "score": {
       "type": "decimal"
     },
-    "product_additionnal_information": {
+    "product_article_description": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::product-additionnal-information.product-additionnal-information",
-      "inversedBy": "product_article"
+      "target": "api::product-article-description.product-article-description",
+      "mappedBy": "product_article"
+    },
+    "subCategory": {
+      "type": "enumeration",
+      "enum": [
+        "Scrunchy",
+        "Bandeaux",
+        "Sac/Bananes",
+        "Cuisine/Deco",
+        "Bonnets"
+      ]
+    },
+    "price": {
+      "type": "decimal"
     }
   }
 }

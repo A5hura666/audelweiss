@@ -1,14 +1,40 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface ComponentsCategoryCard extends Struct.ComponentSchema {
+  collectionName: 'components_components_category_cards';
+  info: {
+    displayName: 'category-card';
+  };
+  attributes: {
+    image: Schema.Attribute.Media<'images'>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    url: Schema.Attribute.String;
+  };
+}
+
 export interface ComponentsClassifiedLinks extends Struct.ComponentSchema {
   collectionName: 'components_components_classified_links';
   info: {
+    description: '';
     displayName: 'ClassifiedLinks';
   };
   attributes: {
     Category: Schema.Attribute.String & Schema.Attribute.Required;
-    pageLinks: Schema.Attribute.Component<'components.link', true> &
+    link: Schema.Attribute.Component<'components.link', true> &
       Schema.Attribute.Required;
+  };
+}
+
+export interface ComponentsFeatureItem extends Struct.ComponentSchema {
+  collectionName: 'components_components_feature_items';
+  info: {
+    description: '';
+    displayName: 'usp-item';
+  };
+  attributes: {
+    description: Schema.Attribute.Text & Schema.Attribute.Required;
+    position: Schema.Attribute.Integer;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
 
@@ -34,7 +60,7 @@ export interface ComponentsLink extends Struct.ComponentSchema {
   };
   attributes: {
     label: Schema.Attribute.String;
-    megaMenu: Schema.Attribute.Component<'components.mega-menu', false>;
+    MegaMenu: Schema.Attribute.Component<'components.mega-menu', true>;
     url: Schema.Attribute.String;
   };
 }
@@ -43,9 +69,10 @@ export interface ComponentsMegaMenu extends Struct.ComponentSchema {
   collectionName: 'components_components_mega_menus';
   info: {
     description: '';
-    displayName: 'megaMenu';
+    displayName: 'megaMenuItem';
   };
   attributes: {
+    category: Schema.Attribute.String & Schema.Attribute.Required;
     productLinks: Schema.Attribute.Component<'components.product-link', true> &
       Schema.Attribute.Required;
   };
@@ -62,6 +89,18 @@ export interface ComponentsProductArticleCard extends Struct.ComponentSchema {
       'oneToOne',
       'api::product-article-card.product-article-card'
     >;
+  };
+}
+
+export interface ComponentsProductFilters extends Struct.ComponentSchema {
+  collectionName: 'components_components_product_filters';
+  info: {
+    description: '';
+    displayName: 'productFilters';
+  };
+  attributes: {
+    colorFilter: Schema.Attribute.Component<'layout.colors-filter', true>;
+    productFilter: Schema.Attribute.Component<'layout.product-filter', true>;
   };
 }
 
@@ -82,6 +121,7 @@ export interface ComponentsProductLink extends Struct.ComponentSchema {
 export interface ComponentsProductPage extends Struct.ComponentSchema {
   collectionName: 'components_components_product_pages';
   info: {
+    description: '';
     displayName: 'ProductPage';
   };
   attributes: {
@@ -89,10 +129,47 @@ export interface ComponentsProductPage extends Struct.ComponentSchema {
       'oneToOne',
       'api::product-article-card.product-article-card'
     >;
+  };
+}
+
+export interface ComponentsProductrticleDescription
+  extends Struct.ComponentSchema {
+  collectionName: 'components_components_productrticle_descriptions';
+  info: {
+    description: '';
+    displayName: 'productArticleDescription';
+  };
+  attributes: {
     product_article_description: Schema.Attribute.Relation<
       'oneToOne',
       'api::product-article-description.product-article-description'
     >;
+    productComment: Schema.Attribute.Component<'layout.product-comment', true>;
+    productFilters: Schema.Attribute.Component<
+      'components.product-filters',
+      true
+    >;
+  };
+}
+
+export interface LayoutBlogArticle extends Struct.ComponentSchema {
+  collectionName: 'components_layout_blog_articles';
+  info: {
+    description: '';
+    displayName: 'BlogArticle';
+  };
+  attributes: {
+    ArticleCategory: Schema.Attribute.Enumeration<
+      ['Infos', 'Id\u00E9es Cadeaux', 'Conseils']
+    >;
+    cover: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    description: Schema.Attribute.Text;
+    introduction: Schema.Attribute.Text;
+    paragraphes: Schema.Attribute.Component<
+      'layout.contenu-article-blog',
+      true
+    >;
+    title: Schema.Attribute.String;
   };
 }
 
@@ -109,8 +186,7 @@ export interface LayoutBlogItem extends Struct.ComponentSchema {
       Schema.Attribute.Required;
     date: Schema.Attribute.Date & Schema.Attribute.Required;
     description: Schema.Attribute.Text & Schema.Attribute.Required;
-    linkToArticle: Schema.Attribute.Component<'components.link', false> &
-      Schema.Attribute.Required;
+    linkToArticle: Schema.Attribute.Component<'components.link', false>;
     readingTime: Schema.Attribute.Integer;
     thumbnail: Schema.Attribute.Media<'images'>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
@@ -120,12 +196,23 @@ export interface LayoutBlogItem extends Struct.ComponentSchema {
 export interface LayoutBlogList extends Struct.ComponentSchema {
   collectionName: 'components_layout_blog_lists';
   info: {
+    description: '';
     displayName: 'BlogList';
   };
   attributes: {
     blogs: Schema.Attribute.Component<'layout.blog-item', true>;
     pageTitle: Schema.Attribute.String & Schema.Attribute.Required;
     text: Schema.Attribute.Text;
+  };
+}
+
+export interface LayoutCategoriesSection extends Struct.ComponentSchema {
+  collectionName: 'components_layout_categories_sections';
+  info: {
+    displayName: 'categories-section';
+  };
+  attributes: {
+    categories: Schema.Attribute.Component<'components.category-card', true>;
   };
 }
 
@@ -138,6 +225,32 @@ export interface LayoutCategoryHighlight extends Struct.ComponentSchema {
     Categories: Schema.Attribute.Component<'components.link', true> &
       Schema.Attribute.Required;
     Images: Schema.Attribute.Media<'images', true> & Schema.Attribute.Required;
+  };
+}
+
+export interface LayoutColorsFilter extends Struct.ComponentSchema {
+  collectionName: 'components_layout_colors_filters';
+  info: {
+    description: '';
+    displayName: 'colorsFilters';
+  };
+  attributes: {
+    product_color: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::product-color.product-color'
+    >;
+  };
+}
+
+export interface LayoutContenuArticleBlog extends Struct.ComponentSchema {
+  collectionName: 'components_layout_contenu_article_blogs';
+  info: {
+    description: '';
+    displayName: 'ContenuArticleBlog';
+  };
+  attributes: {
+    description: Schema.Attribute.RichText;
+    title: Schema.Attribute.String;
   };
 }
 
@@ -186,6 +299,75 @@ export interface LayoutHero extends Struct.ComponentSchema {
     description: Schema.Attribute.Text & Schema.Attribute.Required;
     image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface LayoutMegaMenu extends Struct.ComponentSchema {
+  collectionName: 'components_layout_mega_menus';
+  info: {
+    displayName: 'MegaMenu';
+  };
+  attributes: {
+    MegaMenuItems: Schema.Attribute.Component<'components.mega-menu', true> &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          min: 1;
+        },
+        number
+      >;
+  };
+}
+
+export interface LayoutProductComment extends Struct.ComponentSchema {
+  collectionName: 'components_layout_product_comments';
+  info: {
+    displayName: 'productComment';
+  };
+  attributes: {
+    product_comment: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::product-comment.product-comment'
+    >;
+  };
+}
+
+export interface LayoutProductFilter extends Struct.ComponentSchema {
+  collectionName: 'components_layout_product_filters';
+  info: {
+    displayName: 'productFilter';
+  };
+  attributes: {
+    product_filter: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::product-filter.product-filter'
+    >;
+  };
+}
+
+export interface LayoutProductsCarousel extends Struct.ComponentSchema {
+  collectionName: 'components_layout_products_carousels';
+  info: {
+    displayName: 'products-carousel';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    product_articles: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::product-article-card.product-article-card'
+    >;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface LayoutUspSection extends Struct.ComponentSchema {
+  collectionName: 'components_layout_usp_sections';
+  info: {
+    displayName: 'usp-section';
+  };
+  attributes: {
+    items: Schema.Attribute.Component<'components.feature-item', true> &
+      Schema.Attribute.Required;
   };
 }
 
@@ -254,19 +436,32 @@ export interface SharedSlider extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'components.category-card': ComponentsCategoryCard;
       'components.classified-links': ComponentsClassifiedLinks;
+      'components.feature-item': ComponentsFeatureItem;
       'components.icon-link': ComponentsIconLink;
       'components.link': ComponentsLink;
       'components.mega-menu': ComponentsMegaMenu;
       'components.product-article-card': ComponentsProductArticleCard;
+      'components.product-filters': ComponentsProductFilters;
       'components.product-link': ComponentsProductLink;
       'components.product-page': ComponentsProductPage;
+      'components.productrticle-description': ComponentsProductrticleDescription;
+      'layout.blog-article': LayoutBlogArticle;
       'layout.blog-item': LayoutBlogItem;
       'layout.blog-list': LayoutBlogList;
+      'layout.categories-section': LayoutCategoriesSection;
       'layout.category-highlight': LayoutCategoryHighlight;
+      'layout.colors-filter': LayoutColorsFilter;
+      'layout.contenu-article-blog': LayoutContenuArticleBlog;
       'layout.footer': LayoutFooter;
       'layout.header': LayoutHeader;
       'layout.hero': LayoutHero;
+      'layout.mega-menu': LayoutMegaMenu;
+      'layout.product-comment': LayoutProductComment;
+      'layout.product-filter': LayoutProductFilter;
+      'layout.products-carousel': LayoutProductsCarousel;
+      'layout.usp-section': LayoutUspSection;
       'shared.media': SharedMedia;
       'shared.quote': SharedQuote;
       'shared.rich-text': SharedRichText;

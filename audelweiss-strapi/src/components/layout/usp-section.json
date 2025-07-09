@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_layout_usp_sections",
+  "info": {
+    "displayName": "usp-section"
+  },
+  "options": {},
+  "attributes": {
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.feature-item",
+      "required": true
+    }
+  }
+}

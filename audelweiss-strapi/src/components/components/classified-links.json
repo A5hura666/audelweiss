@@ -1,7 +1,8 @@
 {
   "collectionName": "components_components_classified_links",
   "info": {
-    "displayName": "ClassifiedLinks"
+    "displayName": "ClassifiedLinks",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -9,7 +10,7 @@
       "type": "string",
       "required": true
     },
-    "pageLinks": {
+    "link": {
       "type": "component",
       "repeatable": true,
       "component": "components.link",
