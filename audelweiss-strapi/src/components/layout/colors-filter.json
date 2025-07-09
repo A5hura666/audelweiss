@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_layout_colors_filters",
+  "info": {
+    "displayName": "colorsFilters",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "product_color": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product-color.product-color"
+    }
+  }
+}

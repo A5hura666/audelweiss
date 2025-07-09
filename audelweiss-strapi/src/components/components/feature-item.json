@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_components_feature_items",
+  "info": {
+    "displayName": "usp-item",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "position": {
+      "type": "integer",
+      "required": false
+    }
+  }
+}

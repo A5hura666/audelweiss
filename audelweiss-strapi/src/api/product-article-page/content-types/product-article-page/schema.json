@@ -1,0 +1,25 @@
+{
+  "kind": "singleType",
+  "collectionName": "product_article_pages",
+  "info": {
+    "singularName": "product-article-page",
+    "pluralName": "product-article-pages",
+    "displayName": "productArticlePage",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "productPageComponent": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.product-page"
+    },
+    "productArticleDescription": {
+      "type": "component",
+      "repeatable": true,
+      "component": "components.productrticle-description"
+    }
+  }
+}
