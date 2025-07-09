@@ -105,8 +105,9 @@ export default function AddressModal({ shippingAddress, billingAddress, onClose,
                         </div>
                     </>
                 ) : (
-                    <p className="text-gray-500 italic ml-6 mt-2">
-                        Aucune adresse de livraison et/ou facturation renseignée.
+                    <p className="text-gray-500 italic mt-6 text-center max-w-md mx-auto">
+                        Aucune adresse de livraison et/ou facturation renseignée.<br />
+                        Si vous continuez, vous devrez les renseigner lors du paiement.
                     </p>
                 )}
 
@@ -119,10 +120,7 @@ export default function AddressModal({ shippingAddress, billingAddress, onClose,
                     </button>
                     <button
                         onClick={handleConfirm}
-                        disabled={!hasBothAddresses}
-                        className={`px-4 py-2 rounded text-white transition ${
-                            hasBothAddresses ? 'bg-[#E8A499] hover:bg-[#d89589]' : 'bg-gray-300 cursor-not-allowed'
-                        }`}
+                        className={`px-4 py-2 rounded text-white transition bg-[#E8A499] hover:bg-[#d89589]`}
                     >
                         Confirmer
                     </button>

@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import {CheckCircle} from "lucide-react";
 
 export default function PaymentSuccess() {
     const router = useRouter();
@@ -16,7 +17,7 @@ export default function PaymentSuccess() {
         const createOrderFromSession = async () => {
             const token = localStorage.getItem('token');
             if (!token) {
-                alert('Utilisateur non connecté');
+                window.location.href = '/my-account';
                 return;
             }
 
@@ -31,7 +32,9 @@ export default function PaymentSuccess() {
                 });
 
                 const data = await res.json();
-                if (!res.ok) throw new Error(data.error || 'Erreur création commande');
+                if (!res.ok) {
+                    throw new Error(data.error || 'Erreur création commande');
+                }
 
                 localStorage.removeItem('cart');
             } catch (error) {
@@ -43,9 +46,17 @@ export default function PaymentSuccess() {
     }, [router]);
 
     return (
-        <div className="p-10 text-center">
-            <h1 className="text-2xl font-bold">Merci pour votre commande !</h1>
-            <p>Votre paiement a bien été pris en compte.</p>
+        <div className="flex flex-col items-center justify-center min-h-[600px] bg-white p-8">
+            <CheckCircle className="text-green-600" size={72} />
+            <h1 className="mt-6 text-3xl font-extrabold text-green-800">
+                Merci pour votre commande !
+            </h1>
+            <p className="mt-3 text-lg text-green-700">
+                Votre paiement a bien été pris en compte.
+            </p>
+            <p className="mt-4 text-sm text-green-600 max-w-md text-center">
+                Vous recevrez un email de confirmation sous peu avec les détails de votre commande.
+            </p>
         </div>
     );
 }
