@@ -173,23 +173,20 @@ export default function Product() {
   }, [currentIndex]);
 
   // Fonction pour setter la valeur en fonction du nom du filtre
-  const handleFilterChange = (filterName, value) => {
-    setSelectedFilters((prev) => ({
-      ...prev,
-      [filterName]: value,
-    }));
-    const addProductToWishlist = async (productId) => {
-        const res = await fetch("/api/wishList", {
-            method: liked ? "DELETE" : "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                productId,
-                userId: JSON.parse(localStorage.getItem("user")).id,
-            }),
-        });
-    };
+
+  const addProductToWishlist = async (productId) => {
+      const res = await fetch("/api/wishList", {
+          method: liked ? "DELETE" : "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+              productId,
+              userId: JSON.parse(localStorage.getItem("user")).id,
+          }),
+      });
+  };
+
 
     useEffect(() => {
         const getWishlistStatus = async () => {
@@ -738,4 +735,4 @@ export default function Product() {
       </div>
     </section>
   );
-}}
+}
