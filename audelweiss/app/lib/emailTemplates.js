@@ -5,7 +5,7 @@
  */
 
 // Template de base pour tous les emails
-const baseTemplate = (content, title = '') => `
+const baseTemplate = (content, title = "") => `
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -30,14 +30,14 @@ const baseTemplate = (content, title = '') => `
         }
         .header {
             text-align: center;
-            border-bottom: 3px solid #4a90e2;
+            border-bottom: 3px solid #d89589;
             padding-bottom: 20px;
             margin-bottom: 30px;
         }
         .logo {
             font-size: 28px;
             font-weight: bold;
-            color: #4a90e2;
+            color: #d89589;
             margin-bottom: 10px;
         }
         .content {
@@ -89,20 +89,18 @@ const baseTemplate = (content, title = '') => `
 </html>
 `;
 
-
-
 // Template de notification de contact
 export const contactNotificationTemplate = (contactData) => {
-    const { name, email, subject: contactSubject, message, phone } = contactData;
-    
-    const content = `
+  const { name, email, subject: contactSubject, message, phone } = contactData;
+
+  const content = `
         <h2 style="color: #4a90e2;">Nouveau message de contact 📧</h2>
         <p>Un nouveau message a été envoyé depuis le formulaire de contact du site.</p>
         
         <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; margin: 20px 0;">
             <p><strong>Nom :</strong> ${name}</p>
             <p><strong>Email :</strong> <a href="mailto:${email}">${email}</a></p>
-            ${phone ? `<p><strong>Téléphone :</strong> ${phone}</p>` : ''}
+            ${phone ? `<p><strong>Téléphone :</strong> ${phone}</p>` : ""}
             <p><strong>Sujet :</strong> ${contactSubject}</p>
         </div>
         
@@ -117,11 +115,33 @@ export const contactNotificationTemplate = (contactData) => {
             </a>
         </div>
     `;
-    
-    return baseTemplate(content, `Nouveau contact de ${name}`);
+
+  return baseTemplate(content, `Nouveau contact de ${name}`);
+};
+
+export const welcomeEmailTemplate = (name) => {
+  const content = `
+       <h2 style="color: #d89589;">Bienvenue chez Audelweiss 🌸</h2>
+        <p>Bonjour ${name}, votre compte a été créé avec succès.</p>
+        <p>Vous pouvez désormais accéder à votre espace client pour gérer vos commandes et vos informations personnelles.</p>
+        <p>Si vous avez des questions ou besoin d'aide, n'hésitez pas à nous contacter.</p>
+    `;
+  return baseTemplate(content, `Bienvenue sur Audelweiss`);
+};
+
+export const orderConfirmationTemplate = (name) => {
+  const content = `
+    <h2 style="color: #d89589;">Confirmation de commande 🌸</h2>
+    <p>Bonjour ${name}, votre commande a été confirmée.</p>
+    <p>Nos équipes vous remercient pour votre confiance.</p>
+    <p>Nous vous contacterons dès que votre commande sera expédiée.</p>
+  `;
+  return baseTemplate(content, `Confirmation de commande`);
 };
 
 export default {
-    contactNotificationTemplate,
-    baseTemplate
-}; 
+  contactNotificationTemplate,
+  baseTemplate,
+  welcomeEmailTemplate,
+  orderConfirmationTemplate,
+};
