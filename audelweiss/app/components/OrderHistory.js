@@ -9,7 +9,8 @@ import {
     Truck,
     CheckCircle,
     XCircle,
-    Download
+    Download,
+    MapPin
 } from 'lucide-react';
 
 // … ton code existant …
@@ -186,29 +187,71 @@ export default function OrderHistory() {
 
             <ul>
                 {orders.map((order) => (
-                    <li key={order.id} className="border p-4 mb-4 rounded shadow-sm bg-white">
-                        <div className="flex justify-between items-center mb-2">
-                            <p className="font-semibold">Commande #{order.id}</p>
-                            {renderStatusBadge(order.status)}
+                    <li key={order.id} className="border p-6 mb-6 rounded shadow-sm bg-white">
+                        {/* En-tête commande */}
+                        <div className="flex justify-between items-center mb-3">
+                            <div>
+                                <p className="text-lg font-semibold">Commande #{order.id}</p>
+                                <p className="text-sm text-gray-500">Date : {new Date(order.createdAt).toLocaleDateString()}</p>
+                            </div>
+                            <div>{renderStatusBadge(order.status)}</div>
                         </div>
-                        <p className="text-sm text-gray-600">Date : {new Date(order.createdAt).toLocaleDateString()}</p>
-                        <p className="text-sm text-gray-600 mb-2">Total : {order.total.toFixed(2)} €</p>
-                        <details className="mt-2">
-                            <summary className="cursor-pointer text-blue-600">Articles</summary>
-                            <ul className="pl-4 list-disc mt-1 text-sm">
+
+                        {/* Adresses */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 text-gray-700 text-sm">
+                            {/* Livraison */}
+                            <div>
+                                <h4 className="flex items-center gap-2 font-semibold mb-2 text-[#e8a499]">
+                                    <MapPin size={18} /> Adresse de livraison
+                                </h4>
+                                <p>{[order.shippingFirstName, order.shippingLastName].filter(Boolean).join(' ')}</p>
+                                <p>{order.shippingLine1}</p>
+                                {order.shippingLine2 && <p>{order.shippingLine2}</p>}
+                                <p>
+                                    {order.shippingPostalCode} {order.shippingCity}, {order.shippingCountry}
+                                </p>
+                            </div>
+
+                            {/* Facturation */}
+                            <div>
+                                <h4 className="flex items-center gap-2 font-semibold mb-2 text-[#e8a499]">
+                                    <CreditCard size={18} /> Adresse de facturation
+                                </h4>
+                                <p>{[order.billingFirstName, order.billingLastName].filter(Boolean).join(' ')}</p>
+                                <p>{order.billingLine1}</p>
+                                {order.billingLine2 && <p>{order.billingLine2}</p>}
+                                <p>
+                                    {order.billingPostalCode} {order.billingCity}, {order.billingCountry}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Articles */}
+                        <details className="mb-4">
+                            <summary className="cursor-pointer text-[#e8a499] font-semibold">Articles</summary>
+                            <ul className="pl-5 list-disc mt-2 text-sm text-gray-600">
                                 {order.items.map((item) => (
                                     <li key={item.id}>
                                         {item.productName} – {item.quantity} x {item.productPrice.toFixed(2)} €
                                     </li>
                                 ))}
+                                {/* Total affiché sous les articles */}
+                                <li className="mt-2 font-semibold text-[#e8a499]">
+                                    Total : {order.total.toFixed(2)} €
+                                </li>
                             </ul>
                         </details>
-                        <button
-                            onClick={() => generatePDF(order)}
-                            className="mt-3 inline-flex items-center gap-1 text-sm text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded"
-                        >
-                            <Download size={14} /> Télécharger PDF
-                        </button>
+
+
+                        {/* Bouton PDF */}
+                        <div className="text-right">
+                            <button
+                                onClick={() => generatePDF(order)}
+                                className="inline-flex items-center gap-1 text-sm text-white bg-[#e8a499] hover:bg-[#d89589] px-4 py-2 rounded"
+                            >
+                                <Download size={16} /> Télécharger PDF
+                            </button>
+                        </div>
                     </li>
                 ))}
             </ul>
