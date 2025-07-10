@@ -171,6 +171,7 @@ export default function Header() {
                 onClick={() => {
                   localStorage.removeItem("user");
                   localStorage.removeItem("token");
+                  localStorage.removeItem("cart");
                   setUser(null);
                   window.location.href = "/";
                 }}
@@ -216,6 +217,8 @@ export default function Header() {
               <button
                 onClick={() => {
                   localStorage.removeItem("user");
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("cart");
                   setUser(null);
                   window.location.href = "/";
                 }}

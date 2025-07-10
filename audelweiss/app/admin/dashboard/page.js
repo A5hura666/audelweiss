@@ -13,10 +13,8 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState(null);
 
-    // Récupération utilisateur au montage
     useEffect(() => {
         const token = localStorage.getItem("token");
-        console.log("Token récupéré :", token);
         if (!token) return;
 
         fetch("/api/user/me", {
@@ -32,7 +30,6 @@ export default function DashboardPage() {
             .catch(() => setUser(null));
     }, []);
 
-    // Récupération données selon onglet et user
     useEffect(() => {
         if (!user) return;
 
