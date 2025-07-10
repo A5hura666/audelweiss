@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { User, Menu, X, LogOut } from "lucide-react";
+import { User, Menu, X, LogOut, Shield } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { getStrapiCall } from "@/app/lib/utils";
 import siteData from "@/data/headerData.json";
@@ -151,6 +151,15 @@ export default function Header() {
                 )}
               </Link>
             ))}
+            {user?.role === "ADMIN" && (
+                <Link
+                    href="/admin/dashboard"
+                    className={`flex items-center space-x-1 text-sm font-bold text-gray-700 hover:text-[#E8A499] transition`}
+                >
+                  <Shield size={22} />
+                  <span>Dashboard</span>
+                </Link>
+            )}
           </div>
 
           {user && (

@@ -21,5 +21,5 @@ export async function POST(req) {
     }
 
     const token = generateToken(user);
-    return NextResponse.json({ token, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, phone: user.phone } });
+    return NextResponse.json({ token, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, phone: user.phone, role: user.role } });
 }
